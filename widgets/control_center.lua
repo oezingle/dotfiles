@@ -5,7 +5,7 @@ local config    = require("config")
 local no_scroll = require("widgets.helper.no_scroll")
 
 local shapes = require("util.shapes")
-local redshift = require("awesome-redshift")
+local redshift = require("util.redshift")
 
 local music_widget           = require("widgets.music")
 local network_manager_widget = require("widgets.network_manager")

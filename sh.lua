@@ -40,7 +40,7 @@ check_dependencies("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1", 
 end, "gnome polkit agent")
 
 check_dependencies({ 'redshift', '/usr/lib/geoclue-2.0/demos/agent' }, function()
-    local redshift = require("awesome-redshift")
+    local redshift = require("util.redshift")
 
     redshift.init(1)
 
