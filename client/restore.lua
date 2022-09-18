@@ -29,7 +29,9 @@ tag.connect_signal("property::layout", function(t)
         if client_or_tag_floating(c) and not c.fullscreen then
             apply_geometry(c)
         end
-        c:emit_signal("request::titlebars")
+        if c.has_titlebar then
+            c:emit_signal("request::titlebars")
+        end
     end
 end)
 

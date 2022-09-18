@@ -154,8 +154,12 @@ awesome.connect_signal("wallpaper::set_current", function()
     wallpaper.set_current()
 end)
 
--- get the wallpaper at a specific resolution, and with optional blur.
--- saves crazy amounts of time when dealing with widgets
+--- get the wallpaper at a specific resolution, and with optional blur.
+--- saves crazy amounts of time when dealing with widgets (low res images load way faster)
+---@param width number
+---@param height number
+---@param blur boolean? default false
+---@return string
 local function get_wallpaper(width, height, blur)
     if not isdir(wallpaper_dir) then
         mkdir(wallpaper_dir)
@@ -166,8 +170,8 @@ local function get_wallpaper(width, height, blur)
         return wallpaper.get_current()
     end
 
-    width = math.floor(width) or 0
-    height = math.floor(height) or 0
+    width = math.floor(width)
+    height = math.floor(height)
 
     blur = blur or false
 

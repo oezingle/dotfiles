@@ -1,3 +1,5 @@
+-- TODO move to widgets
+
 local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
@@ -8,8 +10,6 @@ local gfs = require("gears.filesystem")
 local config_dir = gfs.get_configuration_dir()
 
 local shapes = require("util.shapes")
-
--- TODO refactor a lot
 
 local function get_volume(callback)
     awful.spawn.easy_async_with_shell(
