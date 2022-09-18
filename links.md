@@ -1,0 +1,1 @@
+- https://github.com/lgi-devs/lgi/blob/master/docs/guide.md#8-interoperability-with-native-code

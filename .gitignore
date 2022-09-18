@@ -1,0 +1,9 @@
+
+picom.conf
+
+cache/**
+
+battery-widget
+awesome-redshift
+
+.vscode
