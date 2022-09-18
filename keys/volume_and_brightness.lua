@@ -5,15 +5,13 @@ local config = require("config")
 local get_font = require("util.get_font")
 
 local gfs = require("gears.filesystem")
-local themes_path = gfs.get_themes_dir()
-
 local config_dir = gfs.get_configuration_dir()
 
 local shapes = require("util.shapes")
 
 -- TODO refactor a lot
 
-local get_volume = function(callback)
+local function get_volume(callback)
     awful.spawn.easy_async_with_shell(
         "pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \\([0-9][0-9]*\\)%.*,\\1,'"
         ,
@@ -31,7 +29,7 @@ local get_volume = function(callback)
     )
 end
 
-local get_brightness = function(callback)
+local function get_brightness(callback)
     awful.spawn.easy_async(
         "xbacklight -get",
         function(returned)
@@ -68,9 +66,6 @@ local popup = awful.popup {
                 forced_height = 160,
                 forced_width  = 160,
 
-                -- Junk image lol
-                image = themes_path .. "default/submenu.png",
-
                 id = "popup-image",
             },
             {
@@ -98,8 +93,9 @@ local popup = awful.popup {
 }
 
 local timer = gears.timer({
-    timeout = 2,
-    callback = function()
+    timeout     = 2,
+    single_shot = true,
+    callback    = function()
         popup.visible = false
     end
 })
@@ -109,15 +105,12 @@ local get_widget = function(id)
     return popup.widget:get_children_by_id(id)[1]
 end
 
-local cmd_keybind = function(cmd, callback, shell)
+-- Function that runs a command without any args
+local cmd_callback = function(cmd, callback, shell)
     shell = shell or false
 
     -- determine function used. Some might need a shell
-    local spawn_function = awful.spawn.easy_async
-
-    if shell then
-        spawn_function = awful.spawn.easy_async_with_shell
-    end
+    local spawn_function = shell and awful.spawn.easy_async_with_shell or awful.spawn.easy_async
 
     return function()
         spawn_function(
@@ -171,21 +164,21 @@ end
 
 local keys = {
     awful.key({}, "XF86AudioRaiseVolume",
-        cmd_keybind("pactl -- set-sink-volume 0 +10%", volume_changed)
+        cmd_callback("pactl -- set-sink-volume 0 +10%", volume_changed)
     ),
     awful.key({}, "XF86AudioLowerVolume",
-        cmd_keybind("pactl -- set-sink-volume 0 -10%", volume_changed)
+        cmd_callback("pactl -- set-sink-volume 0 -10%", volume_changed)
     ),
     -- TODO proper mute/unmute toggle
     awful.key({}, "XF86AudioMute",
-        cmd_keybind("pactl -- set-sink-volume 0 0%", volume_changed)
+        cmd_callback("pactl -- set-sink-volume 0 0%", volume_changed)
     ),
 
     awful.key({}, "XF86MonBrightnessDown",
-        cmd_keybind(config_dir .. "sh/brightness.sh sub 10", brightness_changed)
+        cmd_callback(config_dir .. "sh/brightness.sh sub 10", brightness_changed)
     ),
     awful.key({}, "XF86MonBrightnessUp",
-        cmd_keybind(config_dir .. "sh/brightness.sh add 10", brightness_changed)
+        cmd_callback(config_dir .. "sh/brightness.sh add 10", brightness_changed)
     ),
 
 }

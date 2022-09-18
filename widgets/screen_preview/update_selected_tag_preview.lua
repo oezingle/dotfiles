@@ -183,7 +183,7 @@ local function update_selected_tag_preview(s, preview_width, preview_height)
                 y = 0
             })
 
-            -- TODO can cause a 'mousegrabber already running' error
+            -- TODO can cause a 'mousegrabber already running' error - multiple clients think they're hovered
 
             mousegrabber.run(function(m)
                 local x = m.x

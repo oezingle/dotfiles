@@ -4,13 +4,12 @@ local shapes = require("util.shapes")
 
 local gears = require("gears")
 local gtable = gears.table
-local gtimer = gears.timer
 
--- TODO there's definitely one keygrabber per screen
+require("widgets.screen_preview.keygrabber")
 
 -- TODO move windows between screens
 
--- TODO clicking a tag doesn't work with multiple displays
+-- TODO clicking a tag/client doesn't work with multiple displays
 
 local get_wallpaper = require("util.get_wallpaper")
 
@@ -153,63 +152,6 @@ local function create_screen_preview(s)
         tag_border_indicators = create_tag_preview_list(s, width, height)
     end)
 
-    local keygrabber_enable = true
-    local keygrabber = awful.keygrabber {
-        keybindings = {
-            { {}, 'Escape', function()
-                awesome.emit_signal("screen_preview::hide")
-            end }
-        },
-        -- Note that it is using the key name and not the modifier name.
-        export_keybindings = false,
-        mask_event_callback = true,
-
-        keyreleased_callback = function(self, mods, key)
-            if keygrabber_enable then
-                local passthroughs = {
-                    "Tab"
-                }
-
-                for number = 0, 9 do
-                    table.insert(passthroughs, tostring(number))
-                end
-
-                for _, passthrough in ipairs(passthroughs) do
-                    -- if it's a tag switch, invalidate the history objects
-                    if type(tonumber(passthrough)) ~= "nil" then
-                        -- invalidate tag list
-                        s.screen_preview.old_tags = {}
-                    end
-
-                    if key == passthrough then
-                        keygrabber_enable = true
-
-                        self:stop()
-
-                        awful.key.execute(mods, key)
-
-                        gtimer {
-                            timeout     = 0.1,
-                            single_shot = true,
-                            autostart   = true,
-                            callback    = function()
-                                if keygrabber_enable then
-                                    self:start()
-
-                                    keygrabber_enable = false
-                                end
-                            end
-                        }
-                    end
-                end
-            else
-                self:stop()
-
-                awful.key.execute(mods, key)
-            end
-        end
-    }
-
     awesome.connect_signal("screen_preview::show", function(wanted_screen)
         if not wanted_screen then
             wanted_screen = s
@@ -226,18 +168,6 @@ local function create_screen_preview(s)
         awesome.emit_signal("screen_preview::refresh_tag_previews")
 
         s.screen_preview.visible = true
-
-        awful.keygrabber({
-            keyreleased_callback = function(self)
-                self:stop()
-
-                gtimer.delayed_call(function()
-                    keygrabber_enable = true
-
-                    keygrabber:start()
-                end)
-            end
-        }):start()
     end)
 
     awesome.connect_signal("screen_preview::hide", function(wanted_screen)
@@ -258,10 +188,6 @@ local function create_screen_preview(s)
         end
 
         s.screen_preview.visible = false
-
-        keygrabber_enable = false
-
-        keygrabber:stop()
     end)
 
     awesome.connect_signal("screen_preview::toggle", function(wanted_screen)
