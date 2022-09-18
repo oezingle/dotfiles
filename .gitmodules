@@ -1,0 +1,3 @@
+[submodule "appmenu/server"]
+	path = appmenu/server
+	url = https://github.com/oezingle/Simple-Appmenu-Server
