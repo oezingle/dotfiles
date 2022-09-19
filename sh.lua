@@ -1,10 +1,7 @@
 local awful = require('awful')
 local config = require('config')
-local filesystem = require('gears').filesystem
 local get_wallpaper = require('util.get_wallpaper')
 local check_dependencies = require('util.check_dependencies')
-
-local config_dir = filesystem.get_configuration_dir()
 
 -- keep a process around so long as awesome is active
 ---@param command string
@@ -58,7 +55,7 @@ end
 if config.gimmicks.pywal then
     check_dependencies({ 'wal' }, function()
         local function update_pywal()
-            awful.spawn.with_shell("wal -i '" .. get_wallpaper() .. "'")
+            awful.spawn.with_shell("wal -i '" .. get_wallpaper(1024, 1024) .. "'")
         end
 
         update_pywal()
@@ -75,7 +72,8 @@ end, "pulseaudio audio")
 -- some xinput stuff
 -- Enable trackpad while typing
 awful.spawn("xinput set-prop 10 325 0")
--- Enable middle click
+-- Enable middle click (some apps don't care)
+-- TODO run this every time unlocked
 awful.spawn("xinput set-prop 10 333 1")
 
 -- TODO fix custom network applet

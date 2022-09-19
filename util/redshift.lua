@@ -2,12 +2,12 @@
 
 local spawn = require("awful.spawn")
 
-local redshift = {
-    path    = "/usr/bin/redshift",
-    method  = "randr",
-    options = "",
-    state   = 1,
-}
+local redshift = {}
+
+redshift.path    = "/usr/bin/redshift"
+redshift.method  = "randr"
+redshift.options = ""
+redshift.state   = 1
 
 function redshift.dim(force)
     if redshift.state == 0 or force then
@@ -32,7 +32,7 @@ function redshift.undim()
 
         for i = 0, screens - 1 do
             spawn(redshift.path .. " -m vidmode:screen=" .. i ..
-            " -x " .. redshift.options)
+                " -x " .. redshift.options)
         end
     end
 end

@@ -6,11 +6,11 @@ local get_preferred_size = require("widgets.helper.get_preferred_size")
 
 local pannable_layout = {}
 
-function pannable_layout:fit(context, width, height)
+function pannable_layout:fit(_, width, height)
     return width, height
 end
 
-function pannable_layout:layout(context, width, height)
+function pannable_layout:layout(_, _, _)
     local x, y = self._private.position[1], self._private.position[2]
 
     -- Tell the child it has infinite space
@@ -19,7 +19,7 @@ function pannable_layout:layout(context, width, height)
     return { base.place_widget_at(self._private.widget, x, y, width, height) }
 end
 
-function pannable_layout:before_draw_children(context, cr, width, height)
+function pannable_layout:before_draw_children(_, cr, width, height)
     cr:rectangle(0, 0, width, height)
     cr:clip()
 end

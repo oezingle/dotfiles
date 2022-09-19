@@ -1,5 +1,5 @@
 
----@return fun(...: string)
+---@return fun(...: any)
 return (function()
     local has_gears = pcall(require, "gears")
 

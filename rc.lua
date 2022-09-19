@@ -34,8 +34,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
-local check_dependencies = require "util.check_dependencies"
 local create_exit_screen = require("widgets.exit_menu")
+local scratch_terminal = require "widgets.scratch_terminal"
 
 -- TODO these probably fire twice when using the test signal
 
@@ -142,6 +142,10 @@ local globalkeys = gears.table.join(
         { description = "view next", group = "tag" }),
     awful.key({ modkey, }, "Escape", awful.tag.history.restore,
         { description = "go back", group = "tag" }),
+
+    awful.key({ modkey, }, "x", scratch_terminal, 
+        { description = "Run a scratch terminal"}),
+
 
     awful.key({ modkey, }, "j",
         function()

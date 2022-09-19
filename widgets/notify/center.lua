@@ -75,7 +75,7 @@ local function create_notification_center(s)
         border_width = config.border.floating_width,
         border_color = config.popup.border or get_decoration_color(),
 
-        screen = s
+        screen = s,
     }
 
     autoclose(container)
