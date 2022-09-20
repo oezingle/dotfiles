@@ -121,12 +121,6 @@ local config = {
     }
 }
 
-if config.gimmicks.pywal ~= false then
-    -- Terminals opened through ctrl+alt+t will use pywal.
-    -- I set this up literally just so vscode's internal terminal would use theme colors instead of wal colors
-    config.apps.terminal = config.apps.terminal .. ' -e \'sh -c "wal -R > /dev/null; $SHELL"\''
-end
-
 -- create some commands
 config.cmd = {}
 config.cmd.editor = config.apps.terminal .. " -e " .. config.apps.editor

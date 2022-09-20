@@ -1,11 +1,7 @@
 local radial_menu      = require("widgets.util.radial_menu")
 local scratch_terminal = require("util.scratch").terminal
-local shapes           = require("util.shapes")
-local get_font         = require("util.get_font")
-local config           = require("config")
-local no_scroll        = require("widgets.helper.no_scroll")
+local easy_menu_item   = require("widgets.util.radial_menu.easy_menu_item")
 
-local wibox      = require("wibox")
 local gfs        = require("gears.filesystem")
 local config_dir = gfs.get_configuration_dir()
 
@@ -51,52 +47,7 @@ local function scratch_terminal_widget()
 
         local icon = config_dir .. "icon/scratch-term/" .. lang.icon .. ".svg"
 
-        local lang_widget = wibox.widget {
-            {
-                {
-                    {
-                        {
-                            widget        = wibox.widget.imagebox,
-                            image         = icon,
-                            forced_width  = 64,
-                            forced_height = 64,
-                        },
-                        {
-                            {
-                                widget = wibox.widget.textbox,
-                                font   = get_font(12),
-                                text   = lang.name,
-                            },
-                            layout = wibox.container.place,
-                        },
-                        layout = wibox.layout.fixed.vertical,
-                    },
-                    layout = wibox.container.place,
-
-                    forced_width = 96,
-                    forced_height = 96,
-                },
-
-                layout = wibox.container.margin,
-                margins = 10,
-            },
-            layout = wibox.container.background,
-
-            bg = config.button.normal,
-            shape = shapes.rounded_rect(100),
-        }
-
-        lang_widget:connect_signal("mouse::enter", function (w)
-            w.bg = config.button.hover
-        end)
-
-        lang_widget:connect_signal("mouse::leave", function (w)
-            w.bg = config.button.normal
-        end)
-
-        lang_widget:connect_signal("button::press", no_scroll(function (w)
-            w.bg = config.button.active
-        end))
+        local lang_widget = easy_menu_item(lang.name, icon)
         
         table.insert(children, {
             widget = lang_widget,

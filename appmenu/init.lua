@@ -22,16 +22,10 @@ pidwatch("~/.config/awesome/appmenu/server/main")
 
 -- TODO catch errors, reload if menu has changed
 
-local appmenu_button     = require("appmenu.widget.appmenu_button")
-local appmenu_menu       = require("appmenu.widget.appmenu_menu")
-local recursive_menu_gen = require("appmenu.widget.recursive_menu_gen")
-
---- Make the first letter of all words in a string uppercase. "hello world" -> "Hello World"
----@param str string
----@return string
-local function uppercase_first_letters(str)
-    return string.gsub(" " .. str, "%W%l", string.upper):sub(2)
-end
+local appmenu_button          = require("appmenu.widget.appmenu_button")
+local appmenu_menu            = require("appmenu.widget.appmenu_menu")
+local recursive_menu_gen      = require("appmenu.widget.recursive_menu_gen")
+local uppercase_first_letters = require("util.uppercase_first_letters")
 
 -- TODO mouse & keyboard control
 -- keyboard combo to stop focus change, lock into global menu

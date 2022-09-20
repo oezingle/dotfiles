@@ -1,3 +1,4 @@
+local layout_selector = require "widgets.layout_selector"
 -- seed random
 math.randomseed(os.time())
 -- some platforms have a recurring first random
@@ -210,6 +211,8 @@ local globalkeys = gears.table.join(
         { description = "select next", group = "layout" }),
     awful.key({ modkey, "Shift" }, "f", function() awful.layout.inc(-1, nil, awful.layout.layouts) end,
         { description = "select previous", group = "layout" }),
+    awful.key({ modkey, "Control" }, "f", function () layout_selector() end,
+        { description = "select visually", group = "layout" }),
 
     -- restore minimized
     awful.key({ modkey, "Shift" }, "n",

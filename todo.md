@@ -54,8 +54,6 @@ ERROR: Unknown command 'lock'`
 
 - set `inode/directory` mimetype to use thunar over VS Code 
 
-- make vscode's terminal ignore `wal -R` in bashrc
-
 - rework battery widget
 	- click on it -> applet w/ powertop-like stats
 

@@ -2,6 +2,11 @@ local beautiful = require("beautiful")
 
 -- Get the preferred height of a widget
 -- https://github.com/awesomeWM/awesome/issues/611
+---@param widget table
+---@param context table?
+---@param width number?
+---@param height number?
+---@return number width, number height
 local function get_preferred_size(widget, context, width, height)
     local context = context or 1
 

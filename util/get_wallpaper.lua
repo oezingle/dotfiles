@@ -65,7 +65,7 @@ do
 
     if type(config.wallpaper.time) == "number" then
         -- Set numeric wallpaper times to be in hours
-        
+
         wallpaper_time = config.wallpaper.time * 60 * 60
     else
         wallpaper_time = config.wallpaper.time
@@ -156,8 +156,8 @@ end)
 
 --- get the wallpaper at a specific resolution, and with optional blur.
 --- saves crazy amounts of time when dealing with widgets (low res images load way faster)
----@param width number
----@param height number
+---@param width number?
+---@param height number?
 ---@param blur boolean? default false
 ---@return string
 local function get_wallpaper(width, height, blur)
@@ -170,8 +170,8 @@ local function get_wallpaper(width, height, blur)
         return wallpaper.get_current()
     end
 
-    width = math.floor(width)
-    height = math.floor(height)
+    width = math.floor(width or 0)
+    height = math.floor(height or 0)
 
     blur = blur or false
 
@@ -183,26 +183,26 @@ local function get_wallpaper(width, height, blur)
         if not fs.isdir(dir) then
             fs.mkdir(dir)
         end
-    
+
         -- TOOD create folder by identiifer, save to folder by identifier
         local filename = dir .. tostring(width) .. "x" .. tostring(height) .. (blur and "_blur" or "")
-    
+
         if not exists(filename) then
             local resize_string = " -resize " .. tostring(width) .. "x" .. tostring(height) .. "^ "
-    
+
             local crop_string = " -gravity Center -extent " .. tostring(width) .. "x" .. tostring(height) .. " "
-    
+
             local blur_string = ""
-    
+
             if blur then
                 blur_string = " -blur 20x20 "
             end
-    
+
             local cmd = "magick convert" ..
                 resize_string ..
                 crop_string ..
                 blur_string .. "'" .. wallpaper.table[identifier] .. "' '" .. filename .. "'"
-            
+
             os.execute(cmd)
         end
     end

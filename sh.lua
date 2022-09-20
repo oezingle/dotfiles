@@ -55,7 +55,7 @@ end
 if config.gimmicks.pywal then
     check_dependencies({ 'wal' }, function()
         local function update_pywal()
-            awful.spawn.with_shell("wal -i '" .. get_wallpaper(1024, 1024) .. "'")
+            awful.spawn.with_shell("wal -i '" .. get_wallpaper() .. "'")
         end
 
         update_pywal()

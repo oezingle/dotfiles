@@ -7,6 +7,9 @@ local no_scroll  = require("widgets.helper.no_scroll")
 local shapes     = require("util.shapes")
 local config     = require("config")
 local config_dir = require("gears.filesystem").get_configuration_dir()
+local get_preferred_size = require("widgets.helper.get_preferred_size")
+
+local print = require("agnostic.print")
 
 -- small layout that fits a widget very badly so that it's centered
 local center_badly = Class()
@@ -114,7 +117,20 @@ local function radial_menu_contents(children, use_mouse)
 
     local step = (2 * math.pi) / #children
 
-    local arm_length = #children == 1 and 0 or 150
+    --[[
+        TODO dynamic arm length
+         - get diagonal length of child widgets
+         - use that total as a circumference -> local arm_length = C / (2 * math.pi)
+    ]]
+    local circumference = 0
+
+    for _, child in ipairs(children) do
+        local width, height = get_preferred_size(child.widget)
+
+        circumference = circumference + math.sqrt(width ^ 2 + height ^ 2)
+    end
+
+    local arm_length = math.max(130, circumference / (2 * math.pi))
 
     local center_x, center_y
 
