@@ -71,8 +71,6 @@ ERROR: Unknown command 'lock'`
 - limit hovererd clients to 1 while using screen preview
 	- should fix mousegrabber issue?
 
-- break appmenu/init.lua into appmenu/widget/... - too many helper functions
-
 - restarting awesome breaks firefox's transparency
 
 - multihead
