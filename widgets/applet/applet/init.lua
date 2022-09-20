@@ -4,62 +4,10 @@
 local Class = require("util.Class")
 local exitable_dialog = require("widgets.util.exitable_dialog")
 local check_dependencies = require("util.check_dependencies")
-local no_scroll          = require("widgets.helper.no_scroll")
-
-local awful = require("awful")
 
 local applet = {}
 
-applet.toolkit = {}
-
--- toolkit dependencies
-local wibox    = require("wibox")
-local get_font = require("util.get_font")
-local shapes   = require("util.shapes")
-local config   = require("config")
-
-applet.toolkit.button = function(content, callback, style)
-    style = style or {}
-
-    style.normal = style.normal or config.button.normal
-    style.hover = style.hover or config.button.hover
-
-    style.radius = style.radius or 5
-
-    local widget = wibox.widget {
-        {
-            {
-                widget = wibox.widget.textbox,
-                font = get_font(12),
-                text = content,
-
-                id = "button-text"
-            },
-            layout = wibox.container.place
-        },
-
-        bg = style.normal,
-
-        shape = shapes.rounded_rect(style.radius),
-
-        widget = wibox.container.background
-    }
-
-    widget:connect_signal("mouse::enter", function(self)
-        self.bg = style.hover
-    end)
-
-    widget:connect_signal("mouse::leave", function(self)
-        self.bg = style.normal
-    end)
-
-    if callback then
-        widget:connect_signal("button::press", no_scroll(callback))
-    end
-
-    return widget
-end
-
+applet.toolkit = require("widgets.applet.applet.toolkit")
 
 function applet:new(widget, dependencies)
     dependencies = dependencies or {}
@@ -79,6 +27,10 @@ function applet:on_close(fn)
     self._on_close = fn
 end
 
+function applet:on_open(fn)
+    self._on_open = fn
+end
+
 function applet:create_internal_widget()
     self.popup = exitable_dialog {
         widget = self.widget,
@@ -88,6 +40,10 @@ function applet:create_internal_widget()
 
     self.bindings.show = function()
         self.popup.visible = true
+
+        if self._on_open then
+            self._on_open()
+        end
     end
 
     self.bindings.hide = function()
@@ -117,7 +73,7 @@ function applet:create_bindings()
             toggle = function() end
         }
 
-        check_dependencies(self.dependencies, function ()
+        check_dependencies(self.dependencies, function()
             self:create_internal_widget()
         end)
     end

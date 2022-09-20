@@ -1,4 +1,3 @@
-local layout_selector = require "widgets.layout_selector"
 -- seed random
 math.randomseed(os.time())
 -- some platforms have a recurring first random
@@ -54,6 +53,8 @@ require("notify")
 -- Set up taskbar
 local create_taskbar = require("taskbar")
 create_taskbar()
+
+local layout_selector = require("widgets.layout_selector")
 
 -- allow screen preview
 if config.gimmicks.screen_preview then

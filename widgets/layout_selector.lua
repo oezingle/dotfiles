@@ -4,7 +4,10 @@ local awful                   = require("awful")
 local beautiful               = require("beautiful")
 local uppercase_first_letters = require("util.uppercase_first_letters")
 
-local function layout_selector()
+---@param dont_use_mouse boolean? if the mouse position should be ignored and the menu should be in the center of the screen
+local function layout_selector(dont_use_mouse)
+    dont_use_mouse = dont_use_mouse or false
+
     local current_screen = awful.screen.focused()
 
     local current_layout = awful.layout.get(current_screen)
@@ -30,7 +33,7 @@ local function layout_selector()
         }
     end
 
-    radial_menu(children, true)
+    radial_menu(children, not dont_use_mouse)
 end
 
 return layout_selector

@@ -1,6 +1,11 @@
 
+---@class Class : table
+---@operator call(...): any
+
 --- Bind base.new to base.__call
----@param base table?
+---@generic T : table
+---@param base T?
+---@return T
 local function class(base)
     base = base or {}
 

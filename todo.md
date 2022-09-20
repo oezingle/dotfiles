@@ -21,13 +21,7 @@
 - rofi theme
 	- a templating engine: follow config.popup colors?
 
-- set xfce4-power-manager lock command
-	- `(xfce4-power-manager:1165366): xfce4-power-manager-WARNING **: 23:49:55.146: Screensaver lock command not set when attempting to lock the screen.
-Please set the xfconf property /general/LockCommand in xfce4-session to the desired lock command
-ERROR: Unknown command 'lock'`
-	- `xfconf-query -c xfce4-session -p /general/LockCommand -s "dm-tool lock" --create -t string`
-	- https://forum.xfce.org/viewtopic.php?id=14993
-
+- lock on screen close
 
 - applets
 	- math symbols applet
@@ -39,7 +33,7 @@ ERROR: Unknown command 'lock'`
 	- finish calculator
 	- emoji selector
 
-- wallpapers	
+- wallpapers
 	- test timestamp based table: { ["0:00"] = "/path/to/image" }
 	- looks like shit with light wallpaper
 	- wallpaper_changed signal called constantly under xephyr - might be the case with native xorg too?

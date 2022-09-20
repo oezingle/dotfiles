@@ -3,6 +3,7 @@ local wibox  = require("wibox")
 local config = require("config")
 local gears  = require("gears")
 local system_status = require("widgets.system_status")
+local layout_selector = require("widgets.layout_selector")
 
 local get_decoration_color = require("util.color.get_decoration_color")
 local shapes = require("util.shapes")
@@ -81,6 +82,7 @@ local function create_taskbar()
         s.layout_indicator:buttons(gears.table.join(
             awful.button({}, 1, function() awful.layout.inc(1) end),
             awful.button({}, 3, function() awful.layout.inc(-1) end),
+            awful.button({}, 2, function() layout_selector(true) end),
             awful.button({}, 4, function() awful.layout.inc(1) end),
             awful.button({}, 5, function() awful.layout.inc(-1) end)))
 

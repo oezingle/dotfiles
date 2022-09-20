@@ -148,11 +148,10 @@ local function create_control_center()
         4, 1, 1, 1
     )
 
-    -- TODO this button
     -- system specs
     grid:add_widget_at(
         icon_button(config_dir .. "icon/control-center/hardware-chip-outline.svg", function ()
-        
+            SystemInfo.toggle()
         end),
         4, 2, 1, 1
     )

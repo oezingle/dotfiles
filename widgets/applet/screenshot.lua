@@ -241,8 +241,6 @@ do
         "scrot"
     })
 
-    screenshot_applet:set_dependencies({ "scrot" })
-
     screenshot_applet:on_close(on_close)
 
     Screenshot = screenshot_applet:create()
