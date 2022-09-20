@@ -1,5 +1,7 @@
 -- https://github.com/awesomeWM/awesome/issues/3675
 
+---@param c Client
+---@return Geometry
 local function true_geometry(c)
     local _, top_size = c:titlebar_top()
     local _, right_size = c:titlebar_right()

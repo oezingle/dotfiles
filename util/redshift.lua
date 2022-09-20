@@ -9,6 +9,8 @@ redshift.method  = "randr"
 redshift.options = ""
 redshift.state   = 1
 
+--- Dim the screen using redshift
+---@param force boolean?
 function redshift.dim(force)
     if redshift.state == 0 or force then
         if redshift.method == "randr" then
@@ -24,6 +26,7 @@ function redshift.dim(force)
     end
 end
 
+--- Undim the screen using redshift
 function redshift.undim()
     if redshift.method == "randr" then
         spawn(redshift.path .. " -m randr -x " .. redshift.options)
@@ -37,6 +40,7 @@ function redshift.undim()
     end
 end
 
+--- Toggle redshift dimming
 function redshift.toggle()
     if redshift.state == 1 then
         redshift.undim()
@@ -45,6 +49,8 @@ function redshift.toggle()
     end
 end
 
+--- Initialize redshift
+---@param state number?
 function redshift.init(state)
     if state == 1 then
         redshift.dim(true)

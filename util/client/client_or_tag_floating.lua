@@ -1,5 +1,7 @@
 local awful = require("awful")
 
+---@param c Client
+---@return boolean
 local function client_or_tag_floating(c)
     if c.maximized then
         return false

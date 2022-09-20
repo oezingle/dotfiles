@@ -1,6 +1,9 @@
 local testable = require("util.testable")
 local gcolor = require("gears.color")
 
+--- Convert decimal integers to hexadecimal
+---@param number number the number to convert
+---@return string hex that number in hexadecimal
 local function num_to_hex(number)
     local rounded = math.floor(number)
 

@@ -1,5 +1,9 @@
 
 -- sorted iterator
+---@generic T
+---@param t T[]
+---@param order fun (t: T[], a: T, b: T): boolean?
+---@return function iter an iterator
 local function spairs(t, order)
     -- collect the keys
     local keys = {}

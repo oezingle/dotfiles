@@ -91,13 +91,5 @@ ERROR: Unknown command 'lock'`
 	- annotations for functions (at least util/)
 
 - radial menu
-	- appears in center of focused screen
 	- fancy little layout selector 
 		- middle click layout button?
-	- scratch terminal - floating, discard on unfocus, pick a language
-		- bash
-		- node
-		- lua
-		- python
-		- bc
-		- etc.

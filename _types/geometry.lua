@@ -1,5 +1,9 @@
 ---@meta
 
----@alias Geometry { x: number, y: number, width: number, height: number }
+---@class Coordinates
+---@field x number
+---@field y number
 
----@alias Coordinates { x: number, y: number }
+---@class Geometry : Coordinates
+---@field width number
+---@field height number

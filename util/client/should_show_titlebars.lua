@@ -1,5 +1,7 @@
 local client_or_tag_floating = require("util.client.client_or_tag_floating")
 
+---@param c Client
+---@return boolean
 local function should_show_titlebars(c)
     -- stupidest fix ever: client.request::titlebars is only called for windows that request titlebars, 
     -- and is never explicitly called, so I can just set boolean c.has_titlebar

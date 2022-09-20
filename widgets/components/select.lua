@@ -62,7 +62,7 @@ local function update_dropdown_text(self)
     end
 end
 
-function select:layout(context, width, height)
+function select:layout(_, width, height)
     update_dropdown_text(self)
 
     return { base.place_widget_at(self._private.button, 0, 0, width, height) }

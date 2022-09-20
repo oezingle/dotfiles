@@ -44,6 +44,9 @@ local timer = gears.timer({
     end
 })
 
+--- Show a modal with information on it in the center of the current screen
+---@param title string
+---@param text string
 local modal_notify = function(title, text)
     popup.widget:get_children_by_id("modal-title")[1].text = title
     popup.widget:get_children_by_id("modal-text")[1].text = text

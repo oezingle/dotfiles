@@ -29,11 +29,13 @@ local function spawn_scratch(command)
         y                 = (s_height - s_height * fraction_v) / 2,
 
         callback = function(c)
-            c:connect_signal("unfocus", function()
-                if c then
-                    c:kill()
-                end
-            end)
+            for _, signal in ipairs({ "unfocus", "mouse::leave" }) do
+                c:connect_signal(signal, function()
+                    if c then
+                        c:kill()
+                    end
+                end)
+            end
         end
     })
 end
@@ -46,7 +48,6 @@ local function scratch_terminal(command)
     spawn_scratch(config.apps.terminal .. cmd_flag)
 end
 
-
 local scratch = {
     spawn = spawn_scratch,
     terminal = scratch_terminal,
@@ -57,7 +58,7 @@ for key, fn in pairs(scratch) do
 end
 
 setmetatable(scratch, {
-    __call = function (_, ...)
+    __call = function(_, ...)
         scratch.spawn(...)
     end
 })

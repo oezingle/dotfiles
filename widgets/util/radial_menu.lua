@@ -1,11 +1,12 @@
-local awful     = require("awful")
-local wibox     = require("wibox")
-local Class     = require("util.Class")
-local gtable    = require("gears.table")
-local base      = require("wibox.widget.base")
-local no_scroll = require("widgets.helper.no_scroll")
-local shapes    = require("util.shapes")
-local config    = require("config")
+local awful      = require("awful")
+local wibox      = require("wibox")
+local Class      = require("util.Class")
+local gtable     = require("gears.table")
+local base       = require("wibox.widget.base")
+local no_scroll  = require("widgets.helper.no_scroll")
+local shapes     = require("util.shapes")
+local config     = require("config")
+local config_dir = require("gears.filesystem").get_configuration_dir()
 
 -- small layout that fits a widget very badly so that it's centered
 local center_badly = Class()
@@ -129,6 +130,35 @@ local function radial_menu_contents(children, use_mouse)
 
     local symbolic_children = {}
 
+    -- create a symbolic child widget - points to the parent so that the radial menu can infer the closest button
+    local function create_symbolic_child(parent, coordinates)
+        -- be close to mouse, supports wrapped_child
+        local symbolic_child = wibox.widget {
+            layout = wibox.container.margin,
+
+            margins = arm_length,
+        }
+
+        -- pass through events
+        for _, signal in ipairs({
+            "mouse::enter",
+            "mouse::leave",
+            "button::press"
+        }) do
+            symbolic_child:connect_signal(signal, function(...)
+                parent:emit_signal(signal, ...)
+            end)
+        end
+
+        -- just kinda center it silently
+        coordinates.x = coordinates.x - arm_length
+        coordinates.y = coordinates.y - arm_length
+
+        radial_menu:add_at(symbolic_child, coordinates)
+
+        table.insert(symbolic_children, symbolic_child)
+    end
+
     for index, child in ipairs(children) do
         local rad = index * step - (math.pi / 2)
 
@@ -175,44 +205,79 @@ local function radial_menu_contents(children, use_mouse)
         })
 
         do
-            -- be close to mouse, supports wrapped_child
-            local symbolic_child = wibox.widget {
-                layout = wibox.container.margin,
+            local x = math.cos(rad) * 32 + center_x
+            local y = math.sin(rad) * 32 + center_y
 
-                margins = 150,
-            }
-
-            -- pass through events
-            for _, signal in ipairs({
-                "mouse::enter",
-                "mouse::leave",
-                "button::press"
-            }) do
-                symbolic_child:connect_signal(signal, function(...)
-                    wrapped_child:emit_signal(signal, ...)
-                end)
-            end
-
-            local x = math.cos(rad) * 10 + center_x - 150
-            local y = math.sin(rad) * 10 + center_y - 150
-
-            radial_menu:add_at(symbolic_child, {
-                x = x,
-                y = y
-            })
-
-            table.insert(symbolic_children, symbolic_child)
+            create_symbolic_child(wrapped_child, { x = x, y = y })
         end
+
+    end
+
+    do
+        -- central exit button
+        local exit_button = wibox.widget {
+            {
+                {
+                    {
+                        widget = wibox.widget.imagebox,
+                        image = config_dir .. "icon/close-outline.svg",
+
+                        forced_height = 32,
+                        forced_width = 32,
+                    },
+                    layout = wibox.container.place,
+
+                    forced_width = 64,
+                    forced_height = 64,
+                },
+
+                layout = wibox.container.margin,
+                margins = 0
+            },
+            layout = wibox.container.background,
+
+            shape_border_color = config.popup.fg,
+
+            shape = shapes.rounded_rect(100)
+        }
+
+        exit_button:connect_signal("mouse::enter", function(w)
+            w.bg = "#ff6666"
+
+            w.shape_border_width = 3
+            w.children[1].margins = 3
+        end)
+
+        exit_button:connect_signal("mouse::leave", function(w)
+            w.bg = config.button.normal
+
+            w.shape_border_width = 0
+            w.children[1].margins = 0
+        end)
+
+        exit_button:connect_signal("button::press", no_scroll(function()
+            hide_menu()
+        end))
+
+        exit_button:emit_signal("mouse::enter")
+
+        radial_menu:add_at(center_badly(exit_button), {
+            x = center_x,
+            y = center_y
+        })
+
+        create_symbolic_child(exit_button, { x = center_x, y = center_y })
     end
 
     --- point to the closest menu item
     mousegrabber.run(
-    ---@param coords Coordinates
-        function(coords)
+        function ()
+            local coords = mouse.coords()
+    
             if mouse.current_widget_geometries then
                 local closest_child
                 local closest_child_dist = 32767
-
+    
                 for _, geometry in ipairs(mouse.current_widget_geometries) do
                     local is_symbolic_child = (function()
                         for _, symbolic_child in ipairs(symbolic_children) do
@@ -220,45 +285,45 @@ local function radial_menu_contents(children, use_mouse)
                                 return true
                             end
                         end
-
+    
                         return false
                     end)()
-
+    
                     if is_symbolic_child then
                         local center_x = geometry.x + (geometry.width / 2)
                         local center_y = geometry.y + (geometry.height / 2)
-
+    
                         local dist = dist2d(coords, {
                             x = center_x,
                             y = center_y
                         })
-
+    
                         geometry.widget:emit_signal("mouse::leave")
-
+    
                         -- TODO doesn't quite work properly?
                         if dist < closest_child_dist then
                             closest_child = geometry.widget
-
+    
                             closest_child_dist = dist
                         end
                     end
                 end
-
+    
                 if closest_child then
                     closest_child:emit_signal("mouse::enter")
-
-                    local buttons = mouse.coords().buttons
-
+    
+                    local buttons = coords.buttons
+    
                     if buttons[1] then
                         closest_child:emit_signal("button::press", 1)
-
+    
                         hide_menu()
-
+    
                         return false
                     end
                 end
             end
-
+    
             return true
         end,
         -- TODO better cursor
