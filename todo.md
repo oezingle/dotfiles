@@ -73,7 +73,7 @@ ERROR: Unknown command 'lock'`
 
 - break appmenu/init.lua into appmenu/widget/... - too many helper functions
 
-- something about changing floating states or maybe restarting awesome or maybe chromium being opened breaks firefox's transparency
+- restarting awesome breaks firefox's transparency
 
 - multihead
 	- brightness keys / control center controls an arbitrary display
