@@ -1,5 +1,0 @@
-2022-09-07 14:22:30 W: awesome: luaA_dofunction:78: error while running function!
-stack traceback:
-	/usr/share/awesome/lib/naughty/core.lua:415: in function 'naughty.getById'
-	/usr/share/awesome/lib/naughty/dbus.lua:200: in function </usr/share/awesome/lib/naughty/dbus.lua:117>
-error: /usr/share/awesome/lib/naughty/core.lua:415: attempt to index a number value (local 'notification')

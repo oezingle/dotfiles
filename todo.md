@@ -39,7 +39,6 @@ ERROR: Unknown command 'lock'`
 	- finish calculator
 	- emoji selector
 
-
 - wallpapers	
 	- test timestamp based table: { ["0:00"] = "/path/to/image" }
 	- looks like shit with light wallpaper
@@ -88,7 +87,6 @@ ERROR: Unknown command 'lock'`
 
 - types
 	- generate type annotations for awesome from the docs
-	- annotations for functions (at least util/)
 
 - radial menu
 	- fancy little layout selector 
