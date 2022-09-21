@@ -107,6 +107,8 @@ local config = {
         "/home/zingle/Pictures/wallpaper/JVC 120 ER DARK_8K.png",
         "/home/zingle/Pictures/wallpaper/Scnea HQ T-120_DARK_8K.png",
         "/home/zingle/Pictures/wallpaper/Quasar Video Cassette 60_8K.png",
+        "/home/zingle/Pictures/wallpaper/SAMSUNG E-180 EHQ_DARK_8K.png",
+        "/home/zingle/Pictures/wallpaper/SCOTCH VHS 8K.png"
 
         -- These ones are kinda boring idk
         -- "/home/zingle/Pictures/wallpaper/Kodak T-120_8K.png",

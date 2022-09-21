@@ -35,7 +35,7 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 require("awful.hotkeys_popup.keys")
 
 local create_exit_screen = require("widgets.exit_menu")
-local scratch_terminal = require "widgets.scratch_terminal"
+local scratch_terminal = require("widgets.scratch_terminal")
 
 -- TODO these probably fire twice when using the test signal
 
@@ -80,16 +80,9 @@ local get_wallpaper = require("util.get_wallpaper")
 -- Rofi popup
 local rofi = require('rofi')
 
-
---
 -- Themes define colours, icons, font and wallpapers.
 -- beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 beautiful.init(gears.filesystem.get_configuration_dir() .. "mytheme.lua")
-
--- This is used later as the default terminal and editor to run.
-terminal = config.apps.terminal
-editor = config.apps.editor
-editor_cmd = config.cmd.editor
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -175,7 +168,7 @@ local globalkeys = gears.table.join(
         { description = "jump to urgent client", group = "client" }),
 
     -- Standard program
-    awful.key({ "Control", Alt }, "t", function() awful.spawn(terminal) end,
+    awful.key({ "Control", Alt }, "t", function() awful.spawn(config.apps.terminal) end,
         { description = "open a terminal", group = "launcher" }),
     awful.key({ modkey }, "e", function() awful.spawn("thunar") end,
         { description = "open a file manager", group = "launcher" }),

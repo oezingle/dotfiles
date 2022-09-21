@@ -26,10 +26,9 @@
 - applets
 	- math symbols applet
 	- Network Manager: WPA/WPA2 enterprise networks
-	- conflicting design languages between network-manager util and other applets
-		- lower radius on network-manager
-		- more transparency for calculator?
-		- network-manager util should live as an applet
+		- conflicting design languages
+			- lower radius on network-manager
+			- network-manager util should live as an applet
 	- finish calculator
 	- emoji selector
 
@@ -75,9 +74,7 @@
 			- battery (if is a laptop)
 			- systray
 
+- hover titlebar buttons
+
 - types
 	- generate type annotations for awesome from the docs
-
-- radial menu
-	- fancy little layout selector 
-		- middle click layout button?
