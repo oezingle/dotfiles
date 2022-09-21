@@ -11,7 +11,7 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
  - `client/restore.lua` is modified from this [Reddit thread](https://www.reddit.com/r/awesomewm/comments/cn02m6/)
  - `util/redshift.lua` is modified from [troglobit/awesome-redshift](https://github.com/troglobit/awesome-redshift)
  - `appmenu/server` wouldn't have been possible without [fbuihuu/samples-dbus](https://github.com/fbuihuu/samples-dbus/blob/master/dbus-client.c)
- - All the icons are stolen from ionicons - I plan to do this in a legal matter soon™
+ - All the icons are stolen from ionicons - I plan to do this in a legal manner soon™
 
 ## Features
 
