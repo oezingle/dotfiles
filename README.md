@@ -3,6 +3,23 @@
 
 My little AwesomeWM configuration. Riddled with copyright law breaches. The main attraction is probably my DBus global menu (`appmenu/`). I refuse to document anything but if you want to steal any of my code, go ahead. 
 
+## Details
+ - Font: [Inter](https://rsms.me/inter/)
+ - Compositor: [Picom](https://github.com/yshui/picom)
+ - GTK Theme: [Materia-theme-transparent](https://github.com/ckissane/materia-theme-transparent)
+ - Icons: [WhiteSur-dark](https://github.com/vinceliuice/WhiteSur-icon-theme)
+ - Cursor: [LiOS V](https://github.com/im-AMS/LiOSV-cursors)
+ - Firefox CSS: [BlurredFox](https://github.com/manilarome/blurredfox) with [this fix](https://github.com/manilarome/blurredfox/issues/68)
+ - Terminal: xfce4-terminal
+ - File Manager: Thunar
+
+## Dependencies
+### Required
+ - I'm lazy
+### Optional
+ - I'm lazy
+
+
 ## Stolen Code Appreciation Time
 
 "Whenever Possible, Steal Code" - I stole 95% of this project as any good programmer would
@@ -25,7 +42,7 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
 ![scratch terminal radial menu](/media/screenshot/scratch_terminal.png)
 
 ### Control Center
-![control center shows currently playing media](/media/screenshot/control_center_media.png)
+![im a very sad boy](/media/screenshot/control_center_media.png)
 
 ### Random Window Decoration Colors
 ![helps identify windows quickly](/media/screenshot/window_decorations.png)
@@ -34,6 +51,15 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
 ![system load](/media/screenshot/system_load.png)
 
 ![wm info](/media/screenshot/window_manager_info.png)
+
+### Features without screenshots
+ - Dynamic Wallpapers
+ - Cached Wallpaper variants for speed
+ - Multihead support (ish)
+ - Radial Layout Selector (Ctrl+Mod+F)
+ - Emoji CPU load indicator that opens top when clicked
+ - Alt+Tab client switcher (current tag only)
+ - Drag clients to tags in screen preview
 
 ## Stuff You Might Want To Steal
  - `appmenu/` - DBus Appmenu Implementation - Supports GTK and Canonical formats
@@ -45,3 +71,4 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
  - `widgets/util/radial_menu/` - Radial menu with buttons and an exit button
  - `widgets/util/pagination.lua` - Multiple pages of widgets
  - `widgets/system_status.lua` - Emoji in top left that shows CPU usage
+ - `util/testable.lua` - simple testing framework. export a testable(module, {...tests}) to enable unit testing for that file. call testable.lua from the terminal to run tests.
