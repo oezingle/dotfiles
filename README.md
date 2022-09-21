@@ -15,17 +15,25 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
 
 ## Features
 
-App Menu
+### App Menu
 ![global macos-style menu](/media/screenshot/global_menu.png)
 
-Screen Overview
+### Screen Overview
 ![macos-style screen overview](/media/screenshot/screen_preview.png)
 
-Scratch Terminal Selector (Mod+X)
+### Scratch Terminal Selector (Mod+X)
 ![scratch terminal radial menu](/media/screenshot/scratch_terminal.png)
 
-Random Window Decoration Colors
+### Control Center
+![control center shows currently playing media](/media/screenshot/control_center_media.png)
+
+### Random Window Decoration Colors
 ![helps identify windows quickly](/media/screenshot/window_decorations.png)
+
+### System / WM Info Widget
+![system load](/media/screenshot/system_load.png)
+
+![wm info](/media/screenshot/window_manager_info.png)
 
 ## Stuff You Might Want To Steal
  - `appmenu/` - DBus Appmenu Implementation - Supports GTK and Canonical formats
