@@ -45,7 +45,8 @@ local function create_system_status()
         ,
         2,
         function(widget, stdout)
-            local load = (tonumber(stdout) or 0) * 100
+            -- constrained to 100 in order to not break the widget
+            local load = math.min((tonumber(stdout) or 0) * 100, 100)
 
             local closest_status
             for status_time, _ in pairs(load_statuses) do
@@ -54,7 +55,7 @@ local function create_system_status()
                 end
             end
 
-            widget:get_children()[1].text = load_statuses[closest_status]
+            widget:get_children()[1].text = load_statuses[closest_status] or "[!]"
 
             -- widget.text = tostring(math.floor(load)) .. "%"
         end,

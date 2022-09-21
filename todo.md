@@ -55,26 +55,29 @@
 - antialias corners
 	- https://www.reddit.com/r/awesomewm/comments/kxe1n0/antialiased_rounded_borders/
 
-- switch from util.Promise to oezingle/LuaPromise - better tests, forces me to maintain it
+- Promises
+	- Use them
+	- switch from util.Promise to oezingle/LuaPromise 
+		- better tests
+		- forces me to maintain it
 
 - test under awesome-luajit, switch?
 
 - limit hovererd clients to 1 while using screen preview
 	- should fix mousegrabber issue?
 
-- restarting awesome breaks firefox's transparency
-
 - multihead
 	- brightness keys / control center controls an arbitrary display
 	- screen_preview is broken w/ multiple monitors
-	- there's only one notification center, but two control centers
-		- allow certain widgets on only primary screen
-			- notifications button
-			- control center
-			- battery (if is a laptop)
-			- systray
+	- allow certain widgets on only primary screen
+		- notifications button
+		- control center
+		- battery (if is a laptop)
+		- systray
 
 - hover titlebar buttons
+
+- windows without appmenus (minecraft-launcher) generate errors
 
 - types
 	- generate type annotations for awesome from the docs

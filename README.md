@@ -57,7 +57,7 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
  - Cached Wallpaper variants for speed
  - Multihead support (ish)
  - Radial Layout Selector (Ctrl+Mod+F)
- - Emoji CPU load indicator that opens top when clicked
+ - Emoji CPU load indicator that opens `top` when clicked
  - Alt+Tab client switcher (current tag only)
  - Drag clients to tags in screen preview
 
