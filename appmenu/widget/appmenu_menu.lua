@@ -4,13 +4,11 @@ local gtimer = require("gears.timer")
 local config = require("config")
 
 ---@param parent table
----@param direction Direction?
+---@param direction Direction? the direction relative to the parent
 local function appmenu_menu(parent, direction)
     local items = wibox.widget {
         layout = wibox.layout.fixed.vertical
     }
-
-    -- TODO mouse::leave - check for child. if no child, bubble w/ emit_signal to parent
 
     direction = direction or "bottom"
 
@@ -49,9 +47,15 @@ local function appmenu_menu(parent, direction)
             end)
         end
 
+        local child = popup.child
+
         gtimer.delayed_call(function()
-            if popup.child and not popup.child.has_entered then
-                popup.child:emit_signal("destroy")
+            if popup then
+                child = popup.child
+            end
+            
+            if child and not child.has_entered then
+                child:emit_signal("destroy")
             end
         end)
     end)
@@ -71,6 +75,7 @@ local function appmenu_menu(parent, direction)
         end
     end)
 
+    -- Move to mouse
     do
         ---@type Geometry
         local geo = mouse.current_widget_geometry

@@ -5,7 +5,7 @@ if not config.gimmicks.global_menu then
     return function() end
 end
 
--- TODO state.reload() blocks the mainloop for a WHILE
+-- TODO state.reload() blocks the mainloop for a while
 
 local flags   = require("appmenu.flags")
 local confirm = require("widgets.components.confirm")
@@ -18,16 +18,12 @@ local gdebug = require("gears.debug")
 
 pidwatch("~/.config/awesome/appmenu/server/main")
 
--- TODO hide menu when mouse has entered and leaves, but not into another menu button?
-
--- TODO catch errors, reload if menu has changed
-
 local appmenu_button          = require("appmenu.widget.appmenu_button")
 local appmenu_menu            = require("appmenu.widget.appmenu_menu")
 local recursive_menu_gen      = require("appmenu.widget.recursive_menu_gen")
 local uppercase_first_letters = require("util.uppercase_first_letters")
 
--- TODO mouse & keyboard control
+-- TODO keyboard control
 -- keyboard combo to stop focus change, lock into global menu
 -- arrow keys / enter
 -- escape to leave either current menu or if no menus open, global menu mode
@@ -51,8 +47,28 @@ local function create_appmenu()
 
     local app_menu = global_menu:get_children_by_id("app-menu")[1]
 
+    local last_reload_client = nil
+    local reload_attempts = 0
+
     ---@param c table
     local reload_menu = function(c)
+        if last_reload_client == c then
+            reload_attempts = reload_attempts + 1
+        else
+            last_reload_client = c
+            reload_attempts = 0
+        end
+
+        if reload_attempts > 5 then
+            -- give up on reloading
+
+            -- TODO document this better
+
+            gdebug.print_warning("Giving up on reloading menu for client " .. c.name)
+            
+            return
+        end
+        
         if flags.DEBUG then
             gdebug.print_warning("Reloading menu")
         end
@@ -119,7 +135,17 @@ local function create_appmenu()
                         if child.label then
                             -- TODO this button might not have children of its own - then what?
                             local button = appmenu_button(state, child.label, {}, function(button)
-                                return recursive_menu_gen(state, child, button)
+                                local success, res_or_err = pcall(function ()
+                                    return recursive_menu_gen(state, child, button)                                
+                                end)
+
+                                if not success then
+                                    gdebug.print_warning("Menu error: " .. tostring(res_or_err))
+
+                                    state.reload(c)
+                                else 
+                                    return res_or_err
+                                end
                             end)
 
                             app_menu:add(button)
@@ -147,6 +173,7 @@ end
 
 local appmenu
 
+-- strawman function
 local function get_appmenu()
     if not appmenu then
         appmenu = create_appmenu()

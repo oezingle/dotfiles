@@ -20,6 +20,9 @@
 
 - rofi theme
 	- a templating engine: follow config.popup colors?
+	- see http://olivinelabs.com/lustache/
+
+- use 30log for oop - switch from class:new() to class:init() and then port
 
 - lock on screen close
 
@@ -57,9 +60,7 @@
 
 - Promises
 	- Use them
-	- switch from util.Promise to oezingle/LuaPromise 
-		- better tests
-		- forces me to maintain it
+	- switch from util.Promise to an actual promise provider
 
 - test under awesome-luajit, switch?
 
@@ -74,6 +75,12 @@
 		- control center
 		- battery (if is a laptop)
 		- systray
+
+- better unit tests - tests/ directory
+
+- wide refactor
+	- src/ dir?
+	- appmenu -> widgets/appmenu
 
 - hover titlebar buttons
 

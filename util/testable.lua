@@ -3,6 +3,30 @@ local print = require("agnostic.print")
 
 -- TODO await Promises returned by test functions - Promise.all()
 
+-- For speed
+local DISABLE_TESTABLE = true
+
+if DISABLE_TESTABLE then
+    local bypass = function (...)
+        return ...
+    end
+
+    return setmetatable({
+        testable          = bypass,
+        has_awesome       = bypass,
+        on_signal         = bypass,
+        test_all          = bypass,
+        test              = bypass,
+        awesome_only_test = bypass,
+        assert            = bypass
+    }, {
+        __call = function(_, ...)
+            return bypass(...)
+        end
+    })
+    
+end
+
 ---@class Array<T>: { [integer]: T }
 
 ---@alias SingleOrArray<T> T|Array<T>

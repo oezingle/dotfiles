@@ -8,7 +8,13 @@ local function get_menu(window_id, callback)
         if gtk_menu then
             callback(gtk_menu)
         else
-            get_canonical_menu(window_id, callback)
+            get_canonical_menu(window_id, function (canonical_menu)
+                if canonical_menu then
+                    callback(canonical_menu)
+                end
+
+                -- there's no menu here at all
+            end)
         end
     end)
 end
