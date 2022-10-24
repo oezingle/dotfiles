@@ -122,11 +122,10 @@ local function create_control_center()
         1, 3, 1, 1
     )
 
-    -- TODO this button
     -- bluetooth
     grid:add_widget_at(
         icon_button(config_dir .. "icon/control-center/bluetooth-outline.svg", function(state)
-
+            -- TODO bluetooth applet
         end, "Bluetooth Configuration"),
         2, 3, 1, 1
     )
