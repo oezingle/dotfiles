@@ -8,7 +8,7 @@ local shapes = require("util.shapes")
 local redshift = require("util.redshift")
 
 local music_widget           = require("widgets.music")
-local network_manager_widget = require("widgets.network_manager")
+-- local network_manager_widget = require("widgets.network_manager")
 local dropdown               = require("widgets.util.dropdown")
 local cmd_slider             = require("widgets.components.cmd_slider")
 local icon_button            = require("widgets.components.icon_button")
@@ -117,7 +117,7 @@ local function create_control_center()
     -- network manager
     grid:add_widget_at(
         icon_button(config_dir .. "icon/control-center/wifi-outline.svg", function()
-            network_manager_widget()
+            -- network_manager_widget()
         end, "Network Configuration"),
         1, 3, 1, 1
     )
