@@ -314,7 +314,7 @@ end
 -- append volume keys
 globalkeys = gears.table.join(
     globalkeys,
-    table.unpack(require("keys.volume_and_brightness"))
+    table.unpack(require("widgets.volume_and_brightness").keys)
 )
 
 -- append screen preview keys
