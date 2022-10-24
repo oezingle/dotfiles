@@ -14,7 +14,7 @@
 - pet rock widget
 
 - improve notification center
-	- scroll is iffy
+	- scroll is broken
 	- kinda boring idk
 	- add date/time
 
@@ -81,6 +81,7 @@
 - wide refactor
 	- src/ dir?
 	- appmenu -> widgets/appmenu
+	- keys -> widgets
 
 - hover titlebar buttons
 

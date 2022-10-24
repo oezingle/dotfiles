@@ -48,6 +48,7 @@ end
 local popup = awful.popup {
     widget    = {
         {
+            --[[
             {
                 {
                     widget = wibox.widget.textbox,
@@ -59,6 +60,7 @@ local popup = awful.popup {
                 widget = wibox.container.background,
                 fg = "#fff"
             },
+            ]]
             {
                 widget        = wibox.widget.imagebox,
                 -- resize image
@@ -122,7 +124,7 @@ end
 
 local volume_changed = function()
     get_volume(function(volume)
-        get_widget("popup-text").text = "Volume"
+        -- get_widget("popup-text").text = "Volume"
         get_widget("popup-progress").value = volume
 
         local svg_path = ""
@@ -149,7 +151,7 @@ end
 
 local brightness_changed = function()
     get_brightness(function(brightness)
-        get_widget("popup-text").text = "Brightness"
+        -- get_widget("popup-text").text = "Brightness"
         get_widget("popup-progress").value = brightness
 
         get_widget("popup-image").image = config_dir .. "icon/sunny-outline.svg"
