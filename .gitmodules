@@ -4,3 +4,6 @@
 [submodule "battery-widget"]
 	path = battery-widget
 	url = https://github.com/deficient/battery-widget
+[submodule "awesome-battery_widget"]
+	path = awesome-battery_widget
+	url = https://github.com/Aire-One/awesome-battery_widget

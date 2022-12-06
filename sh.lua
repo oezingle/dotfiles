@@ -11,7 +11,7 @@ local function pidwatch(command)
     -- only drawback of this method is that it doesn't handle w mcrashes
     local pid = awful.spawn.with_shell(command)
 
-    awesome.connect_signal("exit", function ()
+    awesome.connect_signal("exit", function()
         -- -pid = kill group
         awesome.kill(-pid, awesome.unix_signal['SIGTERM'])
     end)
@@ -32,7 +32,7 @@ pidwatch("picom --experimental-backends")
 pidwatch("xfce4-power-manager")
 --end, "xfce4 power manager - autosleep, battery management")
 
-check_dependencies("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1", function ()
+check_dependencies("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1", function()
     pidwatch("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 end, "gnome polkit agent")
 
@@ -68,6 +68,13 @@ end
 check_dependencies({ "start-pulseaudio-x11" }, function()
     awful.spawn("start-pulseaudio-x11")
 end, "pulseaudio audio")
+
+-- screen locking
+if config.lock_time then
+    check_dependencies({ "xautolock" }, function()
+        pidwatch("xautolock -time " .. tostring(config.lock_time) .. " -locker \"dm-tool lock\"")
+    end, "xautolock screen locking")
+end
 
 -- some xinput stuff
 -- Enable trackpad while typing

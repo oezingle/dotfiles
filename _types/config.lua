@@ -62,3 +62,4 @@
 ---@field wallpaper { [number]: string, [string]: string, time: string|number } 
 ---@field cmd table<string, string>
 ---@field applet DotfileConfigurationApplets|nil
+---@field lock_time number

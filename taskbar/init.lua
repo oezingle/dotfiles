@@ -1,9 +1,11 @@
-local awful  = require("awful")
-local wibox  = require("wibox")
-local config = require("config")
-local gears  = require("gears")
-local system_status = require("widgets.system_status")
-local layout_selector = require("widgets.layout_selector")
+local awful                 = require("awful")
+local wibox                 = require("wibox")
+local config                = require("config")
+local gears                 = require("gears")
+local create_battery_widget = require("awesome-battery_widget")
+local config_dir            = gears.filesystem.get_configuration_dir()
+local system_status         = require("widgets.system_status")
+local layout_selector       = require("widgets.layout_selector")
 
 local get_decoration_color = require("util.color.get_decoration_color")
 local shapes = require("util.shapes")
@@ -117,6 +119,52 @@ local function create_taskbar()
             height = config.taskbar.top
         }
 
+        local percentage = wibox.widget {
+            widget = wibox.widget.textbox,
+            text = "??",
+            id = "textbox"
+        }
+
+        local battery_widget = create_battery_widget {
+            screen = s,
+            use_display_device = true,
+            --widget_template = wibox.widget.imagebox
+            widget_template = {
+                layout = wibox.layout.stack,
+                {
+                    layout = wibox.container.margin,
+                    left = 3,
+                    top = 3,
+                    bottom = 3,
+                    right = 7,
+                    {
+                        layout = wibox.container.place,
+                        percentage
+                    }
+                },
+                {
+                    widget = wibox.widget.imagebox,
+                    image = config_dir .. "icon/battery/battery-dead-outline.svg"
+                },
+            }
+        }
+
+        battery_widget:connect_signal('upower::update', function(widget, device)
+            --[[
+            if device.percentage > 75 then
+                widget.image = config_dir .. "icon/battery/battery-full-outline.svg"                
+            elseif device.percentage > 50 then
+                widget.image = config_dir .. "icon/battery/battery-half-outline.svg"
+            else
+                widget.image = config_dir .. "icon/battery/battery-dead-outline.svg"
+            end
+            ]]
+
+            percentage.text = string.format('%3d', device.percentage)
+
+            -- widget.text = string.format('%3d', device.percentage) .. '%'
+        end)
+
         s.top_bar:setup {
             layout = wibox.layout.align.horizontal,
             expand = "none",
@@ -154,7 +202,8 @@ local function create_taskbar()
                         right = 10
                     },
                     s.tag_switcher,
-                    require("battery-widget") { adapter = "BAT0", ac = "AC" },
+                    battery_widget,
+                    --require("battery-widget") { adapter = "BAT0", ac = "AC" },
                     s.layout_indicator,
                     control_center(),
                 }

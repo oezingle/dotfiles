@@ -101,6 +101,10 @@ local config = {
         calculator = false
     },
 
+    -- time to lock the screen in minutes
+    -- set to zero to disable locking
+    lock_time = 10,
+
     -- string[] or table<string, string> where the key is of the form "h:mm".
     -- time: string (parsed to number) or number (number of hours per wallpaper change) or nil
     wallpaper = {
