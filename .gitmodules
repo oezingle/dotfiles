@@ -1,9 +1,3 @@
 [submodule "appmenu/server"]
 	path = appmenu/server
 	url = https://github.com/oezingle/Simple-Appmenu-Server
-[submodule "awesome-battery_widget"]
-	path = awesome-battery_widget
-	url = https://github.com/Aire-One/awesome-battery_widget
-[submodule "awesome-upower-battery"]
-	path = awesome-upower-battery
-	url = https://github.com/berlam/awesome-upower-battery.git
