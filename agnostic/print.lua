@@ -1,4 +1,6 @@
 
+local pack = require("agnostic.version.pack")
+
 ---@return fun(...: any)
 return (function()
     local has_gears = pcall(require, "gears")
@@ -7,7 +9,7 @@ return (function()
         local print_warning = require("gears.debug").print_warning
 
         return function (...)
-            local items = table.pack(...)
+            local items = pack(...)
 
             local collector = ""
 

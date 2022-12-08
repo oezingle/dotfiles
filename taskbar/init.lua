@@ -19,7 +19,7 @@ local notification_center = require("widgets.notify.center")
 local create_tag_switcher = require("taskbar.tag_switcher")
 local create_tasklist     = require("taskbar.tasklist")
 
-local unpack = table.unpack or unpack
+local unpack = require("agnostic.version.unpack")
 
 local function color_border_widget(args)
     local layout = args.layout or wibox.layout.fixed.vertical

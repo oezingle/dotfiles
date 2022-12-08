@@ -1,6 +1,7 @@
 local base   = require("wibox.widget.base")
 local gtable = require("gears.table")
 local Class  = require("util.Class")
+local pack = require("agnostic.version.pack")
 
 local pagination = Class({})
 
@@ -44,7 +45,7 @@ end
 
 function pagination:set_children(...)
     -- im high and hehe childs
-    local childs = table.pack(...)
+    local childs = pack(...)
 
     self._private.pages = childs
 end

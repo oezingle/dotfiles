@@ -6,7 +6,7 @@ local get_preferred_size = require("widgets.helper.get_preferred_size")
 
 local pannable_layout = {}
 
-local pack = table.pack or function (...) return {...} end
+local pack = require("agnostic.version.pack")
 
 function pannable_layout:fit(_, width, height)
     return width, height

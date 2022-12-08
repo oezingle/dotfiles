@@ -1,5 +1,8 @@
 -- Quick DBus helper methods
 
+local pack = require("agnostic.version.pack")
+local unpack = require("agnostic.version.unpack")
+
 -- TODO move to util
 
 -- TODO SmartTable.method_async - abusing the AwesomeWM mainloop does not fly!
@@ -11,13 +14,6 @@ local lgi = require("lgi")
 local Gio = lgi.Gio
 
 local dbus = {}
-
-local pack = table.pack or function (...)
-    local tmp = {...}
-    tmp.n = select("#", ...)
-
-    return tmp
-end
 
 ------------------------------- Type Definitions -------------------------------
 
@@ -91,7 +87,7 @@ function dbus.new_smart_proxy(...)
 
     local proxy
     if #args > 3 then
-        proxy = dbus.new_proxy_with_connection(table.unpack(...))
+        proxy = dbus.new_proxy_with_connection(unpack(...))
     else
         proxy = dbus.new_proxy(...)
     end

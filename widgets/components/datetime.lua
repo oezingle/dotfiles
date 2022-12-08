@@ -5,6 +5,8 @@ local format_date = require("util.date").format
 local get_font    = require("util.get_font")
 local Class       = require("util.Class")
 
+local pack = require("agnostic.version.pack")
+
 local datetime = {}
 
 function datetime:update()
@@ -20,7 +22,7 @@ function datetime:layout(_, width, height)
 end
 
 function datetime:set_children(...)
-    local args = table.pack(...)
+    local args = pack(...)
 
     assert(#args == 1, "datetime may only have a single child")
 

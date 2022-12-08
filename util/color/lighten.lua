@@ -1,5 +1,6 @@
 local testable = require("util.testable")
 local gcolor = require("gears.color")
+local pack = require("agnostic.version.pack")
 
 --- Convert decimal integers to hexadecimal
 ---@param number number the number to convert
@@ -17,7 +18,7 @@ end
 local function lighten_color(color, amount)
     amount = amount or 0.1
 
-    local channels = table.pack(gcolor.parse_color(color))
+    local channels = pack(gcolor.parse_color(color))
 
     local hex_channels = { "", "", "", "" }
 

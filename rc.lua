@@ -5,7 +5,7 @@ math.random()
 math.random()
 math.random()
 
-local unpack = table.unpack or unpack
+local unpack = require("agnostic.version.unpack")
 
 local Alt = "Mod1"
 

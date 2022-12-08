@@ -1,9 +1,8 @@
 local shapes = require("util.shapes")
 local wibox  = require("wibox")
+local unpack = require("agnostic.version.unpack")
 
 local get_decoration_color = require("util.color.get_decoration_color")
-
-local unpack = table.unpack or unpack
 
 -- A widget with a rounded rect, margin, and background color
 local function color_bg_widget(args)

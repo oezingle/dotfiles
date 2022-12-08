@@ -9,7 +9,7 @@ local config     = require("config")
 local config_dir = require("gears.filesystem").get_configuration_dir()
 local get_preferred_size = require("widgets.helper.get_preferred_size")
 
-local print = require("agnostic.print")
+local pack = require("agnostic.version.pack")
 
 -- small layout that fits a widget very badly so that it's centered
 local center_badly = Class()
@@ -23,7 +23,7 @@ function center_badly:layout(_, width, height)
 end
 
 function center_badly:set_children(...)
-    local children = table.pack(...)
+    local children = pack(...)
 
     assert(#children == 1)
 

@@ -3,7 +3,11 @@ local agnostic_print = require("agnostic.print")
 local gtk_menu_item = require("appmenu.gtk.menu_item")
 local dbus = require("appmenu.dbus")
 local flags = require("appmenu.flags")
+--[[
 local Promise = require("util.Promise")
+local pack = require("agnostic.version.pack")
+local unpack = require("agnostic.version.unpack")
+]]
 
 -- dbus GTK menu spec: https://wiki.gnome.org/Projects/GLib/GApplication/DBusAPI#org.gtk.Menus
 -- actually pretty useful
@@ -13,15 +17,17 @@ local gtk_menu_info_cache = setmetatable({}, {
     __mode = "v"
 })
 
+--[[
 local function spawn_promise(command, ...)
-    local args = table.pack(...)
+    local args = pack(...)
 
     return Promise(function(resolve)
         agnostic_spawn(command, function(res)
-            resolve(res, table.unpack(args))
+            resolve(res, unpack(args))
         end)
     end)
 end
+]]
 
 ---@param window_id number XWindow id to get the menu of
 ---@param callback fun(info: MenuInfo |nil): nil

@@ -15,9 +15,19 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
 
 ## Dependencies
 ### Required
- - I'm lazy
+ - `python-pywal` (due to a current bug)
+ - `picom` (won't break anything though)
 ### Optional
- - I'm lazy
+ - `appmenu-gtk-module` (appmenus for GTK apps)
+ - `whatsapp-ttf-emoji` (little guy in the top left)
+ - `inter-fonts` (nice system font)
+ - `xorg-xbacklight` (backlight control)
+ - `xautolock` (locking after config.lock_time minutes)
+ - `polkit-gnome` (GNOME polkit agent)
+ - `redshift` (redshift blue light filter)
+ - `geoclue` (redshift blue light filter)
+ - `libinput-gestures` (gestures, must be configured manually)
+ - `pulseaudio` (audio)
 
 
 ## Stolen Code Appreciation Time

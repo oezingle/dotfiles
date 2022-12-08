@@ -14,12 +14,7 @@ local clienticon_or_xorg = require("widgets.components.clienticon_or_xorg")
 
 local tag_preview = {}
 
-local pack = table.pack or function (...)
-    local tmp = {...}
-    tmp.n = select("#", ...)
-
-    return tmp
-end
+local pack = require("agnostic.version.pack")
 
 function tag_preview:fit(context, width, height)
     return width, height

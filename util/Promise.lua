@@ -1,5 +1,8 @@
 local testable = require("util.testable")
 local Class = require("util.Class")
+local pack = require("agnostic.version.pack")
+local unpack = require("agnostic.version.unpack")
+
 -- I decided against using is_instance because I want Promise.lua to be 'portable' for da github
 
 ---@alias PromiseCallback fun(resolve: function, reject: function?)
@@ -87,7 +90,7 @@ end
 local function Promise_get_resolver(self)
     ---@param ... any[]
     return function(...)
-        Promise_settle(self, table.pack(...))
+        Promise_settle(self, pack(...))
     end
 end
 
@@ -95,7 +98,7 @@ end
 local function Promise_get_rejecter(self)
     ---@param ... any[]
     return function(...)
-        Promise_settle(self, table.pack(...), true)
+        Promise_settle(self, pack(...), true)
     end
 end
 
@@ -137,17 +140,17 @@ function Promise:chain(after, catch)
             -- :after's errors should be handled by :catch
 
             local after_succeded, after_res = xpcall(function()
-                return table.pack(after(table.unpack(arguments)))
+                return pack(after(unpack(arguments)))
             end, function(err) return err end)
 
             if after_succeded then
-                resolve(table.unpack(after_res))
+                resolve(unpack(after_res))
             else
                 reject(after_res)
             end
         else
             -- TODO resolve if catch returns a non-error? somehow?
-            reject(catch(table.unpack(arguments)))
+            reject(catch(unpack(arguments)))
         end
     end
 
@@ -186,20 +189,20 @@ end
 --- Return a Promise that resolves with the value given by ...
 ---@return Promise
 function Promise.resolve(...)
-    local args = table.pack(...)
+    local args = pack(...)
 
     return Promise(function(res)
-        res(table.unpack(args))
+        res(unpack(args))
     end)
 end
 
 --- Return a Promise that rejects with the value given by ...
 ---@return Promise
 function Promise.reject(...)
-    local args = table.pack(...)
+    local args = pack(...)
 
     return Promise(function(_, rej)
-        rej(table.unpack(args))
+        rej(unpack(args))
     end)
 end
 
@@ -220,7 +223,7 @@ function Promise.all(promises)
                 resolves_left = resolves_left + 1
 
                 promise:chain(function(...)
-                    values[i] = table.pack(...)
+                    values[i] = pack(...)
 
                     resolves_left = resolves_left - 1
 

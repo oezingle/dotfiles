@@ -4,3 +4,5 @@ picom.conf
 cache/**
 
 .vscode
+
+config.lua

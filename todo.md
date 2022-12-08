@@ -85,6 +85,8 @@
 
 - hover titlebar buttons
 
+- pywal isn't actually optional (rofi requires it, fix that!)
+
 - windows without appmenus (minecraft-launcher) generate errors
 
 - types
