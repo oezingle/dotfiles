@@ -5,6 +5,8 @@ math.random()
 math.random()
 math.random()
 
+local unpack = table.unpack or unpack
+
 local Alt = "Mod1"
 
 -- Default modkey.
@@ -314,7 +316,7 @@ end
 -- append volume keys
 globalkeys = gears.table.join(
     globalkeys,
-    table.unpack(require("widgets.volume_and_brightness").keys)
+    unpack(require("widgets.volume_and_brightness").keys)
 )
 
 -- append screen preview keys

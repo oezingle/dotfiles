@@ -6,6 +6,8 @@ local get_preferred_size = require("widgets.helper.get_preferred_size")
 
 local pannable_layout = {}
 
+local pack = table.pack or function (...) return {...} end
+
 function pannable_layout:fit(_, width, height)
     return width, height
 end
@@ -40,7 +42,7 @@ function pannable_layout:set_child(value)
 end
 
 function pannable_layout:set_children(...)
-    local children = table.pack(...)[1]
+    local children = pack(...)[1]
     
     assert(#children == 1, "Pannable layout may only have 1 child")
 

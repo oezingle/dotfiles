@@ -14,6 +14,13 @@ local clienticon_or_xorg = require("widgets.components.clienticon_or_xorg")
 
 local tag_preview = {}
 
+local pack = table.pack or function (...)
+    local tmp = {...}
+    tmp.n = select("#", ...)
+
+    return tmp
+end
+
 function tag_preview:fit(context, width, height)
     return width, height
 end
@@ -112,7 +119,7 @@ function tag_preview:new_as_table(args)
 end
 
 function tag_preview:new(...)
-    local args = table.pack(...)
+    local args = pack(...)
 
     if #args == 2 and type(args[2]) == "boolean" then
         return tag_preview:new_as_function(args[1], args[2])

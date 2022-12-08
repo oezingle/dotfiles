@@ -12,6 +12,13 @@ local Gio = lgi.Gio
 
 local dbus = {}
 
+local pack = table.pack or function (...)
+    local tmp = {...}
+    tmp.n = select("#", ...)
+
+    return tmp
+end
+
 ------------------------------- Type Definitions -------------------------------
 
 ---@alias GVariant unknown
@@ -80,7 +87,7 @@ end
 ---@param ... any Args for dbus.new_proxy or dbus.new_proxy_with_connection
 ---@return SmartProxy SmartProxy
 function dbus.new_smart_proxy(...)
-    local args = table.pack(...)
+    local args = pack(...)
 
     local proxy
     if #args > 3 then
