@@ -108,22 +108,7 @@ local config = {
     -- string[] or table<string, string> where the key is of the form "h:mm".
     -- time: string (parsed to number) or number (number of hours per wallpaper change) or nil
     wallpaper = {
-        "/home/zingle/Pictures/wallpaper/JVC 120 ER DARK_8K.png",
-        "/home/zingle/Pictures/wallpaper/Scnea HQ T-120_DARK_8K.png",
-        "/home/zingle/Pictures/wallpaper/Quasar Video Cassette 60_8K.png",
-        "/home/zingle/Pictures/wallpaper/SAMSUNG E-180 EHQ_DARK_8K.png",
-        "/home/zingle/Pictures/wallpaper/SCOTCH VHS 8K.png"
-
-        -- These ones are kinda boring idk
-        -- "/home/zingle/Pictures/wallpaper/Kodak T-120_8K.png",
-        -- "/home/zingle/Pictures/wallpaper/Polaroid HQ E-180_8K.png",
-        -- "/home/zingle/Pictures/wallpaper/AKAI E-180_8K.png",
-
-        -- TODO make bright wallpapers look good - white font on transparency is hard to read
-        -- "/home/zingle/Pictures/wallpaper/TDK SUPER AVILYN DARK_8K.png",
-        -- "/home/zingle/Pictures/wallpaper/JVC E-180 DYNAREC_8K.png"
-
-        -- time = "1:00"
+        "~/Pictures/wallpaper.jpg",
     }
 }
 
