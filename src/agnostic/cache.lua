@@ -16,7 +16,7 @@ return (function()
             return self.fn(...)
         end
 
-        function uncache:new(fn)
+        function uncache:init(fn)
             self.fn = fn
         end 
 

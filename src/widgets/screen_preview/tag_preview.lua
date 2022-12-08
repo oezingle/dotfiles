@@ -94,7 +94,7 @@ function tag_preview:update(t)
     self._private.tag = t
 end
 
-function tag_preview:new_as_function(t, fast)
+function tag_preview:init_as_function(t, fast)
     assert(t)
 
     fast = fast or false
@@ -109,17 +109,17 @@ function tag_preview:new_as_function(t, fast)
     return ret
 end
 
-function tag_preview:new_as_table(args)
-    return self:new_as_function(args.tag, args.fast)
+function tag_preview:init_as_table(args)
+    return self:init_as_function(args.tag, args.fast)
 end
 
-function tag_preview:new(...)
+function tag_preview:init(...)
     local args = pack(...)
 
     if #args == 2 and type(args[2]) == "boolean" then
-        return tag_preview:new_as_function(args[1], args[2])
+        return tag_preview:init_as_function(args[1], args[2])
     elseif #args >= 2 and type(args[2]) == "table" then
-        return tag_preview:new_as_table(args[2])
+        return tag_preview:init_as_table(args[2])
     end
 
 end

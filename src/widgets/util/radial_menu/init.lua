@@ -30,7 +30,7 @@ function center_badly:set_children(...)
     self._private.widget = children[1]
 end
 
-function center_badly:new(widget)
+function center_badly:init(widget)
     local ret = base.make_widget(nil, nil, { enable_properties = true })
 
     gtable.crush(ret, center_badly, true)

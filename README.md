@@ -42,7 +42,6 @@ echo $(cd src/appmenu/server; make)
  - `picom` (compositor)
 
 
-
 ## Stolen Code Appreciation Time
 
 I stole like 95% of this project

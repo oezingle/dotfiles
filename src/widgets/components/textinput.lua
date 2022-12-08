@@ -9,7 +9,7 @@ local Class = require("src.util.Class")
 
 local textinput = {}
 
-function textinput:new(args)
+function textinput:init(args)
     args = args or {}
 
     self.text = ""

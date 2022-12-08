@@ -16,7 +16,7 @@ local get_decoration_color = require("src.util.color.get_decoration_color")
 
 local dropdown = {}
 
-function dropdown:new (args)    
+function dropdown:init (args)    
     self.popup = awful.popup {
         widget = args.widget,
 

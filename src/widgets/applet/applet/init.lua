@@ -9,7 +9,7 @@ local applet = {}
 
 applet.toolkit = require("src.widgets.applet.applet.toolkit")
 
-function applet:new(widget, dependencies)
+function applet:init(widget, dependencies)
     dependencies = dependencies or {}
 
     self:set_dependencies(dependencies)

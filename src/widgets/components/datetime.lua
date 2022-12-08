@@ -31,7 +31,7 @@ end
 
 ---@param time integer?
 ---@return table widget
-function datetime:new(time)
+function datetime:init(time)
     local ret = base.make_widget(nil, nil, { enable_properties = true })
 
     gtable.crush(ret, datetime, true)
@@ -50,7 +50,7 @@ end
 
 --[[
 setmetatable(datetime, { __call = function(_, ...)
-    return datetime.new({}, ...)
+    return datetime.init({}, ...)
 end })
 
 return datetime

@@ -41,7 +41,7 @@ end
 --- Create and trigger a Promise
 ---@param callback PromiseCallback
 ---@return Promise
-function Promise:new(callback)
+function Promise:init(callback)
     Promise_new_silent(self, callback)
 
     Promise._trigger(self)

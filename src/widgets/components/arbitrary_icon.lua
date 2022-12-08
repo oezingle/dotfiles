@@ -82,7 +82,7 @@ function arbitrary_icon:draw(context, cr, width, height)
     cr:paint()
 end
 
-function arbitrary_icon:new(name)
+function arbitrary_icon:init(name)
     local ret = base.make_widget(nil, nil, { enable_properties = true })
 
     gtable.crush(ret, arbitrary_icon, true)

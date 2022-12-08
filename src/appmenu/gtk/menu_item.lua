@@ -76,7 +76,7 @@ local function gtk_get_children(i_menu_item)
 
         local submenu_subscription = submenu and submenu[1] or nil
 
-        local new_menu_item = gtk_menu_item.new(
+        local new_menu_item = gtk_menu_item.init(
             {},
             i_menu_item._private.menu_proxy,
             i_menu_item._private.actions_proxy,
@@ -112,7 +112,7 @@ function gtk_menu_item:get_children(callback)
     callback(self._private.children)
 end
 
-function gtk_menu_item:new(menu_proxy, actions_proxy, subscription_group, label, action)
+function gtk_menu_item:init(menu_proxy, actions_proxy, subscription_group, label, action)
     self.subscription_group = subscription_group
 
     self.label = label

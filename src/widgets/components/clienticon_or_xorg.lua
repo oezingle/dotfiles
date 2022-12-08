@@ -32,7 +32,7 @@ function clienticon_or_xorg:set_client(c)
     clienticon_or_xorg_set_correct_internal_widget(self)
 end
 
-function clienticon_or_xorg:new(c)
+function clienticon_or_xorg:init(c)
     local ret = base.make_widget(nil, nil, { enable_properties = true })
 
     gtable.crush(ret, clienticon_or_xorg, true)

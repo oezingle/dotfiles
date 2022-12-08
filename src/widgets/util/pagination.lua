@@ -66,7 +66,7 @@ function pagination:layout(_, width, height)
     return { base.place_widget_at(widget, 0, 0, width, height) }
 end
 
-function pagination:new(children)
+function pagination:init(children)
     local ret = base.make_widget(nil, nil, { enable_properties = true })
 
     gtable.crush(ret, pagination, true)

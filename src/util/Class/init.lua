@@ -15,7 +15,7 @@ local function class(base)
 
             setmetatable(instance, { __index = base })
 
-            return base.new(instance, ...)
+            return base.init(instance, ...)
         end
     })
 

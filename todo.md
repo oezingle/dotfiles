@@ -22,7 +22,7 @@
 	- a templating engine: follow config.popup colors?
 	- see http://olivinelabs.com/lustache/
 
-- use 30log for oop - switch from class:new() to class:init() and then port
+- use 30log for oop
 
 - lock on screen close
 

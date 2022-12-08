@@ -56,7 +56,7 @@ local function canonical_get_children(i_menu_item)
             end
         end
 
-        local new_menu_item = canonical_menu_item.new(
+        local new_menu_item = canonical_menu_item.init(
             {},
             i_menu_item._private.proxy,
             child_id,
@@ -95,7 +95,7 @@ function canonical_menu_item:get_children(callback)
 end
 
 -- TODO switch to get_children(callback) for async
-function canonical_menu_item:new(proxy, id, label)    
+function canonical_menu_item:init(proxy, id, label)    
     self.id = id
 
     self.label = label

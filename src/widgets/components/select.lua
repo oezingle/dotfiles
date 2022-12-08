@@ -151,7 +151,7 @@ function select:set_options(options)
     self._private.options = options
 end
 
-function select:new(options)
+function select:init(options)
     local ret = base.make_widget(nil, nil, { enable_properties = true })
 
     gtable.crush(ret, select, true)

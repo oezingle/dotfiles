@@ -61,7 +61,7 @@ function pannable_layout:move(point)
     self:emit_signal("widget::layout_changed")
 end
 
-function pannable_layout:new()
+function pannable_layout:init()
 
     local ret = base.make_widget(nil, nil, { enable_properties = true })
 
