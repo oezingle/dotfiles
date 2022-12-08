@@ -5,7 +5,7 @@ math.random()
 math.random()
 math.random()
 
-local unpack = require("agnostic.version.unpack")
+local unpack = require("src.agnostic.version.unpack")
 
 local Alt = "Mod1"
 
@@ -36,51 +36,51 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
-local create_exit_screen = require("widgets.exit_menu")
-local scratch_terminal = require("widgets.scratch_terminal")
+local create_exit_screen = require("src.widgets.exit_menu")
+local scratch_terminal = require("src.widgets.scratch_terminal")
 
 -- TODO these probably fire twice when using the test signal
 
 -- Include my custom event handlers
-require("events")
+require("src.events")
 
-require("client")
+require("src.client")
 
 -- Run shell stuff
-require("sh")
+require("src.sh")
 
 -- notifications
-require("notify")
+require("src.notify")
 
 -- Set up taskbar
-local create_taskbar = require("taskbar")
+local create_taskbar = require("src.taskbar")
 create_taskbar()
 
-local layout_selector = require("widgets.layout_selector")
+local layout_selector = require("src.widgets.layout_selector")
 
 -- allow screen preview
 if config.gimmicks.screen_preview then
     --[[
     check_dependencies({ "convert" }, function()
-        require("widgets.screen_preview")
+        require("src.widgets.screen_preview")
 
     end, "OSX-style screen preview")
     ]]
 
     -- TODO doesn't work if enabled by check_dependencies
-    require("widgets.screen_preview")
+    require("src.widgets.screen_preview")
 end
 -- allow client switcher
-require("widgets.client_switcher")()
+require("src.widgets.client_switcher")()
 
 -- Get applets
-require("widgets.applet")
+require("src.widgets.applet")
 
 -- set wallpaper
-local get_wallpaper = require("util.get_wallpaper")
+local get_wallpaper = require("src.util.get_wallpaper")
 
 -- Rofi popup
-local rofi = require('rofi')
+local rofi = require('src.rofi')
 
 -- Themes define colours, icons, font and wallpapers.
 -- beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
@@ -316,7 +316,7 @@ end
 -- append volume keys
 globalkeys = gears.table.join(
     globalkeys,
-    unpack(require("widgets.volume_and_brightness").keys)
+    unpack(require("src.widgets.volume_and_brightness").keys)
 )
 
 -- append screen preview keys

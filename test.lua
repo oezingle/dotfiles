@@ -15,7 +15,7 @@ if err and arg then
     else
         print("Running tests in lua CLI. To run in awesomewm, call 'test.lua awesome'")
 
-        require("util.testable").test_all ()
+        require("src.util.testable").test_all ()
     end
     
     os.exit()            

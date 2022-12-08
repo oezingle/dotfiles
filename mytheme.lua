@@ -13,7 +13,7 @@ local config_dir = gfs.get_configuration_dir()
 
 local config = require("config")
 
--- local shapes = require("util.shapes")
+-- local shapes = require("src.util.shapes")
 
 local theme = {}
 
