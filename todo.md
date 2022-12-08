@@ -76,9 +76,6 @@
 
 - better unit tests - tests/ directory
 
-- wide refactor
-	- keys -> widgets (just volume / brightness )
-
 - hover titlebar buttons
 
 - figure out why tf appmenus don't work on awesome-luajit
