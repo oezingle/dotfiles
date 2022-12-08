@@ -1,5 +1,0 @@
-require\("([^"]+)"\)
-require("src.$1")
-
-require\("src\.(wibox|gears|awful|beautiful|naughty|dbus|menubar|mouse|mousegrabber|root|selection|lgi|config)([^"]*)"\)
-require("$1$2")
