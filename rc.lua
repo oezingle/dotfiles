@@ -172,7 +172,7 @@ local globalkeys = gears.table.join(
     -- Standard program
     awful.key({ "Control", Alt }, "t", function() awful.spawn(config.apps.terminal) end,
         { description = "open a terminal", group = "launcher" }),
-    awful.key({ modkey }, "e", function() awful.spawn("thunar") end,
+    awful.key({ modkey }, "e", function() awful.spawn(config.apps.file_manager) end,
         { description = "open a file manager", group = "launcher" }),
 
     awful.key({ modkey, "Control" }, "r", awesome.restart,

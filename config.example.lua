@@ -84,6 +84,7 @@ local config = {
     apps = {
         terminal = "xfce4-terminal",
         editor = os.getenv("EDITOR") or "vim",
+        file_manager = "thunar",
     },
 
     -- How long notifications stay around in the top middle of the screen

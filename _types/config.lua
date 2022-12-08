@@ -35,6 +35,7 @@
 ---@class DotfileConfigurationApps
 ---@field terminal string
 ---@field editor string
+---@field file_manager string
 
 ---@class DotfileConfigurationGimmicks
 ---@field gestures boolean
