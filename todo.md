@@ -42,11 +42,9 @@
 
 - uninstall `gtk3-demos` once i've got all my arbitrary_icons sorted
 
-- custom polkit?
+- custom polkit
 
 - unit tests where possible
-
-- make sure global menu is up to snuff
 
 - set `inode/directory` mimetype to use thunar over VS Code 
 
