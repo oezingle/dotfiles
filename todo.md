@@ -77,8 +77,6 @@
 - better unit tests - tests/ directory
 
 - wide refactor
-	- src/ dir?
-	- appmenu -> widgets/appmenu
 	- keys -> widgets (just volume / brightness )
 
 - hover titlebar buttons
