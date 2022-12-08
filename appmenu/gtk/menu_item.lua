@@ -11,7 +11,6 @@ local gtk_menu_item = {
     MENU_TYPE = "gtk"
 }
 
-
 -- TODO determine if actions are always ordered - O(1) efficiency instead of O(n)
 local function gtk_get_action(actions, subscription_group, menu_number)
     for _, action in ipairs(actions) do

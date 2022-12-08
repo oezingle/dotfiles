@@ -37,21 +37,28 @@ local function get_canonical_menu_info(window_id, callback)
         -- needs a tuple for whatever reason
         local window_id_variant = GVariant("(u)", { window_id })
 
-        local res = app_menu_proxy.method.GetMenuForWindow(window_id_variant)
+        xpcall(
+            function()
+                local res = app_menu_proxy.method.GetMenuForWindow(window_id_variant)
+                
+                ---@type MenuInfo
+                local info = {
+                    service = res[1],
+                    path = res[2]
+                }
+    
+                canonical_menu_info_cache[window_id] = info
+    
+                callback(info)
+            end,
+            function (err)
+                if flags.DEBUG then
+                    agnostic_print(err)
+                end
 
-        if res then
-            ---@type MenuInfo
-            local info = {
-                service = res[1],
-                path = res[2]
-            }
-
-            canonical_menu_info_cache[window_id] = info
-
-            callback(info)
-        else
-            callback(nil)
-        end
+                callback(nil)
+            end
+        )            
     end
 end
 

@@ -11,6 +11,8 @@ local function get_menu(window_id, callback)
             get_canonical_menu(window_id, function (canonical_menu)
                 if canonical_menu then
                     callback(canonical_menu)
+                else
+                    callback(nil)
                 end
 
                 -- there's no menu here at all

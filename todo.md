@@ -85,9 +85,7 @@
 
 - hover titlebar buttons
 
-- pywal isn't actually optional (rofi requires it, fix that!)
-
-- windows without appmenus (minecraft-launcher) generate errors
+- figure out why tf appmenus don't work on awesome-luajit
 
 - types
 	- generate type annotations for awesome from the docs

@@ -113,7 +113,7 @@ function dbus.smart_proxy(proxy)
 
             if handlers then
                 for _, fn in ipairs(handlers) do
-                    -- I have a hard time believing i will ever use sender_name, so I revsered args
+                    -- I have a hard time believing i will ever use sender_name, so I reversed args
                     fn(parameters, sender_name)
                 end
             end
