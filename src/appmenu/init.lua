@@ -6,6 +6,7 @@ if not config.gimmicks.global_menu then
 end
 
 -- TODO state.reload() blocks the mainloop for a while
+-- TODO state.reload() is bad pattern
 
 local flags   = require("src.appmenu.flags")
 local confirm = require("src.widgets.components.confirm")
@@ -16,7 +17,8 @@ local get_menu = require("src.appmenu.get_menu")
 local wibox  = require("wibox")
 local gdebug = require("gears.debug")
 
-pidwatch("~/.config/awesome/appmenu/server/main")
+-- TODO assumes a folder
+pidwatch("~/.config/awesome/src/appmenu/server/main")
 
 local appmenu_button          = require("src.appmenu.widget.appmenu_button")
 local appmenu_menu            = require("src.appmenu.widget.appmenu_menu")

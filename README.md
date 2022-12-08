@@ -13,6 +13,16 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
  - Terminal: xfce4-terminal
  - File Manager: Thunar
 
+## Installing
+```bash
+# Copy the default configuration and modify as seen fit
+cp config.example.lua config.lua
+vim config.lua
+
+# Build the appmenu server (only if you want global menus)
+echo $(cd src/appmenu/server; make)
+```
+
 ## Dependencies
 ### Required
  - `upower` (battery stats)
