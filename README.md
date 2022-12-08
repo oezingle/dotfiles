@@ -15,8 +15,8 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
 
 ## Dependencies
 ### Required
- - `python-pywal` (due to a current bug)
- - `picom` (won't break anything though)
+ - `upower` (battery stats)
+ - `awesome` (window manager)
 ### Optional
  - `appmenu-gtk-module` (appmenus for GTK apps)
  - `whatsapp-ttf-emoji` (little guy in the top left)
@@ -28,11 +28,14 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
  - `geoclue` (redshift blue light filter)
  - `libinput-gestures` (gestures, must be configured manually)
  - `pulseaudio` (audio)
+ - `python-pywal` (sync terminal/rofi colors to wallpaper)
+ - `picom` (compositor)
+
 
 
 ## Stolen Code Appreciation Time
 
-"Whenever Possible, Steal Code" - I stole 95% of this project as any good programmer would
+I stole like 95% of this project
  - `widgets/exit_menu.lua` is lifted from [manilarome/the-glorious-dotfiles](https://github.com/manilarome/the-glorious-dotfiles)
  - `widgets/components/client_preview.lua` is improved from this [Reddit Thread](https://www.reddit.com/r/awesomewm/comments/akiqz2/)
  - `client/restore.lua` is modified from this [Reddit thread](https://www.reddit.com/r/awesomewm/comments/cn02m6/)

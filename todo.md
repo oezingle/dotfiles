@@ -81,7 +81,7 @@
 - wide refactor
 	- src/ dir?
 	- appmenu -> widgets/appmenu
-	- keys -> widgets
+	- keys -> widgets (just volume / brightness )
 
 - hover titlebar buttons
 

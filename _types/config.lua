@@ -64,3 +64,4 @@
 ---@field cmd table<string, string>
 ---@field applet DotfileConfigurationApplets|nil
 ---@field lock_time number
+---@field compositor string

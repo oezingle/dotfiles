@@ -24,7 +24,7 @@ end, "Two finger right click")
 
 -- picom
 --check_dependencies({ 'picom' }, function()
-pidwatch("picom")
+pidwatch(config.compositor)
 --end, "picom compositor")
 
 -- xfce4 power manager

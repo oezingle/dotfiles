@@ -106,6 +106,9 @@ local config = {
     -- set to zero to disable locking
     lock_time = 10,
 
+    -- compositor
+    compositor = "picom",
+
     -- string[] or table<string, string> where the key is of the form "h:mm".
     -- time: string (parsed to number) or number (number of hours per wallpaper change) or nil
     wallpaper = {
