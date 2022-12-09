@@ -1,4 +1,4 @@
-local Class = require("src.util.Class")
+local class = require("lib.30log")
 local flags = require("src.appmenu.flags")
 
 -- TODO add back the LayoutChanged signal to deal with layout changing while the system sleeps
@@ -10,9 +10,9 @@ local agnostic_print = require("src.agnostic.print")
 local lgi = require("lgi")
 local GVariant = lgi.GLib.Variant
 
-local canonical_menu_item = {
+local canonical_menu_item = class("Canonical Menu Item", {
     MENU_TYPE = "canonical"
-}
+})
 
 -- TODO async
 local function canonical_get_children(i_menu_item)
@@ -107,4 +107,4 @@ function canonical_menu_item:init(proxy, id, label)
     return self
 end
 
-return Class(canonical_menu_item)
+return canonical_menu_item

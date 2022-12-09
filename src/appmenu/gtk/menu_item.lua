@@ -1,4 +1,4 @@
-local Class = require("src.util.Class")
+local class = require("lib.30log")
 
 -- TODO test signals
 
@@ -7,9 +7,9 @@ local Class = require("src.util.Class")
 local lgi = require("lgi")
 local GVariant = lgi.GLib.Variant
 
-local gtk_menu_item = {
+local gtk_menu_item = class("GTK Menu Item", {
     MENU_TYPE = "gtk"
-}
+})
 
 -- TODO determine if actions are always ordered - O(1) efficiency instead of O(n)
 local function gtk_get_action(actions, subscription_group, menu_number)
@@ -136,4 +136,4 @@ function gtk_menu_item:init(menu_proxy, actions_proxy, subscription_group, label
     return self
 end
 
-return Class(gtk_menu_item)
+return gtk_menu_item

@@ -2,5 +2,8 @@
 	path = src/appmenu/server
 	url = https://github.com/oezingle/Simple-Appmenu-Server
 [submodule "awesome-battery_widget"]
-	path = src/awesome-battery_widget
+	path = lib/awesome-battery_widget
 	url = https://github.com/Aire-One/awesome-battery_widget.git
+[submodule "libs/30log"]
+	path = libs/30log
+	url = https://github.com/Yonaba/30log

@@ -52,19 +52,12 @@
 	- Use them
 	- switch from util.Promise to an actual promise provider
 
-- test under awesome-luajit, switch?
-
-- limit hovererd clients to 1 while using screen preview
-	- should fix mousegrabber issue?
+- limit hovered clients to 1 while using screen preview
+	- should fix mousegrabber issue
 
 - multihead
 	- brightness keys / control center controls an arbitrary display
 	- screen_preview is broken w/ multiple monitors
-	- allow certain widgets on only primary screen
-		- notifications button
-		- control center
-		- battery (if is a laptop)
-		- systray
 
 - better unit tests - tests/ directory
 
@@ -77,3 +70,5 @@
 
 - break keys out from rc.lua
 	- configurable?
+
+- hot reloading? perchance?

@@ -13,7 +13,7 @@ require("src.widgets.network_manager.connection")
 
 local wibox = require("wibox")
 
-local exitable_dialog = require('widgets.util.exitable_dialog')
+local exitable_dialog = require('src.widgets.util.exitable_dialog')
 
 local widget = wibox.widget {
     {
