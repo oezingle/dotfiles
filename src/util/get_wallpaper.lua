@@ -54,11 +54,12 @@ end
 local wallpaper = {}
 
 do
-    ---@as string[]|table<string, string>
+    ---@type table<string|number, string>
     wallpaper.table = config.wallpaper
 
     wallpaper.is_list = wallpaper.table[1] ~= nil
 
+    ---@type integer|string|nil
     wallpaper.current_identifier = nil
 
     local wallpaper_time
