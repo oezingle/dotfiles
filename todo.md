@@ -40,6 +40,7 @@
 - custom polkit
 
 - unit tests where possible
+	- https://github.com/norman/telescope
 
 - set `inode/directory` mimetype to use thunar over VS Code 
 
@@ -72,3 +73,4 @@
 	- configurable?
 
 - hot reloading? perchance?
+	- https://github.com/anton-kl/lua-hot-reload

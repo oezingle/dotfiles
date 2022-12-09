@@ -84,13 +84,13 @@ I stole like 95% of this project
  - Drag clients to tags in screen preview
 
 ## Stuff You Might Want To Steal
- - `appmenu/` - DBus Appmenu Implementation - Supports GTK and Canonical formats
- - `widgets/components/arbitrary_icon.lua` - GTK icons as Awesome Widgets
- - `widgets/components/cmd_slider.lua` - Upsettingly complex widget that calls a callback when a slider is moved 
- - `widgets/components/select.lua` - Dropdown select menu
- - `widgets/components/switch.lua` - A pretty looking toggle switch
- - `widgets/screen_preview/` - Screen preview/overview/whatever you want to call it
- - `widgets/util/radial_menu/` - Radial menu with buttons and an exit button
- - `widgets/util/pagination.lua` - Multiple pages of widgets
- - `widgets/system_status.lua` - Emoji in top left that shows CPU usage
- - `util/testable.lua` - simple testing framework. export a testable(module, {...tests}) to enable unit testing for that file. call testable.lua from the terminal to run tests.
+ - `src/appmenu/` - DBus Appmenu Implementation - Supports GTK and Canonical formats
+ - `src/widgets/components/arbitrary_icon.lua` - GTK icons as Awesome Widgets
+ - `src/widgets/components/cmd_slider.lua` - Upsettingly complex widget that calls a callback when a slider is moved 
+ - `src/widgets/components/select.lua` - Dropdown select menu
+ - `src/widgets/components/switch.lua` - A pretty looking toggle switch
+ - `src/widgets/screen_preview/` - Screen preview/overview/whatever you want to call it
+ - `src/widgets/util/radial_menu/` - Radial menu with buttons and an exit button
+ - `src/widgets/util/pagination.lua` - Multiple pages of widgets
+ - `src/widgets/system_status.lua` - Emoji in top left that shows CPU usage
+ - `src/util/testable.lua` - simple testing framework. export a testable(module, {...tests}) to enable unit testing for that file. call testable.lua from the terminal to run tests.
