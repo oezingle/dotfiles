@@ -164,8 +164,6 @@ local brightness_changed = function()
     end)
 end
 
-local print = require("src.agnostic.print")
-
 local keys = {
     awful.key({}, "XF86AudioRaiseVolume",
         cmd_callback("pactl -- set-sink-volume 0 +10%", volume_changed)
