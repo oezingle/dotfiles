@@ -70,17 +70,90 @@ end
 
 local function create_taskbar()
     awful.screen.connect_for_each_screen(function(s)
+        local is_primary = s == screen.primary
+
         -- Set layouts per-tag
         awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
         create_tag_switcher(s)
 
-        s.left_bar = awful.wibar {
-            position = "left",
+        if is_primary then
+            s.left_bar = awful.wibar {
+                position = "left",
+                screen = s,
+                bg = config.taskbar.bg,
+                width = config.taskbar.left
+            }
+
+            s.left_bar:setup {
+                layout = wibox.layout.align.vertical,
+                expand = "none",
+                {
+                    widget = wibox.container.margin,
+                    left = config.taskbar.gap,
+                    top = config.taskbar.gap,
+                    create_tasklist(s),
+                },
+                notification_center.get_button(),
+                {
+                    widget = wibox.container.margin,
+                    left = config.taskbar.gap,
+                    bottom = config.taskbar.gap,
+                    {
+                        layout = wibox.layout.fixed.vertical,
+                        spacing = 3,
+
+                        create_systray(),
+                        create_launcher(),
+                    }
+                }
+            }
+        end
+
+        s.top_bar = awful.wibar {
+            position = "top",
             screen = s,
             bg = config.taskbar.bg,
-            width = config.taskbar.left
+            height = config.taskbar.top
         }
+
+        local battery_widget = nil
+
+        if is_primary then
+            local percentage = wibox.widget {
+                widget = wibox.widget.textbox,
+                text = "??",
+                id = "textbox"
+            }
+
+            battery_widget = create_battery_widget {
+                screen = s,
+                use_display_device = true,
+                --widget_template = wibox.widget.imagebox
+                widget_template = {
+                    layout = wibox.layout.stack,
+                    {
+                        layout = wibox.container.margin,
+                        left = 3,
+                        top = 3,
+                        bottom = 3,
+                        right = 7,
+                        {
+                            layout = wibox.container.place,
+                            percentage
+                        }
+                    },
+                    {
+                        widget = wibox.widget.imagebox,
+                        image = config_dir .. "icon/battery/battery-dead-outline.svg"
+                    },
+                }
+            }
+
+            battery_widget:connect_signal('upower::update', function(widget, device)
+                percentage.text = string.format('%3d', device.percentage)
+            end)
+        end
 
         s.layout_indicator = awful.widget.layoutbox(s)
         s.layout_indicator:buttons(gears.table.join(
@@ -90,83 +163,6 @@ local function create_taskbar()
             awful.button({}, 4, function() awful.layout.inc(1) end),
             awful.button({}, 5, function() awful.layout.inc(-1) end)))
 
-        s.left_bar:setup {
-            layout = wibox.layout.align.vertical,
-            expand = "none",
-            {
-                widget = wibox.container.margin,
-                left = config.taskbar.gap,
-                top = config.taskbar.gap,
-                create_tasklist(s),
-            },
-            notification_center.get_button(),
-            {
-                widget = wibox.container.margin,
-                left = config.taskbar.gap,
-                bottom = config.taskbar.gap,
-                {
-                    layout = wibox.layout.fixed.vertical,
-                    spacing = 3,
-
-                    create_systray(),
-                    create_launcher(),
-                }
-            }
-        }
-
-        s.top_bar = awful.wibar {
-            position = "top",
-            screen = s,
-            bg = config.taskbar.bg,
-            height = config.taskbar.top
-        }
-
-        local percentage = wibox.widget {
-            widget = wibox.widget.textbox,
-            text = "??",
-            id = "textbox"
-        }
-
-        local battery_widget = create_battery_widget {
-            screen = s,
-            use_display_device = true,
-            --widget_template = wibox.widget.imagebox
-            widget_template = {
-                layout = wibox.layout.stack,
-                {
-                    layout = wibox.container.margin,
-                    left = 3,
-                    top = 3,
-                    bottom = 3,
-                    right = 7,
-                    {
-                        layout = wibox.container.place,
-                        percentage
-                    }
-                },
-                {
-                    widget = wibox.widget.imagebox,
-                    image = config_dir .. "icon/battery/battery-dead-outline.svg"
-                },
-            }
-        }
-
-        battery_widget:connect_signal('upower::update', function(widget, device)
-            --[[
-            if device.percentage > 75 then
-                widget.image = config_dir .. "icon/battery/battery-full-outline.svg"                
-            elseif device.percentage > 50 then
-                widget.image = config_dir .. "icon/battery/battery-half-outline.svg"
-            else
-                widget.image = config_dir .. "icon/battery/battery-dead-outline.svg"
-            end
-            ]]
-
-            percentage.text = string.format('%3d', device.percentage)
-
-            -- widget.text = string.format('%3d', device.percentage) .. '%'
-        end)
-
         s.top_bar:setup {
             layout = wibox.layout.align.horizontal,
             expand = "none",
@@ -175,8 +171,8 @@ local function create_taskbar()
                 left = config.taskbar.gap,
                 top = config.taskbar.gap,
                 {
-                    system_status(),
-                    create_appmenu(),
+                    is_primary and system_status(),
+                    is_primary and create_appmenu(),
 
                     layout = wibox.layout.fixed.horizontal,
                     spacing = 5
@@ -185,7 +181,7 @@ local function create_taskbar()
             {
                 widget = wibox.container.margin,
                 top = config.taskbar.gap,
-                color_border_widget {
+                is_primary and color_border_widget {
                     margins = {
                         left = 10,
                         right = 10
@@ -207,7 +203,7 @@ local function create_taskbar()
                     battery_widget,
                     --require("src.battery-widget") { adapter = "BAT0", ac = "AC" },
                     s.layout_indicator,
-                    control_center(),
+                    is_primary and control_center(),
                 }
             },
         }

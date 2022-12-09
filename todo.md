@@ -36,9 +36,6 @@
 - wallpapers
 	- test timestamp based table: { ["0:00"] = "/path/to/image" }
 	- looks like shit with light wallpaper
-	- wallpaper_changed signal called constantly under xephyr - might be the case with native xorg too?
-
-- uninstall `gtk3-demos` once i've got all my arbitrary_icons sorted
 
 - custom polkit
 
@@ -77,3 +74,6 @@
 
 - types
 	- generate type annotations for awesome from the docs
+
+- break keys out from rc.lua
+	- configurable?

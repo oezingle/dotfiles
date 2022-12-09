@@ -477,3 +477,9 @@ end
 
 -- Garbage collection
 gears.timer.start_new(10, function() collectgarbage("step", 20000) return true end)
+
+local print = require("src.agnostic.print")
+
+awesome.connect_signal("wallpaper_changed", function ()
+    print("Wallpaper changed!")
+end) 

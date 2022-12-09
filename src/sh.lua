@@ -23,9 +23,9 @@ check_dependencies({ "xinput" }, function()
 end, "Two finger right click")
 
 -- picom
---check_dependencies({ 'picom' }, function()
-pidwatch(config.compositor)
---end, "picom compositor")
+if config.compositor and #config.compositor then
+    pidwatch(config.compositor)
+end
 
 -- xfce4 power manager
 --check_dependencies({ 'xfce4-power-manager ' }, function()
