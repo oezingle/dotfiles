@@ -24,8 +24,6 @@
 
 - use 30log for oop
 
-- lock on screen close
-
 - applets
 	- math symbols applet
 	- Network Manager: WPA/WPA2 enterprise networks
