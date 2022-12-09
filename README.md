@@ -1,7 +1,7 @@
 
 # VHS dotfiles
 
-My little AwesomeWM configuration. Riddled with copyright law breaches. The main attraction is probably my DBus global menu (`appmenu/`). I refuse to document anything but if you want to steal any of my code, go ahead. 
+My little AwesomeWM configuration. Riddled with copyright law breaches. The main attraction is probably my DBus global menu (`src/appmenu/`). I refuse to document anything but if you want to steal any of my code, go ahead. 
 
 ## Details
  - Font: [Inter](https://rsms.me/inter/)
