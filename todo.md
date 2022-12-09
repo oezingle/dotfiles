@@ -51,9 +51,6 @@
 
 - no way to switch audio sink
 
-- antialias corners
-	- https://www.reddit.com/r/awesomewm/comments/kxe1n0/antialiased_rounded_borders/
-
 - Promises
 	- Use them
 	- switch from util.Promise to an actual promise provider
