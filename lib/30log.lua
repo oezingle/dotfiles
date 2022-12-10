@@ -1,5 +1,6 @@
 local class = require("lib.30log.30log")
 
+-- hehe
 if false then
     --- Create a class
     ---@param name string the name of the class
