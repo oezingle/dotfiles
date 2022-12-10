@@ -10,11 +10,11 @@ local config_dir = gfs.get_configuration_dir()
 
 local config = require("config")
 
-local Class = require("src.util.Class")
+local class = require("lib.30log")
 
 local get_decoration_color = require("src.util.color.get_decoration_color")
 
-local dropdown = {}
+local dropdown = class("Dropdown Widget")
 
 function dropdown:init (args)    
     self.popup = awful.popup {
@@ -76,4 +76,4 @@ function dropdown:get_internal_popup()
     return self.popup
 end
 
-return Class(dropdown)
+return dropdown

@@ -1,11 +1,10 @@
 -- TODO refactor to util.applet? widget.helper?
 
----@module 'util.Class'
-local Class = require("src.util.Class")
+local class = require("lib.30log")
 local exitable_dialog = require("src.widgets.util.exitable_dialog")
 local check_dependencies = require("src.util.check_dependencies")
 
-local applet = {}
+local applet = class("Applet")
 
 applet.toolkit = require("src.widgets.applet.applet.toolkit")
 
@@ -91,4 +90,4 @@ function applet:create()
     return self.bindings
 end
 
-return Class(applet)
+return applet

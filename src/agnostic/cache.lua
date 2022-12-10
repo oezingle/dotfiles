@@ -10,7 +10,7 @@ return (function()
     if success then
         return gcache
     else
-        local uncache = {}
+        local uncache = require("lib.30log")("Mock Cache")
 
         function uncache:get(...) 
             return self.fn(...)
@@ -20,6 +20,6 @@ return (function()
             self.fn = fn
         end 
 
-        return require("src.util.Class")(uncache)
+        return uncache
     end
 end)()

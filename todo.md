@@ -41,6 +41,7 @@
 
 - unit tests where possible
 	- https://github.com/norman/telescope
+	- better unit tests - tests/ directory
 
 - set `inode/directory` mimetype to use thunar over VS Code 
 
@@ -59,8 +60,6 @@
 - multihead
 	- brightness keys / control center controls an arbitrary display
 	- screen_preview is broken w/ multiple monitors
-
-- better unit tests - tests/ directory
 
 - hover titlebar buttons
 

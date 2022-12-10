@@ -1,6 +1,6 @@
 local awful      = require("awful")
 local wibox      = require("wibox")
-local Class      = require("src.util.Class")
+local class      = require("lib.30log")
 local gtable     = require("gears.table")
 local base       = require("wibox.widget.base")
 local no_scroll  = require("src.widgets.helper.no_scroll")
@@ -12,7 +12,7 @@ local get_preferred_size = require("src.widgets.helper.get_preferred_size")
 local pack = require("src.agnostic.version.pack")
 
 -- small layout that fits a widget very badly so that it's centered
-local center_badly = Class()
+local center_badly = class("Bad Center Layout")
 
 function center_badly:fit(context, width, height)
     return base.fit_widget(self, context, self._private.widget, width, height);

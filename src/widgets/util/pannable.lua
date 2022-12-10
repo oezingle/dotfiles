@@ -62,15 +62,14 @@ function pannable_layout:move(point)
 end
 
 function pannable_layout:init()
+    self = base.make_widget(nil, nil, { enable_properties = true })
 
-    local ret = base.make_widget(nil, nil, { enable_properties = true })
+    gtable.crush(self, pannable_layout, true)
 
-    gtable.crush(ret, pannable_layout, true)
+    self._private.widget = nil
+    self._private.position = {0, 0}
 
-    ret._private.widget = nil
-    ret._private.position = {0, 0}
-
-    return ret
+    return self
 end
 
 return Class(pannable_layout)

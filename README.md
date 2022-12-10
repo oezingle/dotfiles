@@ -41,8 +41,7 @@ echo $(cd src/appmenu/server; make)
  - `python-pywal` (sync terminal/rofi colors to wallpaper)
  - `picom` (compositor)
 
-
-## Stolen Code Appreciation Time
+## Stolen Code
 
 I stole like 95% of this project
  - `widgets/exit_menu.lua` is lifted from [manilarome/the-glorious-dotfiles](https://github.com/manilarome/the-glorious-dotfiles)

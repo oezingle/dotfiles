@@ -18,7 +18,7 @@ if err and arg then
         require("src.util.testable").test_all ()
     end
     
-    os.exit()            
+    os.exit()
 end
 
 local gdebug = require("gears.debug")
