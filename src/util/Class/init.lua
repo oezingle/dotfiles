@@ -6,6 +6,7 @@
 ---@generic T : table
 ---@param base T?
 ---@return T
+---@deprecated
 local function class(base)
     base = base or {}
 

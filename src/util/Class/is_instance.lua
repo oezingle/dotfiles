@@ -3,6 +3,7 @@
 ---@param instance table
 ---@param base table
 ---@return boolean
+---@deprecated
 local function is_instance(instance, base)
     if type(instance) == "table" then
         local metatable = getmetatable(instance)

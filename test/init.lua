@@ -7,9 +7,9 @@
 local test = require("lib.test")
 
 local function perform_tests()
+    require("test.util.color.lighten")
     require("test.util.check_dependencies")
     require("test.util.get_wallpaper")
-    require("test.util.lighten")
     require("test.util.Promise")
     require("test.util.time")
     require("test.util.uppercase_first_letters")
