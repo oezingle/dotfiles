@@ -43,8 +43,8 @@ local function awesome_only_test(callback, name)
     end
 end
 
---- Create a test callback wrapped around a function that returns a boolean
----@param boolean boolean
+--- Assert non-false / non-null value
+---@param boolean any
 ---@param name string?
 ---@return function
 local function test_assert(boolean, name)

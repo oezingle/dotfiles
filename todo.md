@@ -41,6 +41,17 @@
 
 - more unit tests
 
+- use wal for font colors, and dynamic icons
+
+- improve battery widget
+	 - check if upower actually installed
+	 - get upower stats on load
+	 - progressbar
+	 - click for applet
+
+- fun button to change wallpaper
+	- maybe even select?
+
 - set `inode/directory` mimetype to use thunar over VS Code 
 
 - rework battery widget
@@ -58,13 +69,11 @@
 - multihead
 	- brightness keys / control center controls an arbitrary display
 	- screen_preview is broken w/ multiple monitors
+	- check that all clients show up in client list, as left bar is missing from non-primaries
 
 - hover titlebar buttons
 
 - figure out why tf appmenus don't work on awesome-luajit
-
-- types
-	- generate type annotations for awesome from the docs
 
 - break keys out from rc.lua
 	- configurable?

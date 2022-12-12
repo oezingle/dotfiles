@@ -7,3 +7,6 @@
 [submodule "src/appmenu/server"]
 	path = src/appmenu/server
 	url = https://github.com/oezingle/Simple-Appmenu-Server
+[submodule "lib/json"]
+	path = lib/json
+	url = https://github.com/rxi/json.lua

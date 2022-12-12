@@ -1,6 +1,6 @@
 -- synchronous file system operations
 
-local gfs = require("gears.filesystem")
+local has_awesome = require("lib.test").has_awesome
 
 -- https://stackoverflow.com/questions/1340230/check-if-directory-exists-in-lua
 
@@ -18,17 +18,45 @@ local function exists(file)
     return ok, err
 end
 
---- Check if the path is a directory
----@param path string
----@return boolean
-local function isdir(path)
-    return gfs.is_dir(path)
-end
+---@type function
+local isdir
+---@type function
+local mkdir
 
---- Make a directory including parent directories
----@param path string directory path to create
-local function mkdir(path)
-    gfs.make_directories(path)
+if has_awesome() then
+    local gfs = require("gears.filesystem")
+
+    --- Check if the path is a directory
+    ---@param path string
+    ---@return boolean
+    isdir = function(path)
+        return gfs.is_dir(path)
+    end
+
+    --- Make a directory including parent directories
+    ---@param path string directory path to create
+    mkdir = function(path)
+        gfs.make_directories(path)
+    end
+else
+    -- https://stackoverflow.com/questions/2833675/using-lua-check-if-file-is-a-directory
+
+    --- Check if the path is a directory
+    ---@param path string
+    ---@return boolean
+    isdir = function(path)
+        if os.execute("cd '" .. path .. "'") then
+            return true
+        else
+            return false
+        end
+    end
+
+    --- Make a directory including parent directories
+    ---@param path string directory path to create
+    mkdir = function(path)
+        os.execute("mkdir -p '" .. path .. "'")
+    end
 end
 
 --- Read a file as a string
