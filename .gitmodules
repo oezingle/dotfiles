@@ -4,6 +4,3 @@
 [submodule "lib/awesome-battery_widget"]
 	path = lib/awesome-battery_widget
 	url = https://github.com/Aire-One/awesome-battery_widget
-[submodule "src/appmenu/server"]
-	path = src/appmenu/server
-	url = https://github.com/oezingle/Simple-Appmenu-Server
