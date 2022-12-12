@@ -1,4 +1,3 @@
-local testable = require("src.util.testable")
 
 local time = {}
 
@@ -57,14 +56,4 @@ function time.parse(anything)
     end
 end
 
-return testable(time, {
-    testable.assert(function()
-        return time.current().hour == os.date("*t").hour
-    end, "Current Hour"),
-    testable.assert(function()
-        return time.from_string("18:30").min == 30
-    end, "Time Parsing"),
-    testable.assert(function()
-        return time.to_seconds(time.from_string("1:30")) == 90 * 60
-    end, "To Seconds"),
-})
+return time

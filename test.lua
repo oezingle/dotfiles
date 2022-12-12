@@ -15,7 +15,7 @@ if err and arg then
     else
         print("Running tests in lua CLI. To run in awesomewm, call 'test.lua awesome'")
 
-        require("src.util.testable").test_all ()
+        require("test.init")
     end
     
     os.exit()
@@ -23,6 +23,6 @@ end
 
 local gdebug = require("gears.debug")
 
-gdebug.print_warning("Running VHS dotfiles tests")
+gdebug.print_warning("Running dotfile tests")
 
-awesome.emit_signal("awesome::dotfiles::vhs::test")
+awesome.emit_signal("awesome::dotfiles::test")

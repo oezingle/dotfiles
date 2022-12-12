@@ -1,3 +1,6 @@
+-- rebind print
+print = require("src.agnostic.print")
+
 -- seed random
 math.randomseed(os.time())
 -- some platforms have a recurring first random
@@ -483,3 +486,6 @@ local print = require("src.agnostic.print")
 awesome.connect_signal("wallpaper_changed", function ()
     print("Wallpaper changed!")
 end) 
+
+-- allow unit tests
+require("test.init")

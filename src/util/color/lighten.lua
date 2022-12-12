@@ -1,4 +1,3 @@
-local testable = require("src.util.testable")
 local gcolor = require("gears.color")
 local pack = require("src.agnostic.version.pack")
 
@@ -35,14 +34,4 @@ local function lighten_color(color, amount)
     return "#" .. hex_channels[1] .. hex_channels[2] .. hex_channels[3] .. hex_channels[4]
 end
 
-return testable(lighten_color, {
-    testable.assert(function()
-        return lighten_color("#000000", 0.1) == "#191919ff"
-    end, "Lighten Slightly"),
-    testable.assert(function()
-        return lighten_color("#000000") == "#191919ff"
-    end, "Lighten Automatically"),
-    testable.assert(function()
-        return lighten_color("#000000", 1.0) == "#ffffffff"
-    end, "Lighten Entirely"),
-})
+return lighten_color
