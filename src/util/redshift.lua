@@ -23,6 +23,8 @@ function redshift.dim(force)
                     " -o " .. redshift.options)
             end
         end
+
+        redshift.state = 1
     end
 end
 
@@ -38,6 +40,8 @@ function redshift.undim()
                 " -x " .. redshift.options)
         end
     end
+
+    redshift.state = 0
 end
 
 --- Toggle redshift dimming
