@@ -73,5 +73,3 @@
 
 - hot reloading? perchance?
 	- https://github.com/anton-kl/lua-hot-reload
-
-- redshift doesn't turn back on
