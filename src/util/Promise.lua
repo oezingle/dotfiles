@@ -1,8 +1,6 @@
-local Class = require("src.util.Class")
+local class = require("lib.30log")
 local pack = require("src.agnostic.version.pack")
 local unpack = require("src.agnostic.version.unpack")
-
--- I decided against using is_instance because I want Promise.lua to be 'portable' for da github
 
 ---@alias PromiseCallback fun(resolve: function, reject: function?)
 
@@ -13,10 +11,9 @@ local unpack = require("src.agnostic.version.unpack")
 ---@field next Promise|nil
 ---@field prev Promise|nil
 ---@field new fun(self: Promise)
-local Promise = {}
-
--- Promise is now a class
-Class(Promise)
+local Promise = class("Promise", {
+    __is_a_promise = true
+})
 
 --- Generate a promise. does not set metatable or trigger.
 ---@param callback PromiseCallback
@@ -57,19 +54,15 @@ local function Promise_settle(self, value, reject)
 
     -- Check if the returned value is a Promise,
     -- in which case that Promise is passed down to this scope
-    if #value == 1 and type(value) == "table" then
-        local mt = getmetatable(value[1])
+    if #value == 1 and type(value) == "table" and value[1].__is_a_promise then
+        local child = value[1]
 
-        if mt and mt.__index == Promise then
-            local child = value[1]
-
-            if child.fulfilled then
-                -- set value now
-                value = child._private.value
-            else
-                -- throw in the child promise
-                self.next = child
-            end
+        if child.fulfilled then
+            -- set value now
+            value = child._private.value
+        else
+            -- throw in the child promise
+            self.next = child
         end
     end
 
