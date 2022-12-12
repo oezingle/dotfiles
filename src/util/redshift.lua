@@ -14,7 +14,7 @@ redshift.state   = 1
 function redshift.dim(force)
     if redshift.state == 0 or force then
         if redshift.method == "randr" then
-            spawn(redshift.redshift .. " -m randr -o " .. redshift.options)
+            spawn(redshift.path .. " -m randr -o " .. redshift.options)
         elseif redshift.method == "vidmode" then
             local screens = screen.count()
 
