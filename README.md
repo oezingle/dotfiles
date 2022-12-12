@@ -81,15 +81,4 @@ I stole like 95% of this project
  - Emoji CPU load indicator that opens `top` when clicked
  - Alt+Tab client switcher (current tag only)
  - Drag clients to tags in screen preview
-
-## Stuff You Might Want To Steal
- - `src/appmenu/` - DBus Appmenu Implementation - Supports GTK and Canonical formats
- - `src/widgets/components/arbitrary_icon.lua` - GTK icons as Awesome Widgets
- - `src/widgets/components/cmd_slider.lua` - Upsettingly complex widget that calls a callback when a slider is moved 
- - `src/widgets/components/select.lua` - Dropdown select menu
- - `src/widgets/components/switch.lua` - A pretty looking toggle switch
- - `src/widgets/screen_preview/` - Screen preview/overview/whatever you want to call it
- - `src/widgets/util/radial_menu/` - Radial menu with buttons and an exit button
- - `src/widgets/util/pagination.lua` - Multiple pages of widgets
- - `src/widgets/system_status.lua` - Emoji in top left that shows CPU usage
- - `src/util/testable.lua` - simple testing framework. export a testable(module, {...tests}) to enable unit testing for that file. call testable.lua from the terminal to run tests.
+ 
