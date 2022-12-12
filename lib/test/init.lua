@@ -14,7 +14,7 @@ end
 
 --- Run a test suite given a name and test.* testing functions
 ---@param name string
----@param ... function[]
+---@param ... function
 local function suite(name, ...)
     ---@type function[]
     local tests = pack(...)

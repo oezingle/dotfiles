@@ -57,18 +57,6 @@ local function format_date(time)
     end
 end
 
-local function test()
-    print(format_date())
-
-    print(format_date(os.time() - (2 / 3) * one_day))
-
-    print(format_date(os.time() - (3 / 2) * one_day))
-
-    print(format_date(os.time() - 2 * one_day))
-
-    print(format_date(0))
-end
-
 return {
     format = format_date
 }

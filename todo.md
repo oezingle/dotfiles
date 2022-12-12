@@ -39,9 +39,7 @@
 
 - custom polkit
 
-- unit tests where possible
-	- https://github.com/norman/telescope
-	- better unit tests - tests/ directory
+- more unit tests
 
 - set `inode/directory` mimetype to use thunar over VS Code 
 
