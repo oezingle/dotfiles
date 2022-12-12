@@ -1,7 +1,7 @@
 
 # VHS dotfiles
 
-My little AwesomeWM configuration. Riddled with copyright law breaches. The main attraction is probably my DBus global menu (`src/appmenu/`). I refuse to document anything but if you want to steal any of my code, go ahead. 
+My little AwesomeWM configuration. Riddled with copyright law breaches. The main attraction is probably my DBus global menu (`src/appmenu/`). I struggle to document anything but if you want to steal any of my code, go ahead. 
 
 ## Details
  - Font: [Inter](https://rsms.me/inter/)
@@ -15,6 +15,9 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
 
 ## Installing
 ```bash
+# Pull submodules
+git submodule update --init --recursive
+
 # Copy the default configuration and modify as seen fit
 cp config.example.lua config.lua
 vim config.lua
