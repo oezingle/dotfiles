@@ -1,6 +1,7 @@
-local awful = require("awful")
 
-local gdebug = require("gears.debug")
+local print = require("src.agnostic.print")
+
+local spawn = require("src.agnostic.spawn")
 
 --- Run a callback if the required commands/dependencies are installed.
 -- 
@@ -22,8 +23,8 @@ local function check_dependencies(dependencies, callback, feature_name)
 
         cmd = cmd .. "printf success"
 
-        awful.spawn.easy_async_with_shell(cmd, function(res)
-            if res == 'success\n' then
+        spawn(cmd, function(res)
+            if res == 'success\n' or res == 'success' then
                 callback()
             else
                 -- Print dependencies requested so the user can check if they've got them all
@@ -49,7 +50,7 @@ local function check_dependencies(dependencies, callback, feature_name)
                     msg = msg .. ". Disabling feature '" .. feature_name .. "'."
                 end
 
-                gdebug.print_warning(msg)
+                print(msg)
             end
         end)
     else
