@@ -36,6 +36,7 @@
 ---@field terminal string
 ---@field editor string
 ---@field file_manager string
+---@field compositor string
 
 ---@class DotfileConfigurationGimmicks
 ---@field gestures boolean
@@ -60,8 +61,7 @@
 ---@field apps DotfileConfigurationApps
 ---@field notification_lifespan number
 ---@field gimmicks DotfileConfigurationGimmicks
----@field wallpaper table<string|number, string> 
+---@field wallpaper table<string|number, string>|string
 ---@field cmd table<string, string>
 ---@field applet DotfileConfigurationApplets|nil
 ---@field lock_time number
----@field compositor string

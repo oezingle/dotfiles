@@ -23,8 +23,8 @@ check_dependencies({ "xinput" }, function()
 end, "Two finger right click")
 
 -- picom
-if config.compositor and #config.compositor then
-    pidwatch(config.compositor)
+if config.apps.compositor and #config.apps.compositor then
+    pidwatch(config.apps.compositor)
 end
 
 -- xfce4 power manager

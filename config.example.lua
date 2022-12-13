@@ -87,6 +87,7 @@ local config = {
         terminal = "xfce4-terminal",
         editor = os.getenv("EDITOR") or "vim",
         file_manager = "thunar",
+        compositor = "picom",
     },
 
     -- How long notifications stay around in the top middle of the screen
@@ -107,15 +108,11 @@ local config = {
     -- time to lock the screen in minutes
     -- set to zero to disable locking
     lock_time = 10,
-
-    -- compositor
-    compositor = "picom",
+    
 
     -- string[] or table<string, string> where the key is of the form "h:mm".
     -- time: string (parsed to number) or number (number of hours per wallpaper change) or nil
-    wallpaper = {
-        "~/Pictures/wallpaper.jpg",
-    }
+    wallpaper = "~/Pictures/wallpaper.jpg",
 }
 
 -- create some commands
