@@ -8,9 +8,7 @@ if not has_upower then
 
     print("disabling battery widget: Requires upower")
 
-    return function() 
-        return {}
-    end
+    return nil
 end
 
 local UPowerGlib             = lgi.require("UPowerGlib")

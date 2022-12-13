@@ -161,7 +161,7 @@ local function create_taskbar()
                         right = 10
                     },
                     s.tag_switcher,
-                    is_primary and create_battery_widget(),
+                    is_primary and create_battery_widget and create_battery_widget(),
                     --require("src.battery-widget") { adapter = "BAT0", ac = "AC" },
                     s.layout_indicator,
                     is_primary and control_center(),
