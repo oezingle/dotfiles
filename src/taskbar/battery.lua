@@ -5,9 +5,15 @@ local config_dir             = require("gears.filesystem").get_configuration_dir
 
 local UPowerGlib = require("lgi").require('UPowerGlib')
 
-local print = require("src.agnostic.print")
-
 local function create_battery_widget(s)
+    if not UPowerGlib then
+        local print = require("agnostic.print")
+
+        print("disabling battery widget: Install upower")
+        
+        return
+    end
+
     local battery_widget = awesome_battery_widget {
         screen = s,
         use_display_device = true,
@@ -61,7 +67,6 @@ local function create_battery_widget(s)
         if is_charging then
             battery_icon.image = config_dir .. "icon/battery/battery-charging-outline.svg"
         else
-
             battery_icon.image = config_dir .. "icon/battery/battery-dead-outline.svg"
         end
     end

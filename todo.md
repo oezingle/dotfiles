@@ -44,17 +44,12 @@
 
 - improve battery widget
 	 - check if upower actually installed
-	 - get upower stats on load
-	 - progressbar
-	 - click for applet
+	 - click for applet w/ powertop-like stats
 
 - fun button to change wallpaper
 	- maybe even select?
 
 - set `inode/directory` mimetype to use thunar over VS Code 
-
-- rework battery widget
-	- click on it -> applet w/ powertop-like stats
 
 - no way to switch audio sink
 
