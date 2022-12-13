@@ -1,4 +1,7 @@
-local has_upower = pcall(require("lgi").require, "UPowerGlib")
+
+local lgi = require("lgi")
+
+local has_upower = pcall(lgi.require, "UPowerGlib")
 
 if not has_upower then
     local print = require("agnostic.print")
@@ -8,7 +11,7 @@ if not has_upower then
     return function() end
 end
 
-local UPowerGlib             = require("lgi").require("UPowerGlib")
+local UPowerGlib             = lgi.require("UPowerGlib")
 local awesome_battery_widget = require("lib.awesome-battery_widget")
 local wibox                  = require("wibox")
 local config                 = require("config")
