@@ -5,15 +5,17 @@ local gtimer = gears.timer
 local gfs    = gears.filesystem
 local fs     = require("src.util.fs")
 
+local pairs = pairs
+local ipairs = ipairs
+local tostring = tostring
+local os = os
+local table = table
+local math = math
+local awesome = awesome
+
 local config_dir = gfs.get_configuration_dir()
 
 local wallpaper_dir = config_dir .. "cache/wallpaper/"
-
-local read_file = fs.read
-local write_file = fs.write
-local mkdir = fs.mkdir
-local isdir = fs.isdir
-local exists = fs.exists
 
 do
     if type(config.wallpaper) == "string" then
@@ -21,33 +23,38 @@ do
     end
 end
 
+-- check that there is at least 1 wallpaper
+assert(next(config.wallpaper))
+
 -- Regenerate wallpapers if they've changed between awesome restarts
 do
     local wallpaper = config.wallpaper
 
-    local last_value = ""
+    local wallpapers = ""
 
     local wallpaper_is_list = config.wallpaper[1] ~= nil
 
     -- speed is all we really care about
     if wallpaper_is_list then
         for _, v in ipairs(wallpaper) do
-            last_value = last_value .. v
+            wallpapers = wallpapers .. v
         end
     else
-        for k, v in wallpaper do
-            last_value = last_value .. k .. v
+        for k, v in pairs(wallpaper) do
+            if k ~= "time" then
+                wallpapers = wallpapers .. k .. v
+            end
         end
     end
 
     local last_values_path = wallpaper_dir .. "last_values"
 
-    if read_file(last_values_path) ~= last_value then
+    if fs.read(last_values_path) ~= wallpapers then
         os.execute("rm -r " .. wallpaper_dir)
 
-        mkdir(wallpaper_dir)
+        fs.mkdir(wallpaper_dir)
 
-        write_file(last_values_path, last_value)
+        fs.write(last_values_path, wallpapers)
     end
 end
 
@@ -85,8 +92,10 @@ do
                 table.insert(identifiers, index)
             end
         else
-            for k, _ in wallpaper.table do
-                table.insert(identifiers, k)
+            for k, _ in pairs(wallpaper.table) do
+                if k ~= "time" then
+                    table.insert(identifiers, k)
+                end
             end
         end
 
@@ -102,10 +111,10 @@ do
             local best_identifier = nil
 
             -- TODO 24 hour wraparound -> 24:00 is the closest identifier for 0:00
-            for time, _ in wallpaper.table do
-                if time.parse(time) < current_time then
-                    if not best_identifier or time.parse(time) > time.parse(best_identifier) then
-                        best_identifier = time
+            for str_time, _ in pairs(wallpaper.table) do
+                if str_time ~= "time" and time.parse(str_time) < current_time then
+                    if not best_identifier or time.parse(str_time) > time.parse(best_identifier) then
+                        best_identifier = str_time
                     end
                 end
             end
@@ -113,7 +122,7 @@ do
             wallpaper.current_identifier = best_identifier
         end
 
-        -- gears.debug.print_warning("Changed wallpaper to " .. tostring(wallpaper.current_identifier))
+        -- print("Changed wallpaper to " .. tostring(wallpaper.current_identifier))
 
         awesome.emit_signal("wallpaper_should_change")
     end
@@ -134,9 +143,8 @@ do
         return wallpaper.table[wallpaper.current_identifier]
     end
 
-    require("gears.debug").print_warning(wallpaper.time)
-
-    if #wallpaper.table > 1 then
+    if not wallpaper.is_list or #wallpaper.table > 1 then
+        
         wallpaper.timer = gtimer {
             timeout = wallpaper.time,
 
@@ -162,8 +170,8 @@ end)
 ---@param blur boolean? default false
 ---@return string
 local function get_wallpaper(width, height, blur)
-    if not isdir(wallpaper_dir) then
-        mkdir(wallpaper_dir)
+    if not fs.isdir(wallpaper_dir) then
+        fs.mkdir(wallpaper_dir)
     end
 
     -- Get the default wallpaper
@@ -188,7 +196,7 @@ local function get_wallpaper(width, height, blur)
         -- TOOD create folder by identiifer, save to folder by identifier
         local filename = dir .. tostring(width) .. "x" .. tostring(height) .. (blur and "_blur" or "")
 
-        if not exists(filename) then
+        if not fs.exists(filename) then
             local resize_string = " -resize " .. tostring(width) .. "x" .. tostring(height) .. "^ "
 
             local crop_string = " -gravity Center -extent " .. tostring(width) .. "x" .. tostring(height) .. " "

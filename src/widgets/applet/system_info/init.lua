@@ -114,6 +114,4 @@ do
     end)
 
     SystemInfo = system_info_applet:create()
-
-    print("SystemInfo", SystemInfo)
 end

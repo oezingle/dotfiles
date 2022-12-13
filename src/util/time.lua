@@ -1,4 +1,11 @@
 
+local assert = assert
+local tonumber = tonumber
+local type = type
+local os = os
+local string = string
+local table = table
+
 local time = {}
 
 ---@class simpledate
@@ -19,7 +26,7 @@ end
 ---@param str string
 ---@return simpledate
 function time.from_string(str)
-    assert(string.match(str, "%d+:%d"))
+    assert(string.match(str, "%d+:%d+"))
 
     local numbers = {}
 

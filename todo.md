@@ -22,7 +22,7 @@
 	- a templating engine: follow config.popup colors?
 	- see http://olivinelabs.com/lustache/
 
-- use 30log for oop
+- use 30log for widgets. somehow
 
 - applets
 	- math symbols applet
@@ -34,7 +34,6 @@
 	- emoji selector
 
 - wallpapers
-	- test timestamp based table: { ["0:00"] = "/path/to/image" }
 	- looks like shit with light wallpaper
 
 - custom polkit

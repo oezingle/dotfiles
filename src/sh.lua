@@ -53,6 +53,8 @@ if config.gimmicks.gestures then
 end
 
 if config.gimmicks.pywal then
+    -- light wallpaper: check if 1x1 version is more than half white, add -l flag
+
     check_dependencies({ 'wal' }, function()
         local function update_pywal()
             awful.spawn.easy_async_with_shell("wal -i '" .. get_wallpaper() .. "'", function ()

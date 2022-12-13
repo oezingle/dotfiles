@@ -1,7 +1,6 @@
 
 
 -- TODO open in xephyr if awesome isn't running
--- Xephyr :5 & sleep 1 ; DISPLAY=:5 awesome
 
 -- TODO some way to expect output from awesome? tail cmd? async shit?
 
