@@ -80,3 +80,5 @@
 
 - restore layouts / windows
 	- save/load JSON with lib/json
+
+- store color from src.taskbar.battery / src.widgets.components.switch somewhere smart

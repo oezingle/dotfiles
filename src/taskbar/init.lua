@@ -1,23 +1,22 @@
-local awful                 = require("awful")
-local wibox                 = require("wibox")
-local config                = require("config")
-local gears                 = require("gears")
-local create_battery_widget = require("lib.awesome-battery_widget")
-local config_dir            = gears.filesystem.get_configuration_dir()
-local system_status         = require("src.widgets.system_status")
-local layout_selector       = require("src.widgets.layout_selector")
+local awful           = require("awful")
+local wibox           = require("wibox")
+local config          = require("config")
+local gears           = require("gears")
+local system_status   = require("src.widgets.system_status")
+local layout_selector = require("src.widgets.layout_selector")
 
 local get_decoration_color = require("src.util.color.get_decoration_color")
 local shapes = require("src.util.shapes")
 
-local create_launcher     = require("src.taskbar.launcher")
-local create_systray      = require("src.taskbar.systray")
-local create_appmenu      = require("src.appmenu")
-local control_center      = require("src.widgets.control_center")
-local clock_widget        = require("src.widgets.clock")
-local notification_center = require("src.widgets.notify.center")
-local create_tag_switcher = require("src.taskbar.tag_switcher")
-local create_tasklist     = require("src.taskbar.tasklist")
+local create_launcher       = require("src.taskbar.launcher")
+local create_systray        = require("src.taskbar.systray")
+local create_battery_widget = require("src.taskbar.battery")
+local create_appmenu        = require("src.appmenu")
+local control_center        = require("src.widgets.control_center")
+local clock_widget          = require("src.widgets.clock")
+local notification_center   = require("src.widgets.notify.center")
+local create_tag_switcher   = require("src.taskbar.tag_switcher")
+local create_tasklist       = require("src.taskbar.tasklist")
 
 local unpack = require("src.agnostic.version.unpack")
 
@@ -117,44 +116,6 @@ local function create_taskbar()
             height = config.taskbar.top
         }
 
-        local battery_widget = nil
-
-        if is_primary then
-            local percentage = wibox.widget {
-                widget = wibox.widget.textbox,
-                text = "??",
-                id = "textbox"
-            }
-
-            battery_widget = create_battery_widget {
-                screen = s,
-                use_display_device = true,
-                --widget_template = wibox.widget.imagebox
-                widget_template = {
-                    layout = wibox.layout.stack,
-                    {
-                        layout = wibox.container.margin,
-                        left = 3,
-                        top = 3,
-                        bottom = 3,
-                        right = 7,
-                        {
-                            layout = wibox.container.place,
-                            percentage
-                        }
-                    },
-                    {
-                        widget = wibox.widget.imagebox,
-                        image = config_dir .. "icon/battery/battery-dead-outline.svg"
-                    },
-                }
-            }
-
-            battery_widget:connect_signal('upower::update', function(widget, device)
-                percentage.text = string.format('%3d', device.percentage)
-            end)
-        end
-
         s.layout_indicator = awful.widget.layoutbox(s)
         s.layout_indicator:buttons(gears.table.join(
             awful.button({}, 1, function() awful.layout.inc(1) end),
@@ -200,7 +161,7 @@ local function create_taskbar()
                         right = 10
                     },
                     s.tag_switcher,
-                    battery_widget,
+                    is_primary and create_battery_widget(),
                     --require("src.battery-widget") { adapter = "BAT0", ac = "AC" },
                     s.layout_indicator,
                     is_primary and control_center(),

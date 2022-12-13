@@ -84,6 +84,10 @@ local ret = setmetatable({
             awesome.connect_signal("wal::init", cb)
 
             awesome.connect_signal("wal::changed", cb)
+
+            if has_pywal_installed then
+                cb()
+            end
         end
     end
 }, {
