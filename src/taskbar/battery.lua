@@ -4,11 +4,13 @@ local lgi = require("lgi")
 local has_upower = pcall(lgi.require, "UPowerGlib")
 
 if not has_upower then
-    -- local print = require("src.agnostic.print")
+    local print = require("src.agnostic.print")
 
-    -- print("disabling battery widget: Install upower")
+    print("disabling battery widget: Requires upower")
 
-    return function() end
+    return function() 
+        return {}
+    end
 end
 
 local UPowerGlib             = lgi.require("UPowerGlib")
