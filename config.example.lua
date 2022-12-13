@@ -84,10 +84,10 @@ local config = {
 
     -- User-configured apps
     apps = {
-        terminal = "xfce4-terminal",
+        terminal = "xterm",
         editor = os.getenv("EDITOR") or "vim",
         file_manager = "thunar",
-        compositor = "picom",
+        compositor = nil,
     },
 
     -- How long notifications stay around in the top middle of the screen

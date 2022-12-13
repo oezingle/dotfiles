@@ -58,9 +58,7 @@
 
 - no way to switch audio sink
 
-- Promises
-	- Use them
-	- switch from util.Promise to an actual promise provider
+- Use Promises
 
 - limit hovered clients to 1 while using screen preview
 	- should fix mousegrabber issue
@@ -79,3 +77,6 @@
 
 - hot reloading? perchance?
 	- https://github.com/anton-kl/lua-hot-reload
+
+- restore layouts / windows
+	- save/load JSON with lib/json
