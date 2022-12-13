@@ -28,7 +28,6 @@ echo $(cd src/appmenu/server; make)
 
 ## Dependencies
 ### Required
- - `upower` (battery stats)
  - `awesome` (window manager)
 ### Optional
  - `appmenu-gtk-module` (appmenus for GTK apps)
@@ -44,6 +43,7 @@ echo $(cd src/appmenu/server; make)
  - `python-pywal` (sync terminal/rofi colors to wallpaper)
  - `picom` (compositor)
  - `playerctl` (media info)
+ - `upower` (battery stats)
 
 ## Stolen Code
 
