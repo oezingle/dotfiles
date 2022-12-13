@@ -1,14 +1,14 @@
+local has_upower = pcall(require("lgi").require, "UPowerGlib")
 
-local UPowerGlib = require("lgi").require('UPowerGlib')
-
-if not UPowerGlib then
+if not has_upower then
     local print = require("agnostic.print")
 
     print("disabling battery widget: Install upower")
-    
-    return function (s) end
+
+    return function() end
 end
 
+local UPowerGlib             = require("lgi").require("UPowerGlib")
 local awesome_battery_widget = require("lib.awesome-battery_widget")
 local wibox                  = require("wibox")
 local config                 = require("config")
@@ -30,11 +30,11 @@ local function create_battery_widget(s)
                 {
                     max_value = 1,
                     forced_width = 14.7,
-            
+
                     background_color = "#00000000",
-            
+
                     color = config.progressbar.fg,
-            
+
                     value  = 0,
                     widget = wibox.widget.progressbar,
 
@@ -52,11 +52,11 @@ local function create_battery_widget(s)
     local cb = function(widget, device)
         local battery_bar = widget:get_children_by_id("battery-bar")[1]
         local battery_icon = widget:get_children_by_id("battery-icon")[1]
-        
+
         battery_bar.value = device.percentage
 
         local is_charging = device.state == UPowerGlib.DeviceState.CHARGING
-        
+
         local fully_charged = device.state == UPowerGlib.DeviceState.FULLY_CHARGED
 
         if is_charging or fully_charged then
