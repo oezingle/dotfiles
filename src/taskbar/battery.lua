@@ -46,7 +46,9 @@ local function create_battery_widget(s)
         
         battery_bar.value = device.percentage
 
-        local is_charging = device.state == UPowerGlib.DeviceState.CHARGING
+        local is_charging = 
+            device.state == UPowerGlib.DeviceState.CHARGING or
+            device.state == UPowerGlib.DeviceState.FULLY_CHARGED
 
         if is_charging then
             battery_bar.color = "#6CC551"

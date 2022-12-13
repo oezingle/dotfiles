@@ -43,6 +43,7 @@ echo $(cd src/appmenu/server; make)
  - `pulseaudio` (audio)
  - `python-pywal` (sync terminal/rofi colors to wallpaper)
  - `picom` (compositor)
+ - `playerctl` (media info)
 
 ## Stolen Code
 
