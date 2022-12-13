@@ -36,24 +36,33 @@ local function create_battery_widget(s)
             },
             {
                 widget = wibox.widget.imagebox,
-                image = config_dir .. "icon/battery/battery-dead-outline.svg"
+                image = config_dir .. "icon/battery/battery-dead-outline.svg",
+                id = "battery-icon"
             },
         }
     }
 
     local cb = function(widget, device)
         local battery_bar = widget:get_children_by_id("battery-bar")[1]
+        local battery_icon = widget:get_children_by_id("battery-icon")[1]
         
         battery_bar.value = device.percentage
 
-        local is_charging = 
-            device.state == UPowerGlib.DeviceState.CHARGING or
-            device.state == UPowerGlib.DeviceState.FULLY_CHARGED
+        local is_charging = device.state == UPowerGlib.DeviceState.CHARGING
+        
+        local fully_charged = device.state == UPowerGlib.DeviceState.FULLY_CHARGED
 
-        if is_charging then
+        if is_charging or fully_charged then
             battery_bar.color = "#6CC551"
         else
             battery_bar.color = config.progressbar.fg
+        end
+
+        if is_charging then
+            battery_icon.image = config_dir .. "icon/battery/battery-charging-outline.svg"
+        else
+
+            battery_icon.image = config_dir .. "icon/battery/battery-dead-outline.svg"
         end
     end
 
