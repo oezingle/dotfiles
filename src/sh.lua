@@ -55,7 +55,9 @@ end
 if config.gimmicks.pywal then
     check_dependencies({ 'wal' }, function()
         local function update_pywal()
-            awful.spawn.with_shell("wal -i '" .. get_wallpaper() .. "'")
+            awful.spawn.easy_async_with_shell("wal -i '" .. get_wallpaper() .. "'", function ()
+                awesome.emit_signal("wal::changed")
+            end)
         end
 
         update_pywal()
@@ -71,6 +73,9 @@ end, "pulseaudio audio")
 
 -- screen locking
 if config.lock_time then
+    -- TODO better fix for copies of xautolock
+    awful.spawn("pkill xautolock")
+
     check_dependencies({ "xautolock" }, function()
         pidwatch("xautolock -time " .. tostring(config.lock_time) .. " -locker \"dm-tool lock\"")
     end, "xautolock screen locking")

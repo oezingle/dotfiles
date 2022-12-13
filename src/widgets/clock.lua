@@ -1,13 +1,14 @@
-local wibox = require('wibox')
-local awful = require('awful')
+local wibox     = require('wibox')
+local awful     = require('awful')
 local beautiful = require('beautiful')
-local dpi = beautiful.xresources.apply_dpi
+local pywal     = require('src.widgets.util.pywal')
+local dpi       = beautiful.xresources.apply_dpi
 
 local function clock_widget(args)
-    
-    args = args or {}
 
-    local military_mode = args.military_mode or false
+	args = args or {}
+
+	local military_mode = args.military_mode or false
 
 
 	local clock_format = nil
@@ -17,18 +18,21 @@ local function clock_widget(args)
 		clock_format = '<span font="Inter Bold 11">%H:%M</span>'
 	end
 
-	local clock_widget = wibox.widget.textclock(
-		clock_format,
-		1
+	local clock_widget = pywal(
+		wibox.widget.textclock(
+			clock_format,
+			1
+		),
+		true
 	)
 
 	local clock_tooltip = awful.tooltip
 	{
-		objects = {clock_widget},
+		objects = { clock_widget },
 		mode = 'outside',
 		delay_show = 1,
-		preferred_positions = {'right', 'left', 'top', 'bottom'},
-		preferred_alignments = {'middle', 'front', 'back'},
+		preferred_positions = { 'right', 'left', 'top', 'bottom' },
+		preferred_alignments = { 'middle', 'front', 'back' },
 		margin_leftright = dpi(8),
 		margin_topbottom = dpi(8),
 		timer_function = function()
@@ -37,8 +41,8 @@ local function clock_widget(args)
 			local day = os.date('%d')
 			local month = os.date('%B')
 
-			local first_digit = string.sub(day, 0, 1) 
-			local last_digit = string.sub(day, -1) 
+			local first_digit = string.sub(day, 0, 1)
+			local last_digit = string.sub(day, -1)
 
 			if first_digit == '0' then
 				day = last_digit
@@ -54,11 +58,9 @@ local function clock_widget(args)
 				ordinal = 'th'
 			end
 
-			local date_str = 'Today is the ' ..
-			'<b>' .. day .. ordinal .. 
-			' of ' .. month .. '</b>.\n' ..
-			'And it\'s fucking ' .. os.date('%A')
-
+			local date_str = os.date('%A') .. ', ' .. month
+				.. " " .. day .. ordinal
+				
 			return date_str
 		end,
 	}
@@ -72,8 +74,8 @@ local function clock_widget(args)
 			end
 		end
 	)
-	
-    -- TODO bind a nice calendar widget
+
+	-- TODO bind a nice calendar widget
 
 	return clock_widget
 end

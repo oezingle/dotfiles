@@ -3,6 +3,7 @@ local pagination          = require("src.widgets.util.pagination")
 local create_system_load  = require("src.widgets.applet.system_info.pages.system_load")
 local create_system_specs = require("src.widgets.applet.system_info.pages.system_specs")
 local create_awesome_info = require("src.widgets.applet.system_info.pages.awesome")
+local create_pywal_info = require("src.widgets.applet.system_info.pages.pywal")
 local shapes              = require("src.util.shapes")
 local config              = require("config")
 
@@ -17,6 +18,7 @@ local function create_system_info()
         create_system_load(),
         create_system_specs(),
         create_awesome_info(),
+        config.gimmicks.pywal and create_pywal_info()
     }
 
     local page_indicator = wibox.widget {

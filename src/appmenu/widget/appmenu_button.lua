@@ -4,6 +4,7 @@ local wibox     = require("wibox")
 local config    = require("config")
 local no_scroll = require("src.widgets.helper.no_scroll")
 local get_font  = require("src.util.get_font")
+local wal       = require("src.util.wal")
 
 -- Format GTK-style (not always under GTK though) labels
 ---@param label string The label string - a <type>_menu_item.label
@@ -53,6 +54,10 @@ local function appmenu_button(state, label, widget_args, get_menu, handle_click)
 
         layout = wibox.container.background
     }
+
+    wal.on_change(function (scheme)
+        widget.fg = scheme.special.foreground
+    end)
 
     local menu
 

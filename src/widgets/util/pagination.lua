@@ -3,7 +3,7 @@ local gtable = require("gears.table")
 local Class  = require("src.util.Class")
 local pack = require("src.agnostic.version.pack")
 
-local pagination = Class({})
+local pagination = Class()
 
 function pagination:set_page(new_page)
     local old_page = self._private.page

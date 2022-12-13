@@ -1,6 +1,15 @@
-local fs = require("src.util.fs")
+local fs                 = require("src.util.fs")
+local check_dependencies = require("src.util.check_dependencies")
+local has_awesome        = require("lib.test").has_awesome
+
+local config = nil
+if has_awesome() then
+    config = require("config")
+end
 
 local json = require("lib.json")
+
+local setmetatable = setmetatable
 
 -- Ideally change this to # + 6 * char somehow
 ---@alias HexColor string
@@ -44,4 +53,42 @@ local function wal()
     end
 end
 
-return wal
+local has_pywal_installed = false
+
+if config and config.gimmicks.pywal then
+    check_dependencies({ "wal" }, function()
+        has_pywal_installed = true
+
+        awesome.emit_signal("wal::init")
+    end)
+end
+
+---@class WalReturn
+---@operator call:Wal|nil
+local ret = setmetatable({
+    --- Call a callback when the pywal changes
+    ---@param callback fun(scheme: Wal): nil
+    on_change = function(callback)
+        if config.gimmicks.pywal then
+            local cb = function()
+                if has_pywal_installed then
+                    local scheme = wal()
+
+                    if scheme then
+                        callback(scheme)
+                    end
+                end
+            end
+
+            -- callbacks when pywal is found to be installed
+            awesome.connect_signal("wal::init", cb)
+
+            awesome.connect_signal("wal::changed", cb)
+        end
+    end
+}, {
+    __call = wal
+})
+
+---@operator call:Wal|nil
+return ret

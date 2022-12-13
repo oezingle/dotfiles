@@ -42,8 +42,8 @@ function pannable_layout:set_child(value)
 end
 
 function pannable_layout:set_children(...)
-    local children = pack(...)[1]
-    
+    local children = pack(...)
+
     assert(#children == 1, "Pannable layout may only have 1 child")
 
     local value = children[1]

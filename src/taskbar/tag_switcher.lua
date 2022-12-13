@@ -1,8 +1,8 @@
 local awful = require("awful")
 local gears = require("gears")
 local wibox = require("wibox")
-local shapes = require("src.util.shapes")
 local no_scroll = require("src.widgets.helper.no_scroll")
+local wal       = require("src.util.wal")
 
 local config = require("config")
 
@@ -25,19 +25,25 @@ local taglist_buttons = gears.table.join(
 )
 
 local function create_tag_switcher(screen)
+    local style = {
+        shape = gears.shape.circle,
+        bg_occupied = config.tag.occupied,
+        fg_occupied = "#fff",
+        bg_focus = config.tag.focus,
+        bg_empty = config.tag.empty,
+        bg_urgent = config.tag.urgent
+    }
+
+    wal.on_change(function (scheme)
+        style.bg_occupied = scheme.special.foreground
+    end)
+
     screen.tag_switcher = awful.widget.taglist {
         screen  = screen,
         filter  = awful.widget.taglist.filter.all,
         buttons = taglist_buttons,
 
-        style = {
-            shape = gears.shape.circle,
-            bg_occupied = config.tag.occupied,
-            fg_occupied = "#fff",
-            bg_focus = config.tag.focus,
-            bg_empty = config.tag.empty,
-            bg_urgent = config.tag.urgent
-        },
+        style = style,
 
         widget_template = {
             {
