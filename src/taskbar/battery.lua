@@ -1,19 +1,20 @@
+
+local UPowerGlib = require("lgi").require('UPowerGlib')
+
+if not UPowerGlib then
+    local print = require("agnostic.print")
+
+    print("disabling battery widget: Install upower")
+    
+    return function (s) end
+end
+
 local awesome_battery_widget = require("lib.awesome-battery_widget")
 local wibox                  = require("wibox")
 local config                 = require("config")
 local config_dir             = require("gears.filesystem").get_configuration_dir()
 
-local UPowerGlib = require("lgi").require('UPowerGlib')
-
 local function create_battery_widget(s)
-    if not UPowerGlib then
-        local print = require("agnostic.print")
-
-        print("disabling battery widget: Install upower")
-        
-        return
-    end
-
     local battery_widget = awesome_battery_widget {
         screen = s,
         use_display_device = true,
