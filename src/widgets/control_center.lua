@@ -3,6 +3,7 @@ local awful     = require("awful")
 local gears     = require("gears")
 local config    = require("config")
 local no_scroll = require("src.widgets.helper.no_scroll")
+local check_dependencies = require("src.util.check_dependencies")
 
 local shapes = require("src.util.shapes")
 local redshift = require("src.util.redshift")
@@ -57,6 +58,9 @@ local function create_control_center()
                 bg = config.button.normal,
                 widget = wibox.container.background,
                 shape = shapes.rounded_rect(),
+
+                id = "music-container",
+                visible = false
             },
             {
                 layout = wibox.layout.grid,
@@ -119,6 +123,7 @@ local function create_control_center()
     grid:add_widget_at(
         icon_button(config_dir .. "icon/control-center/wifi-outline.svg", function()
             -- TODO integrate into a thin applet - select network, create config
+            
             awful.spawn("nm-connection-editor")
         end, "Network Configuration"),
         1, 3, 1, 1
@@ -167,6 +172,11 @@ local function create_control_center()
 
     brightness_control.visible = false
     volume_control.visible = false
+
+    -- show music widget if playerctl is installed
+    check_dependencies({ "playerctl" }, function ()
+        widget:get_children_by_id("music-container")[1].visible = true
+    end)
 
     widget:connect_signal("property::visible", function(w)
         local visible = w.visible

@@ -1,3 +1,4 @@
+-- https://lazka.github.io/pgi-docs/UPowerGlib-1.0/classes/Device.html
 
 local lgi = require("lgi")
 
