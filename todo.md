@@ -17,6 +17,7 @@
 	- scroll is broken
 	- kinda boring idk
 	- add date/time
+	- add DnD
 
 - rofi theme
 	- a templating engine: follow config.popup colors?

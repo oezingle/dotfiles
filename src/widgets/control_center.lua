@@ -48,14 +48,15 @@ local function toggle_icon_button(icon, callback, tooltip, initial)
 end
 
 local function create_control_center()
+    local music_widget = create_music_widget()
+
     local widget = wibox.widget {
         {
             {
-                create_music_widget(),
+                music_widget,
                 bg = config.button.normal,
                 widget = wibox.container.background,
                 shape = shapes.rounded_rect(),
-                id = "music-widget-container"
             },
             {
                 layout = wibox.layout.grid,
@@ -117,7 +118,8 @@ local function create_control_center()
     -- network manager
     grid:add_widget_at(
         icon_button(config_dir .. "icon/control-center/wifi-outline.svg", function()
-            -- network_manager_widget()
+            -- TODO integrate into a thin applet - select network, create config
+            awful.spawn("nm-connection-editor")
         end, "Network Configuration"),
         1, 3, 1, 1
     )
@@ -142,7 +144,7 @@ local function create_control_center()
     -- might need to be a toggle_icon_button
     grid:add_widget_at(
         icon_button(config_dir .. "icon/control-center/notifications-outline.svg", function()
-            -- TODO change icon to notifications-off-outline, toggle do not disturb
+            -- TODO open notification center
         end),
         4, 1, 1, 1
     )
@@ -162,16 +164,6 @@ local function create_control_center()
         end),
         4, 3, 1, 1
     )
-
-    local music_widget = nil
-
-    do
-        local music_container = widget:get_children_by_id("music-widget-container")[1]
-
-        if music_container then 
-            music_widget = music_container.widget 
-        end
-    end
 
     brightness_control.visible = false
     volume_control.visible = false
