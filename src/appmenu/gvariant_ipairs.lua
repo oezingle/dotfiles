@@ -11,20 +11,14 @@ local function gvariant_ipairs(variant)
         ---@return integer|nil, V|nil
         local function iter(a, i)
             i = i + 1
+
             local v = a[i]
             if v then
                 return i, v
             end
         end
 
-        ---comment
-        ---@generic V
-        ---@param a V
-        ---@return function, V, integer
-        return function(a)
-            ---@diagnostic disable: redundant-return-value
-            return iter, a, 0
-        end
+        return iter, variant, 0
     else
         return ipairs(variant)
     end
