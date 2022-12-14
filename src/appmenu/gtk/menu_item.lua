@@ -16,8 +16,6 @@ local gtk_menu_item = class("GTK Menu Item", {
 local function gtk_get_action(actions, subscription_group, menu_number)
 
     for _, action in gvariant_ipairs(actions) do
-        print(action)
-
         local action_subscription_group = action[1]
         local action_menu_number = action[2]
 
