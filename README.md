@@ -29,6 +29,7 @@ echo $(cd src/appmenu/server; make)
 ## Dependencies
 ### Required
  - `awesome` (window manager)
+ 
 ### Optional
  - `appmenu-gtk-module` (appmenus for GTK apps)
  - `whatsapp-ttf-emoji` (little guy in the top left)
@@ -38,7 +39,6 @@ echo $(cd src/appmenu/server; make)
  - `polkit-gnome` (GNOME polkit agent)
  - `redshift` (redshift blue light filter)
  - `geoclue` (redshift blue light filter)
- - `libinput-gestures` (gestures, must be configured manually)
  - `pulseaudio` (audio)
  - `python-pywal` (sync terminal/rofi colors to wallpaper)
  - `picom` (compositor)

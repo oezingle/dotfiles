@@ -4,25 +4,15 @@ local spawn = require("awful.spawn")
 
 local redshift = {}
 
-redshift.path    = "/usr/bin/redshift"
-redshift.method  = "randr"
-redshift.options = ""
-redshift.state   = 1
+redshift.path  = "/usr/bin/redshift"
+redshift.state = 1
+redshift.pid   = nil
 
 --- Dim the screen using redshift
 ---@param force boolean?
 function redshift.dim(force)
     if redshift.state == 0 or force then
-        if redshift.method == "randr" then
-            spawn(redshift.path .. " -m randr -o " .. redshift.options)
-        elseif redshift.method == "vidmode" then
-            local screens = screen.count()
-
-            for i = 0, screens - 1 do
-                spawn(redshift.path .. " -m vidmode:screen=" .. tostring(i) ..
-                    " -o " .. redshift.options)
-            end
-        end
+        redshift.pid = spawn(redshift.path .. " -m randr")
 
         redshift.state = 1
     end
@@ -30,17 +20,12 @@ end
 
 --- Undim the screen using redshift
 function redshift.undim()
-    if redshift.method == "randr" then
-        spawn(redshift.path .. " -m randr -x " .. redshift.options)
-    elseif redshift.method == "vidmode" then
-        local screens = screen.count()
-
-        for i = 0, screens - 1 do
-            spawn(redshift.path .. " -m vidmode:screen=" .. i ..
-                " -x " .. redshift.options)
-        end
+    if redshift.pid ~= nil then
+        awesome.kill(-redshift.pid, awesome.unix_signal['SIGTERM'])
+        
+        redshift.pid = nil
     end
-
+    
     redshift.state = 0
 end
 

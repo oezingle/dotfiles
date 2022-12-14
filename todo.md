@@ -35,15 +35,14 @@
 
 - wallpapers
 	- looks like shit with light wallpaper
+	- use wal for font colors, and dynamic icons
 
 - custom polkit
 
 - more unit tests
 
-- use wal for font colors, and dynamic icons
 
 - improve battery widget
-	 - check if upower actually installed
 	 - click for applet w/ powertop-like stats
 
 - fun button to change wallpaper
@@ -77,3 +76,5 @@
 	- save/load JSON with lib/json
 
 - store color from src.taskbar.battery / src.widgets.components.switch somewhere smart
+
+- hide music widget if playerctl isn't installed

@@ -33,7 +33,7 @@ local set_played_time = cmd_widget_generator("playerctl position --format '{{ du
 
 local set_song_duration = cmd_widget_generator("playerctl metadata --format '{{ duration(mpris:length) }}'", "0:00")
 
-local function set_played_time_bar(progressbar) 
+local function set_played_time_bar(progressbar)
     awful.spawn.easy_async(
         'playerctl metadata --format "{{ 1.0 * position / mpris:length }}"',
         function(response)
@@ -42,7 +42,7 @@ local function set_played_time_bar(progressbar)
             if decimal then
                 progressbar.value = decimal
             else
-                progressbar.value = 0 
+                progressbar.value = 0
             end
         end
     )
@@ -221,7 +221,7 @@ local function music_widget()
         name_scroll:pause()
         name_scroll:reset_scrolling()
     end)
-    
+
     local timer = gears.timer {
         timeout   = 1,
         call_now  = true,
