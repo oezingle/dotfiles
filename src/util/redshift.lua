@@ -18,6 +18,8 @@ function redshift.dim(force)
     end
 end
 
+-- TODO doesn't exit right
+
 --- Undim the screen using redshift
 function redshift.undim()
     if redshift.pid ~= nil then
@@ -50,6 +52,8 @@ end
 
 awesome.connect_signal("exit", function()
     redshift.undim()
+
+    spawn.with_shell("kill $(pidof redshift)")
 end)
 
 return redshift

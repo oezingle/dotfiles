@@ -7,11 +7,11 @@ local no_scroll = require("src.widgets.helper.no_scroll")
 local shapes = require("src.util.shapes")
 local redshift = require("src.util.redshift")
 
-local music_widget           = require("src.widgets.music")
+local create_music_widget = require("src.widgets.music")
 -- local network_manager_widget = require("src.widgets.network_manager")
-local dropdown               = require("src.widgets.util.dropdown")
-local cmd_slider             = require("src.widgets.components.cmd_slider")
-local icon_button            = require("src.widgets.components.icon_button")
+local dropdown     = require("src.widgets.util.dropdown")
+local cmd_slider   = require("src.widgets.components.cmd_slider")
+local icon_button  = require("src.widgets.components.icon_button")
 
 local config_dir = gears.filesystem.get_configuration_dir()
 
@@ -51,7 +51,7 @@ local function create_control_center()
     local widget = wibox.widget {
         {
             {
-                music_widget(),
+                create_music_widget(),
                 bg = config.button.normal,
                 widget = wibox.container.background,
                 shape = shapes.rounded_rect(),
@@ -149,7 +149,7 @@ local function create_control_center()
 
     -- system specs
     grid:add_widget_at(
-        icon_button(config_dir .. "icon/control-center/hardware-chip-outline.svg", function ()
+        icon_button(config_dir .. "icon/control-center/hardware-chip-outline.svg", function()
             SystemInfo.toggle()
         end),
         4, 2, 1, 1
@@ -163,7 +163,15 @@ local function create_control_center()
         4, 3, 1, 1
     )
 
-    local music_widget = widget:get_children_by_id("music-widget-container")[1].widget
+    local music_widget = nil
+
+    do
+        local music_container = widget:get_children_by_id("music-widget-container")[1]
+
+        if music_container then 
+            music_widget = music_container.widget 
+        end
+    end
 
     brightness_control.visible = false
     volume_control.visible = false
@@ -171,8 +179,10 @@ local function create_control_center()
     widget:connect_signal("property::visible", function(w)
         local visible = w.visible
 
-        music_widget.visible = visible
-        music_widget:emit_signal("property::visible")
+        if music_widget then
+            music_widget.visible = visible
+            music_widget:emit_signal("property::visible")
+        end
 
         brightness_control.visible = visible
         volume_control.visible = visible
