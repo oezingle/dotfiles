@@ -1,5 +1,6 @@
 local class = require("lib.30log")
 local flags = require("src.appmenu.flags")
+local gvariant_ipairs = require("src.appmenu.gvariant_ipairs")
 
 -- TODO add back the LayoutChanged signal to deal with layout changing while the system sleeps
 
@@ -39,7 +40,7 @@ local function canonical_get_children(i_menu_item)
 
     local children = res[2][3]
 
-    for _, child_item in ipairs(children) do
+    for _, child_item in gvariant_ipairs(children) do
         local child_id = child_item[1]
         local child_label = child_item[2].label
 
