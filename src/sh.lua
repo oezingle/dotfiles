@@ -79,7 +79,9 @@ if config.lock_time then
     awful.spawn("pkill xautolock")
 
     check_dependencies({ "xautolock" }, function()
-        pidwatch("xautolock -time " .. tostring(config.lock_time) .. " -locker \"dm-tool lock\"")
+        -- TODO re-enable xautolock
+        
+        -- pidwatch("xautolock -time " .. tostring(config.lock_time) .. " -locker \"dm-tool lock\"")
     end, "xautolock screen locking")
 end
 

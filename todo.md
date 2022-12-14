@@ -79,3 +79,5 @@
 - store color from src.taskbar.battery / src.widgets.components.switch somewhere smart
 
 - hide music widget if playerctl isn't installed
+
+- thunar has an error under luajit: attempt to index field 'layout' (a userdata value)

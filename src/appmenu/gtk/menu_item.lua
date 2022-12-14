@@ -1,4 +1,5 @@
 local class = require("lib.30log")
+local gvariant_ipairs = require("src.appmenu.gvariant_ipairs")
 
 -- TODO test signals
 
@@ -13,6 +14,7 @@ local gtk_menu_item = class("GTK Menu Item", {
 
 -- TODO determine if actions are always ordered - O(1) efficiency instead of O(n)
 local function gtk_get_action(actions, subscription_group, menu_number)
+
     for _, action in ipairs(actions) do
         local action_subscription_group = action[1]
         local action_menu_number = action[2]
@@ -36,7 +38,7 @@ local function gtk_resolve_sections(actions, subscription_group, menu_number)
 
     local menu_items = {}
 
-    for _, menu_item in ipairs(action) do
+    for _, menu_item in gvariant_ipairs(action) do
         local section = menu_item[":section"]
 
         if section then

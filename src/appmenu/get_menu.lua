@@ -1,6 +1,6 @@
 
-local get_gtk_menu = require("src.appmenu.gtk")
-local get_canonical_menu = require("src.appmenu.canonical")
+local get_gtk_menu = require("src.appmenu.gtk.init")
+local get_canonical_menu = require("src.appmenu.canonical.init")
 
 local function get_menu(window_id, callback)
     -- Try GTK

@@ -1,3 +1,5 @@
+#!/usr/bin/lua
+
 if awesome then
     require("gears.debug").print_warning("appmenu/test.lua: run this file from the command line to debug menus")
     
