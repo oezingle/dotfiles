@@ -2,6 +2,7 @@ local wibox    = require("wibox")
 local config   = require("config")
 local shapes   = require("src.util.shapes")
 local gcolor   = require("gears.color")
+local gtimer   = require("gears.timer")
 local pannable = require("src.widgets.util.pannable")
 
 local bind_width_and_height = require("src.widgets.helper.bind_width_and_height")
@@ -62,6 +63,8 @@ local function generate_background(bar, content, scroll)
     }
 end
 
+-- TODO set scrollbar if child content changes height, but don't query child height. is there some signal for this perhaps?
+
 local function scrollable(child)
     local scroll_px = 0
 
@@ -70,7 +73,7 @@ local function scrollable(child)
         -- separator coming in clutch as a widget that expands
         widget = wibox.widget.separator,
 
-        color = "#f00",
+        color = config.progressbar.fg,
 
         shape = shapes.rounded_rect(100),
 
