@@ -149,7 +149,7 @@ local function create_control_center()
     -- might need to be a toggle_icon_button
     grid:add_widget_at(
         icon_button(config_dir .. "icon/control-center/notifications-outline.svg", function()
-            -- TODO open notification center
+            NotificationCenter.toggle()
         end),
         4, 1, 1, 1
     )

@@ -2,7 +2,7 @@
 local naughty = require("naughty")
 
 local notification_popup = require("src.notify.popup")
-local is_do_not_disturb = require("src.notify.do_not_disturb")
+local is_do_not_disturb = require("src.notify.do_not_disturb").get_state
 
 require("src.widgets.notify.center")
 

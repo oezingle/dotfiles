@@ -7,17 +7,19 @@ local get_font             = require("src.util.get_font")
 local get_decoration_color = require("src.util.color.get_decoration_color")
 local notification         = require("src.widgets.notify.notification")
 local no_scroll            = require("src.widgets.helper.no_scroll")
+local switch               = require("src.widgets.components.switch")
 
 -- local datetime   = require("src.widgets.components.datetime")
 local scrollable = require("src.widgets.util.scrollable")
 
-local gfs = require("gears.filesystem")
-local config_dir = gfs.get_configuration_dir()
+local config_dir = require("src.util.directories").config
+
+local do_not_disturb = require("src.notify.do_not_disturb")
 
 -- notification center
 
--- TODO fix scrollable
 -- TODO save notifications to file, on awesome::exit, reload on startup
+-- TODO switch to applet format - center of screen
 
 local notif_constants = require("src.notify.constants")
 
@@ -40,9 +42,38 @@ local function create_notification_center(s)
         widget = wibox.widget {
             {
                 {
-                    widget = wibox.widget.textbox,
-                    text = "Notifications",
-                    font = get_font(14)
+                    {
+                        widget = wibox.widget.textbox,
+                        text = "Notifications",
+                        font = get_font(14)
+                    },
+                    nil,
+                    {
+                        {
+                            {
+                                switch(function(state)
+                                    do_not_disturb.set(state)
+                                end, do_not_disturb.get_state()),
+
+                                layout = wibox.container.margin,
+                                marigns = 1,
+                                forced_width = 34,
+                                forced_height = 18,
+                            },
+
+                            layout = wibox.container.place,
+                            halign = "right"
+                        },
+                        {
+                            widget = wibox.widget.textbox,
+                            text = "Do Not Disturb",
+                            font = get_font(12),
+                        },
+                        layout = wibox.layout.fixed.horizontal,
+                        spacing = 3,
+                    },
+                    layout = wibox.layout.align.horizontal,
+                    expand = "inside"
                 },
                 {
                     widget = wibox.container.margin,
