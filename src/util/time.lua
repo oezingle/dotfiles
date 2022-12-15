@@ -63,4 +63,10 @@ function time.parse(anything)
     end
 end
 
+--- Return the current Unix timestamp
+---@return integer
+function time.utc()
+    return os.time()
+end
+
 return time

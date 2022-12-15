@@ -81,3 +81,7 @@
 - clicking appmenu items should close the appmenu
 
 - alt-tabbing kinda breaks under luajit
+
+- save/reload WM state
+	- current tags - string[]
+	- tag layouts - table\<string, string\>

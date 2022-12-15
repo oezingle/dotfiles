@@ -8,6 +8,8 @@ math.random()
 math.random()
 math.random()
 
+local error_log = require("src.error_log")
+
 local unpack = require("src.agnostic.version.unpack")
 
 local Alt = "Mod1"
@@ -143,8 +145,8 @@ local globalkeys = gears.table.join(
     awful.key({ modkey, }, "Escape", awful.tag.history.restore,
         { description = "go back", group = "tag" }),
 
-    awful.key({ modkey, }, "x", scratch_terminal, 
-        { description = "Run a scratch terminal"}),
+    awful.key({ modkey, }, "x", scratch_terminal,
+        { description = "Run a scratch terminal" }),
 
 
     awful.key({ modkey, }, "j",
@@ -210,7 +212,7 @@ local globalkeys = gears.table.join(
         { description = "select next", group = "layout" }),
     awful.key({ modkey, "Shift" }, "f", function() awful.layout.inc(-1, nil, awful.layout.layouts) end,
         { description = "select previous", group = "layout" }),
-    awful.key({ modkey, "Control" }, "f", function () layout_selector() end,
+    awful.key({ modkey, "Control" }, "f", function() layout_selector() end,
         { description = "select visually", group = "layout" }),
 
     -- restore minimized
@@ -452,15 +454,19 @@ client.connect_signal("mouse::enter", function(c)
     c:emit_signal("request::activate", "mouse_enter", { raise = false })
 end)
 
+-- allow unit tests
+require("test.init")
 
--- TODO startup errors stoppped working lol
---
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
     naughty.notify({ preset = naughty.config.presets.critical,
         title = "Oops, there were errors during startup!",
         text = awesome.startup_errors })
+
+    if error_log then
+        error_log(awesome.startup_errors, true)
+    end
 end
 
 -- Handle runtime errors after startup
@@ -474,12 +480,12 @@ do
         naughty.notify({ preset = naughty.config.presets.critical,
             title = "Oops, an error happened!",
             text = tostring(err) })
+
+        error_log(tostring(err))
+
         in_error = false
     end)
 end
 
 -- Garbage collection
 gears.timer.start_new(10, function() collectgarbage("step", 20000) return true end)
-
--- allow unit tests
-require("test.init")

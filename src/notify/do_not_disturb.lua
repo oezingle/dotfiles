@@ -47,6 +47,7 @@ local function toggle_do_not_disturb ()
     DO_NOT_DISTURB = not DO_NOT_DISTURB
 end
 
+-- todo entire state should live in save.lua or state.lua and hold old notifications + DnD state
 awesome.connect_signal("exit", function ()
     save_state()
 end)

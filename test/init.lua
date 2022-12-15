@@ -14,6 +14,8 @@ local function perform_tests()
     require("test.util.time")
     require("test.util.uppercase_first_letters")
     require("test.util.wal")
+
+    require("test.error_log")
 end
 
 if test.has_awesome() then
