@@ -107,7 +107,7 @@ end
 ---@param s1 ScreenTable
 ---@param s2 ScreenTable
 ---@return boolean
-local function screen_equal (s1, s2)
+local function screen_equal(s1, s2)
     if s1.dpi ~= s2.dpi then
         return false
     end
@@ -178,7 +178,7 @@ local function save_state()
     WM_STATE = WM_STATE or {}
 
     WM_STATE.screens = {}
-    
+
     for s in screen do
         table.insert(WM_STATE.screens, screen_table(s))
     end
@@ -195,11 +195,11 @@ end)
 --- Find the saved WM_STATE screen data for a given screen
 ---@param s table
 ---@return ScreenTable|nil
-local function get_saved_screen (s)
+local function get_saved_screen(s)
     if not WM_STATE or not WM_STATE.screens then
         return nil
     end
-    
+
     local s_table = screen_table(s)
 
     for _, saved_screen in ipairs(WM_STATE.screens) do
@@ -209,7 +209,41 @@ local function get_saved_screen (s)
     end
 end
 
+local function restore_tags()
+    if WM_STATE and WM_STATE.screens then
+        for s in screen do
+            local saved_screen = get_saved_screen(s)
+
+            if saved_screen then
+                for _, t in ipairs(s.tags) do
+                    -- load tags
+                    local saved_tag = saved_screen.tags[t.name]
+
+                    -- set layout
+                    local layouts = t.layouts
+
+                    for _, layout in ipairs(layouts) do
+                        if layout.name == saved_tag.layout then
+                            t.layout = layout
+                        end
+                    end
+
+                    t.selected = false
+
+                    for _, selected_tag in ipairs(saved_screen.selected_tags) do
+                        if t.name == selected_tag then
+                            -- TODO might not work
+                            t.selected = true
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 return {
     state = WM_STATE,
+    restore_tags = restore_tags,
     get_saved_screen = get_saved_screen
 }
