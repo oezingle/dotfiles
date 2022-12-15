@@ -44,11 +44,8 @@ require("awful.hotkeys_popup.keys")
 local create_exit_screen = require("src.widgets.exit_menu")
 local scratch_terminal = require("src.widgets.scratch_terminal")
 
--- TODO these probably fire twice when using the test signal
-
--- Include my custom event handlers
-require("src.events")
-
+-- Include event handlers
+require("src.on_layout_change")
 require("src.client")
 
 -- Run shell stuff
