@@ -10,31 +10,36 @@ local get_preferred_size = require("src.widgets.helper.get_preferred_size")
 -- user scrollable widget using mouse button 4/5 signals
 
 -- weak table to hold last bar_height. if bar_height exists and is the same, ignore background change
-local content_height_cache = setmetatable({}, {
+local scrollbar_cache = setmetatable({}, {
     __mode = "k"
 })
+
+-- Amount to scroll in pixels
+local SCROLL_AMOUNT = 20
 
 --- create bar background using a scuffed gradient
 ---comment
 ---@param bar table bar widget
 ---@param content table scrolled widget
 ---@param scroll number scroll px
----@return Color
+---@return Color|nil
 local function generate_background(bar, content, scroll)
     local _, content_height = get_preferred_size(content)
 
     local bar_height = bar.height / content_height
 
-    local last_height = content_height_cache[content]
+    local scroll_offset = scroll / content_height
 
-    if last_height and last_height == content_height then
+    local cached = scrollbar_cache[content]
+
+    if cached and cached.bar_height == bar_height and cached.scroll_offset == scroll_offset then
         return nil
     end
 
-    -- store new height value
-    content_height_cache[content] = content_height
-
-    local scroll_offset = scroll / content_height
+    scrollbar_cache[content] = {
+        bar_height = bar_height,
+        scroll_offset = scroll_offset
+    }
 
     --[[
         height of light section = (bar height / content height) * bar height
@@ -56,8 +61,6 @@ local function generate_background(bar, content, scroll)
         }
     }
 end
-
--- TODO doesn't really work rn
 
 local function scrollable(child)
     local scroll_px = 0
@@ -89,7 +92,8 @@ local function scrollable(child)
         forced_height = child.forced_height or child_h
     }
 
-    local function generate_scroll_bg()
+    -- TODO doesn't take offset right
+    local function set_scroll_bar()
         local background = generate_background(bar, child, scroll_px)
 
         if background then
@@ -98,6 +102,7 @@ local function scrollable(child)
     end
 
     local function set_scroll()
+        -- TODO cache this somehow
         local _, notif_list_height = get_preferred_size(child)
 
         if scroll_px < 0 then
@@ -111,35 +116,24 @@ local function scrollable(child)
             y = -scroll_px
         })
 
-        generate_scroll_bg()
+        set_scroll_bar()
     end
 
-    for _, widget in ipairs({ bar, child, offset }) do
-        for _, signal in ipairs({
-            "widget::layout_changed",
-
-            "mouse::enter",
-            "mouse::leave",
-
-            "property::visible",
-        }) do
-            widget:connect_signal(signal, generate_scroll_bg)
-        end
-
-        widget:connect_signal("button::press", function(data, lx, ly, button)
-            if button == 4 or button == 5 then
-                if button == 4 then
-                    scroll_px = scroll_px - 10
-                elseif button == 5 then
-                    scroll_px = scroll_px + 10
-                end
-
-                set_scroll()
+    offset:connect_signal("button::press", function(data, lx, ly, button)
+        if button == 4 or button == 5 then
+            if button == 4 then
+                scroll_px = scroll_px - SCROLL_AMOUNT
+            elseif button == 5 then
+                scroll_px = scroll_px + SCROLL_AMOUNT
             end
-        end)
-    end
 
+            set_scroll()
+        end
+    end)
+
+    -- removed for speed
     -- pressing on the scroll bar sets the scroll position
+    --[[
     for _, signal in ipairs({
         "button::press",
         "button::release"
@@ -156,6 +150,7 @@ local function scrollable(child)
             end
         end)
     end
+    ]]
 
     local widget = wibox.widget {
         offset,

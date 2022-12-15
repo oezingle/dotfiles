@@ -65,8 +65,6 @@
 
 - hover titlebar buttons
 
-- figure out why tf appmenus don't work on awesome-luajit
-
 - break keys out from rc.lua
 	- configurable?
 
@@ -78,6 +76,8 @@
 
 - store color from src.taskbar.battery / src.widgets.components.switch somewhere smart
 
-- hide music widget if playerctl isn't installed
-
 - thunar has an error under luajit: attempt to index field 'layout' (a userdata value)
+
+- clicking appmenu items should close the appmenu
+
+- alt-tabbing kinda breaks under luajit

@@ -8,7 +8,7 @@ local get_decoration_color = require("src.util.color.get_decoration_color")
 local notification         = require("src.widgets.notify.notification")
 local no_scroll            = require("src.widgets.helper.no_scroll")
 
-local datetime   = require("src.widgets.components.datetime")
+-- local datetime   = require("src.widgets.components.datetime")
 local scrollable = require("src.widgets.util.scrollable")
 
 local gfs = require("gears.filesystem")

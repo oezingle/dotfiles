@@ -8,6 +8,8 @@ local pannable_layout = {}
 
 local pack = require("src.agnostic.version.pack")
 
+-- TODO don't draw children that are out of frame (wow no way crazy an optimization)
+
 function pannable_layout:fit(_, width, height)
     return width, height
 end
@@ -42,7 +44,7 @@ function pannable_layout:set_child(value)
 end
 
 function pannable_layout:set_children(...)
-    local children = pack(...)
+    local children = pack(...)[1]
 
     assert(#children == 1, "Pannable layout may only have 1 child")
 
