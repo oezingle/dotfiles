@@ -71,9 +71,6 @@ local function create_taskbar()
     awful.screen.connect_for_each_screen(function(s)
         local is_primary = s == screen.primary
 
-        -- Set layouts per-tag
-        awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
-
         create_tag_switcher(s)
 
         if is_primary then

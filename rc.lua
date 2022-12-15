@@ -62,16 +62,9 @@ local layout_selector = require("src.widgets.layout_selector")
 
 -- allow screen preview
 if config.gimmicks.screen_preview then
-    --[[
-    check_dependencies({ "convert" }, function()
-        require("src.widgets.screen_preview")
-
-    end, "OSX-style screen preview")
-    ]]
-
-    -- TODO doesn't work if enabled by check_dependencies
     require("src.widgets.screen_preview")
 end
+
 -- allow client switcher
 require("src.widgets.client_switcher")()
 
@@ -126,6 +119,47 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Create Exit menu
     create_exit_screen(s)
+
+    -- create tags
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.suit.floating)
+end)
+
+-- restore saved WM state
+gears.timer.delayed_call(function()
+    local WM_STATE = require("src.save_state.wm")
+
+    local wm_state = WM_STATE.state
+
+    if wm_state and wm_state.screens then
+        for s in screen do
+            local saved_screen = WM_STATE.get_saved_screen(s)
+
+            if saved_screen then
+                for _, t in ipairs(s.tags) do
+                    -- load tags
+                    local saved_tag = saved_screen.tags[t.name]
+
+                    -- set layout
+                    local layouts = t.layouts
+
+                    for _, layout in ipairs(layouts) do
+                        if layout.name == saved_tag.layout then
+                            t.layout = layout
+                        end
+                    end
+
+                    t.selected = false
+
+                    for _, selected_tag in ipairs(saved_screen.selected_tags) do
+                        if t.name == selected_tag then
+                            -- TODO might not work
+                            t.selected = true
+                        end
+                    end
+                end
+            end
+        end
+    end
 end)
 
 -- {{{ Key bindings
