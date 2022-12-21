@@ -232,7 +232,6 @@ local function restore_tags()
 
                     for _, selected_tag in ipairs(saved_screen.selected_tags) do
                         if t.name == selected_tag then
-                            -- TODO might not work
                             t.selected = true
                         end
                     end

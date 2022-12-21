@@ -1,4 +1,4 @@
-
+#!/usr/bin/lua
 
 -- TODO open in xephyr if awesome isn't running
 
@@ -10,7 +10,7 @@ if err and arg then
     if arg[1] == "awesome" then
         print("Running in awesome-client for you")
 
-        os.execute("cat " .. arg[0] .. " | awesome-client")
+        os.execute("cat " .. arg[0] .. " | grep -v \"#!/usr/bin/lua\" | awesome-client")
 
         print("Check your AwesomeWM logs")
     else
@@ -18,12 +18,8 @@ if err and arg then
 
         require("test.init")
     end
-    
+
     os.exit()
+else
+    awesome.emit_signal("awesome::dotfiles::test")
 end
-
-local gdebug = require("gears.debug")
-
-gdebug.print_warning("Running dotfile tests")
-
-awesome.emit_signal("awesome::dotfiles::test")

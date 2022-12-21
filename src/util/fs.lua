@@ -2,6 +2,8 @@
 
 local has_awesome = require("lib.test").has_awesome
 
+local dirs = require("src.util.directories")
+
 -- https://stackoverflow.com/questions/1340230/check-if-directory-exists-in-lua
 
 --- Check if a file or directory exists in this path
@@ -98,5 +100,7 @@ return {
     isdir  = isdir,
     read   = read_file,
     write  = write_file,
-    rm     = remove
+    rm     = remove,
+
+    dirs   = dirs
 }

@@ -1,8 +1,3 @@
-local xresources = require("beautiful.xresources")
-local dpi = xresources.apply_dpi
-
----@module "_types.config"
-
 ---@type DotfileConfiguration
 local config = {
     decorations = {

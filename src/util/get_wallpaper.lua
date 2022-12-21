@@ -1,8 +1,6 @@
 local time   = require("src.util.time")
 local config = require("config")
-local gears  = require("gears")
-local gtimer = gears.timer
-local gfs    = gears.filesystem
+local gtimer  = require("gears.timer")
 local fs     = require("src.util.fs")
 
 local pairs = pairs
@@ -13,9 +11,7 @@ local table = table
 local math = math
 local awesome = awesome
 
-local config_dir = gfs.get_configuration_dir()
-
-local wallpaper_dir = config_dir .. "cache/wallpaper/"
+local wallpaper_dir = fs.dirs.wallpaper
 
 do
     if type(config.wallpaper) == "string" then
@@ -144,7 +140,6 @@ do
     end
 
     if not wallpaper.is_list or #wallpaper.table > 1 then
-        
         wallpaper.timer = gtimer {
             timeout = wallpaper.time,
 

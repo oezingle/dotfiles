@@ -10,3 +10,6 @@
 [submodule "lib/json"]
 	path = lib/json
 	url = https://github.com/rxi/json.lua
+[submodule "lib/lua_reload"]
+	path = lib/lua_reload
+	url = https://github.com/anton-kl/lua-hot-reload
