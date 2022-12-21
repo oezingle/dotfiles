@@ -83,3 +83,7 @@
 - alt-tabbing kinda breaks under luajit
 
 - profiling
+
+- luajit loses keys sometimes
+
+- diagnostic / debug menu?

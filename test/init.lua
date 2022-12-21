@@ -24,23 +24,6 @@ local function split_newlines(s)
     return lines
 end
 
---[[
---- Convert a filesystem path to a lua module name
----@param path string
----@return string
-local function as_module(path)
-    local new_path = path
-        -- remove ./
-        :gsub("%./", "")
-        -- remove .lua
-        :gsub(".lua", "")
-        -- / -> .
-        :gsub("/", ".")
-
-    return new_path
-end
-]]
-
 --- Load a function as if using require() but without using data
 ---@param path string
 local function load_module(path)
@@ -51,7 +34,9 @@ local function load_module(path)
     if not contents then
         print("File " .. path .. " does not load")
     else
-        load(contents)()
+        local inject_require = "local __old_require = require; local function require(m); package.loaded[m] = false; return __old_require(m) end;"
+
+        load(inject_require .. contents)()
     end
 end
 
