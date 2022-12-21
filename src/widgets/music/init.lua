@@ -13,17 +13,7 @@ local get_font = require("src.util.get_font")
 local update_album_art = require("src.widgets.music.update_album_art")
 local cmd_widget_generator = require("src.widgets.helper.cmd_widget_generator")
 
---[[
-    TODO rounding the album art seems impossible unless I:
-     - steal code from https://github.com/awesomeWM/oocairo/blob/master/examples/loading-images.lua
-     - use that code to load an image, but save its pixel width and height
-     - push those values into a generator function for a clip_shape function
-     - use that shape function to round the corners 
-        - might also have to account for the difference in radius between high-res image and low-res container
-]]
-
 -- TODO make cleaner system for updates
---  - rework widgets
 
 local set_song_name = cmd_widget_generator("playerctl metadata --format '{{ xesam:title }} '", "Not Playing")
 

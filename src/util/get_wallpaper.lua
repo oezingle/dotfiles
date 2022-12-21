@@ -175,7 +175,6 @@ local function generate_wallpaper(identifier, width, height, blur, async_cb)
         fs.mkdir(dir)
     end
 
-    -- TOOD create folder by identiifer, save to folder by identifier
     local filename = dir .. tostring(width) .. "x" .. tostring(height) .. (blur and "_blur" or "")
 
     if not fs.exists(filename) then
@@ -189,7 +188,10 @@ local function generate_wallpaper(identifier, width, height, blur, async_cb)
             blur_string = " -blur 20x20 "
         end
 
-        local cmd = "magick convert" ..
+        local throttle_string = async_cb and "MAGICK_THROTTLE=50 MAGICK_THREAD_LIMIT=1 " or ""
+
+        local cmd = throttle_string ..
+            "magick convert" ..
             resize_string ..
             crop_string ..
             blur_string .. "'" .. wallpaper.table[identifier] .. "' '" .. filename .. "'"

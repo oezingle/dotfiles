@@ -117,11 +117,6 @@ local function radial_menu_contents(children, use_mouse)
 
     local step = (2 * math.pi) / #children
 
-    --[[
-        TODO dynamic arm length
-         - get diagonal length of child widgets
-         - use that total as a circumference -> local arm_length = C / (2 * math.pi)
-    ]]
     local circumference = 0
 
     for _, child in ipairs(children) do
