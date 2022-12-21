@@ -178,18 +178,19 @@ local function generate_wallpaper(identifier, width, height, blur, async_cb)
     local filename = dir .. tostring(width) .. "x" .. tostring(height) .. (blur and "_blur" or "")
 
     if not fs.exists(filename) then
+        ---@type string
         local resize_string = " -resize " .. tostring(width) .. "x" .. tostring(height) .. "^ "
 
+        ---@type string
         local crop_string = " -gravity Center -extent " .. tostring(width) .. "x" .. tostring(height) .. " "
 
-        local blur_string = ""
+        ---@type string
+        local blur_string = blur and " -blur 20x20 " or ""
 
-        if blur then
-            blur_string = " -blur 20x20 "
-        end
-
+        ---@type string
         local throttle_string = async_cb and "MAGICK_THROTTLE=50 MAGICK_THREAD_LIMIT=1 " or ""
 
+        ---@type string
         local cmd = throttle_string ..
             "magick convert" ..
             resize_string ..

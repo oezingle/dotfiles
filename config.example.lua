@@ -72,7 +72,7 @@ local config = {
     },
 
     -- Gap between tiled windows
-    gap = dpi(5),
+    gap = 5,
 
     -- Font to use in the user interface
     font = "Inter",
