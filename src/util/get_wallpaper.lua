@@ -1,6 +1,6 @@
 local time   = require("src.util.time")
 local config = require("config")
-local gtimer  = require("gears.timer")
+local gtimer = require("gears.timer")
 local fs     = require("src.util.fs")
 
 local pairs = pairs
@@ -158,6 +158,84 @@ awesome.connect_signal("wallpaper::set_current", function()
     wallpaper.set_current()
 end)
 
+local spawn = require("src.agnostic.spawn")
+
+--- Generate a wallpaper for a given iterator
+---@param identifier any
+---@param width number
+---@param height number
+---@param blur boolean
+---@param async_cb function?
+local function generate_wallpaper(identifier, width, height, blur, async_cb)
+    async_cb = async_cb or nil
+
+    local dir = wallpaper_dir .. tostring(identifier) .. "/"
+
+    if not fs.isdir(dir) then
+        fs.mkdir(dir)
+    end
+
+    -- TOOD create folder by identiifer, save to folder by identifier
+    local filename = dir .. tostring(width) .. "x" .. tostring(height) .. (blur and "_blur" or "")
+
+    if not fs.exists(filename) then
+        local resize_string = " -resize " .. tostring(width) .. "x" .. tostring(height) .. "^ "
+
+        local crop_string = " -gravity Center -extent " .. tostring(width) .. "x" .. tostring(height) .. " "
+
+        local blur_string = ""
+
+        if blur then
+            blur_string = " -blur 20x20 "
+        end
+
+        local cmd = "magick convert" ..
+            resize_string ..
+            crop_string ..
+            blur_string .. "'" .. wallpaper.table[identifier] .. "' '" .. filename .. "'"
+
+        if async_cb then
+            spawn(cmd, function ()
+                async_cb() 
+            end)
+        else
+            os.execute(cmd)
+        end
+    else
+        -- callback for wallpapers that already exist
+        if async_cb then
+            async_cb()
+        end
+    end
+end
+
+--- Generate wallpapers asyncronously with an iterator function
+---@param iter function an iterator
+---@param width number
+---@param height number
+---@param blur boolean
+local function generate_wallpaper_iter(iter, width, height, blur)
+    local identifier = iter()
+
+    if not identifier then
+        return
+    end
+
+    -- recursive call
+    generate_wallpaper(identifier, width, height, blur, function()
+        generate_wallpaper_iter(iter, width, height, blur)
+    end)
+end
+
+local function list_iter(t)
+    local i = 0
+    local n = #t
+    return function()
+        i = i + 1
+        if i <= n then return t[i] end
+    end
+end
+
 --- get the wallpaper at a specific resolution, and with optional blur.
 --- saves crazy amounts of time when dealing with widgets (low res images load way faster)
 ---@param width number?
@@ -179,37 +257,13 @@ local function get_wallpaper(width, height, blur)
 
     blur = blur or false
 
-    -- TODO create the current wallpaper first, so the system has something to draw, and then do the rest with an async function or even another thread
+    -- generate the current identifier right now so something can get drawn
+    generate_wallpaper(wallpaper.current_identifier, width, height, blur)
 
-    for _, identifier in ipairs(wallpaper.all_identifiers()) do
-        local dir = wallpaper_dir .. tostring(identifier) .. "/"
+    -- generate others
+    local iter = list_iter(wallpaper.all_identifiers())
 
-        if not fs.isdir(dir) then
-            fs.mkdir(dir)
-        end
-
-        -- TOOD create folder by identiifer, save to folder by identifier
-        local filename = dir .. tostring(width) .. "x" .. tostring(height) .. (blur and "_blur" or "")
-
-        if not fs.exists(filename) then
-            local resize_string = " -resize " .. tostring(width) .. "x" .. tostring(height) .. "^ "
-
-            local crop_string = " -gravity Center -extent " .. tostring(width) .. "x" .. tostring(height) .. " "
-
-            local blur_string = ""
-
-            if blur then
-                blur_string = " -blur 20x20 "
-            end
-
-            local cmd = "magick convert" ..
-                resize_string ..
-                crop_string ..
-                blur_string .. "'" .. wallpaper.table[identifier] .. "' '" .. filename .. "'"
-
-            os.execute(cmd)
-        end
-    end
+    generate_wallpaper_iter(iter, width, height, blur)
 
     return wallpaper_dir ..
         tostring(wallpaper.get_current_identifier()) ..
