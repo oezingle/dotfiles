@@ -6,12 +6,9 @@ local get_decoration_color = require("src.util.color.get_decoration_color")
 
 -- A widget with a rounded rect, margin, and background color
 local function color_bg_widget(args)
-    local layout = args.layout or wibox.layout.fixed.vertical
-
     local widgets = { unpack(args) }
-
     if #widgets > 1 then
-        widgets.layout = layout
+        widgets.layout = args.layout or wibox.layout.fixed.vertical
 
         widgets.fill_space = false
 

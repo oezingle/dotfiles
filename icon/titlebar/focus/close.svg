@@ -6,4 +6,24 @@
         stroke="#262626"
         stroke-width="5"
     />
+
+    <!-- todo this should be a single path -->
+    <path d="M 17 17 L 38 38" stroke="#262626" stroke-width="5" />
+    <path d="M 38 17 L 17 38" stroke="#262626" stroke-width="5" />
+    <circle
+        cx="17" cy="17" r="2.5" 
+        fill="#262626"
+    />
+    <circle
+        cx="38" cy="17" r="2.5" 
+        fill="#262626"
+    />
+    <circle
+        cx="17" cy="38" r="2.5" 
+        fill="#262626"
+    />
+    <circle
+        cx="38" cy="38" r="2.5" 
+        fill="#262626"
+    />
 </svg>

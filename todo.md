@@ -1,32 +1,24 @@
 
-- hotkeys to move/resize floating clients
-
 - task bar
 	- calendar (click clock)
-
-- firefox PiP 
-	- isn't draggable
 
 - remake older widgets - they're full of obtuse helpers and not optimal 
 	- color_bg_widget
 	- the way music updates
 
-- pet rock widget
-
 - improve notification center
-	- scroll is broken
 	- kinda boring idk
 	- add date/time
-	- add DnD
 
 - use 30log for widgets. somehow
 
 - applets
-	- math symbols applet
-	- Network Manager: WPA/WPA2 enterprise networks
+	- Network Manager
+		- WPA/WPA2 enterprise networks
 		- conflicting design languages
 			- lower radius on network-manager
 			- network-manager util should live as an applet
+		- Rebuild as frontend to 
 	- finish calculator
 	- emoji selector
 

@@ -78,10 +78,10 @@ theme.menu_width  = dpi(100)
 
 -- Define the image to load
 theme.titlebar_close_button_normal = config_dir.."icon/titlebar/unfocus/close.svg"
-theme.titlebar_close_button_focus  = config_dir.."icon/titlebar/focus/close.svg"
+theme.titlebar_close_button_focus  = config_dir.."icon/titlebar/unfocus/close.svg"
 
 theme.titlebar_minimize_button_normal = config_dir.."icon/titlebar/unfocus/min.svg"
-theme.titlebar_minimize_button_focus  = config_dir.."icon/titlebar/focus/min.svg"
+theme.titlebar_minimize_button_focus  = config_dir.."icon/titlebar/unfocus/min.svg"
 
 -- theme.titlebar_ontop_button_normal_inactive = config_dir.."icon/titlebar/unfocus/ontop.svg"
 -- theme.titlebar_ontop_button_focus_inactive  = config_dir.."icon/titlebar/focus/ontop.svg"
@@ -101,9 +101,9 @@ theme.titlebar_floating_button_focus_active  = themes_path.."default/titlebar/fo
 ]]
 
 theme.titlebar_maximized_button_normal_inactive = config_dir.."icon/titlebar/unfocus/max.svg"
-theme.titlebar_maximized_button_focus_inactive  = config_dir.."icon/titlebar/focus/max_inactive.svg"
+theme.titlebar_maximized_button_focus_inactive  = config_dir.."icon/titlebar/unfocus/max_inactive.svg"
 theme.titlebar_maximized_button_normal_active = config_dir.."icon/titlebar/unfocus/max.svg"
-theme.titlebar_maximized_button_focus_active  = config_dir.."icon/titlebar/focus/max_active.svg"
+theme.titlebar_maximized_button_focus_active  = config_dir.."icon/titlebar/unfocus/max_active.svg"
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = themes_path.."default/layouts/fairhw.png"
@@ -133,7 +133,7 @@ theme.awesome_icon = theme_assets.awesome_icon(
 theme.icon_theme = nil
 
 -- systray bg is a little weird and has to be set manually
--- also doesn't support 
+-- also doesn't support transparency
 theme.bg_systray = config.taskbar.bg
 
 return theme

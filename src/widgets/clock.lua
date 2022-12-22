@@ -2,6 +2,8 @@ local wibox     = require('wibox')
 local awful     = require('awful')
 local beautiful = require('beautiful')
 local pywal     = require('src.widgets.util.pywal')
+local config    = require('config')
+local get_font  = require('src.util.get_font')
 local dpi       = beautiful.xresources.apply_dpi
 
 local function clock_widget(args)
@@ -35,6 +37,9 @@ local function clock_widget(args)
 		preferred_alignments = { 'middle', 'front', 'back' },
 		margin_leftright = dpi(8),
 		margin_topbottom = dpi(8),
+		bg = config.popup.bg,
+		fg = config.popup.fg,
+		font = get_font(10),
 		timer_function = function()
 			local ordinal = nil
 
