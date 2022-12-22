@@ -47,14 +47,11 @@ echo $(cd src/appmenu/server; make)
  - `upower` (battery stats)
 
 ## Stolen Code
-
-I stole like 95% of this project
  - `widgets/exit_menu.lua` is lifted from [manilarome/the-glorious-dotfiles](https://github.com/manilarome/the-glorious-dotfiles)
  - `widgets/components/client_preview.lua` is improved from this [Reddit Thread](https://www.reddit.com/r/awesomewm/comments/akiqz2/)
  - `client/restore.lua` is modified from this [Reddit thread](https://www.reddit.com/r/awesomewm/comments/cn02m6/)
- - `util/redshift.lua` is modified from [troglobit/awesome-redshift](https://github.com/troglobit/awesome-redshift)
  - `appmenu/server` wouldn't have been possible without [fbuihuu/samples-dbus](https://github.com/fbuihuu/samples-dbus/blob/master/dbus-client.c)
- - All the icons are stolen from ionicons - I plan to do this in a legal manner soon™
+ - A lot of the icons are stolen from ionicons - I plan to do this in a legal manner soon™
 
 ## Features
 
