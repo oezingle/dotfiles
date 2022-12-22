@@ -40,22 +40,6 @@ local function as_module(path)
     return new_path
 end
 
---[[
---- Load a function as if using require() but without using cache
----@param path string
-local function load_module(path)
-    local true_path = directories.config .. path
-
-    local contents = fs.read(true_path)
-
-    if not contents then
-        print("File " .. path .. " does not load")
-    else
-        load(inject_require .. contents)()
-    end
-end
-]]
-
 local function perform_tests()
     print("\27[1m\n\n" .. string.rep("=", 80) .. "\nRunning unit tests\n" .. string.rep("=", 80) .. "\n\27[0m")
 
@@ -67,18 +51,6 @@ local function perform_tests()
                 local modname = as_module(line)
 
                 fake_require(modname)
-                
-                -- load_module(line)
-
-                -- this approach works but leaves data in the require cache
-                --[[    
-                local as_module = as_module(line)
-
-                require(as_module)
-
-                -- some versions of lua ( < 5.1?) use _LOADED? idk man
-                package.loaded[as_module] = false
-                ]]
             end
         end)
 end
