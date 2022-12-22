@@ -19,10 +19,6 @@
 	- add date/time
 	- add DnD
 
-- rofi theme
-	- a templating engine: follow config.popup colors?
-	- see http://olivinelabs.com/lustache/
-
 - use 30log for widgets. somehow
 
 - applets
@@ -41,7 +37,6 @@
 - custom polkit
 
 - more unit tests
-
 
 - improve battery widget
 	 - click for applet w/ powertop-like stats
@@ -68,17 +63,11 @@
 - break keys out from rc.lua
 	- configurable?
 
-- hot reloading? perchance?
-	- https://github.com/anton-kl/lua-hot-reload
-
-- restore layouts / windows
-	- save/load JSON with lib/json
-
 - store color from src.taskbar.battery / src.widgets.components.switch somewhere smart
 
 - thunar has an error under luajit: attempt to index field 'layout' (a userdata value)
 
-- clicking appmenu items should close the appmenu
+- there sometimes still are ghost appmenu items
 
 - alt-tabbing kinda breaks under luajit
 

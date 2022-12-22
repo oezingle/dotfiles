@@ -12,6 +12,7 @@ My little AwesomeWM configuration. Riddled with copyright law breaches. The main
  - Firefox CSS: [BlurredFox](https://github.com/manilarome/blurredfox) with [this fix](https://github.com/manilarome/blurredfox/issues/68)
  - Terminal: xfce4-terminal
  - File Manager: Thunar
+ - Rofi Theme: [adi1090x's rofi](https://github.com/adi1090x/rofi) (type 3, style 1)
 
 ## Installing
 ```bash
