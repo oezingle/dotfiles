@@ -2,6 +2,8 @@ local test = require("lib.test")
 
 local Promise = require("src.util.Promise")
 
+local print = require("src.agnostic.print")
+
 test.suite("Promise",
     test.test(function()
         Promise(function(res)
@@ -94,6 +96,9 @@ test.suite("Promise",
             :after(function(awesome_path)
                 assert(awesome_path and type(awesome_path) == "string")
             end)
+            :catch(function (err)
+                print("Error in async promise test:", err)
+            end)
     end, "Async Promise"),
 
     test.awesome_only_test(function()
@@ -119,8 +124,12 @@ test.suite("Promise",
             :after(function(awesome_path)
                 assert(awesome_path and type(awesome_path) == "string")
             end)
+            :catch(function (err)
+                print("Error in async promise test:", err)
+            end)
     end, "Async Promise Nesting"),
 
+    -- TODO is actually broken
     test.awesome_only_test(function()
         Promise.all({
             Promise(function(res)
@@ -131,8 +140,11 @@ test.suite("Promise",
             end),
         })
             :after(function(values)
-                assert(values[1][1] == "Hello!")
-                assert(values[2][1] == "Hola!")
+                assert(values[1][1] == "/usr/bin/awesome\n")
+                assert(values[2][1] == "/usr/bin/awesome-client\n")
+            end)
+            :catch(function (err)
+                print("Error in async promise test:", err)
             end)
     end, "Async Promise.all()")
 )

@@ -5,6 +5,7 @@
 -- TODO unload files once tests completed
 
 local test = require("lib.test")
+local fake_require = require("lib.test.fake_require")
 
 local spawn = require("src.agnostic.spawn")
 local print = require("src.agnostic.print")
@@ -24,7 +25,23 @@ local function split_newlines(s)
     return lines
 end
 
---- Load a function as if using require() but without using data
+--- Convert a filesystem path to a lua module name
+---@param path string
+---@return string
+local function as_module(path)
+    local new_path = path
+        -- remove ./
+        :gsub("%./", "")
+        -- remove .lua
+        :gsub(".lua", "")
+        -- / -> .
+        :gsub("/", ".")
+
+    return new_path
+end
+
+--[[
+--- Load a function as if using require() but without using cache
 ---@param path string
 local function load_module(path)
     local true_path = directories.config .. path
@@ -34,11 +51,10 @@ local function load_module(path)
     if not contents then
         print("File " .. path .. " does not load")
     else
-        local inject_require = "local __old_require = require; local function require(m); package.loaded[m] = false; return __old_require(m) end;"
-
         load(inject_require .. contents)()
     end
 end
+]]
 
 local function perform_tests()
     print("\27[1m\n\n" .. string.rep("=", 80) .. "\nRunning unit tests\n" .. string.rep("=", 80) .. "\n\27[0m")
@@ -48,7 +64,11 @@ local function perform_tests()
             local lines = split_newlines(res)
 
             for _, line in ipairs(lines) do
-                load_module(line)
+                local modname = as_module(line)
+
+                fake_require(modname)
+                
+                -- load_module(line)
 
                 -- this approach works but leaves data in the require cache
                 --[[    
