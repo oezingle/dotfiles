@@ -311,7 +311,6 @@ local function radial_menu_contents(children, use_mouse)
     
                         geometry.widget:emit_signal("mouse::leave")
     
-                        -- TODO doesn't quite work properly?
                         if dist < closest_child_dist then
                             closest_child = geometry.widget
     

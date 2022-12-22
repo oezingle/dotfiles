@@ -17,7 +17,6 @@ local gtk_menu_info_cache = setmetatable({}, {
     __mode = "v"
 })
 
---[[
 local function spawn_promise(command, ...)
     local args = pack(...)
 
@@ -27,7 +26,6 @@ local function spawn_promise(command, ...)
         end)
     end)
 end
-]]
 
 ---@param window_id number XWindow id to get the menu of
 ---@param callback fun(info: MenuInfo |nil): nil
@@ -51,7 +49,7 @@ local function get_gtk_menu_info(window_id, callback)
             end)
             :after(function(service)
                 if not service then
-                    return
+                    error("No service")
                 end
 
                 return spawn_promise('xprop -id ' ..
@@ -59,10 +57,6 @@ local function get_gtk_menu_info(window_id, callback)
                     service)
             end)
             :after(function(result, service)
-                if not service then
-                    return
-                end
-
                 local menu_path = result:sub(1, -2)
 
                 local info = {
@@ -76,10 +70,8 @@ local function get_gtk_menu_info(window_id, callback)
 
                 return info
             end)
-            :after(function(info)
-                if not info then
-                    callback(nil)
-                end
+            :catch(function ()
+                callback(nil)
             end)
             ]]
 

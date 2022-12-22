@@ -10,7 +10,6 @@ local popup = awful.popup {
     widget    = {
         {
             {
-                -- TODO make bigger - font
                 widget = wibox.widget.textbox,
                 text   = "Modal Notification",
                 font   = get_font(18),

@@ -44,7 +44,6 @@ local function recursive_menu_gen(state, menu_item, parent, direction)
                                 if not has_children then
                                     child:activate()
 
-                                    -- TODO doesn't seem to work
                                     state.is_active = false
 
                                     -- canonical menus get new ids on every click event

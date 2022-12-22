@@ -1,14 +1,14 @@
-local awful  = require("awful")
-local wibox  = require("wibox")
-local shapes = require("src.util.shapes")
-local config = require("config")
+local awful     = require("awful")
+local wibox     = require("wibox")
+local shapes    = require("src.util.shapes")
+local config    = require("config")
 local no_scroll = require("src.widgets.helper.no_scroll")
 
 local get_font = require("src.util.get_font")
 
 local client_content_preview = require("src.widgets.components.client_preview")
 local client_true_geometry   = require("src.util.client.true_geometry")
-local clienticon_or_xorg = require("src.widgets.components.clienticon_or_xorg")
+local clienticon_or_xorg     = require("src.widgets.components.clienticon_or_xorg")
 
 local module_name = "client_switcher"
 
@@ -51,30 +51,11 @@ local function create_client_switcher()
         margins = 10,
         {
             {
-                {
-                    widget = wibox.widget.textbox,
-                    text = "[Placeholder]",
-                    id = "tag-name",
+                widget = wibox.widget.textbox,
+                text = "[Placeholder]",
+                id = "tag-name",
 
-                    font = get_font(18)
-                },
-                nil,
-                {
-                    {
-                        -- TODO fix
-                        -- awful.widget.layoutbox(s),
-
-                        forced_width = 24,
-                        forced_height = 24,
-
-                        layout = wibox.container.place,
-                    },
-
-                    layout = wibox.container.place,
-                },
-
-                layout = wibox.layout.align.horizontal,
-                expand = "inside"
+                font = get_font(18)
             },
 
             {
@@ -230,9 +211,9 @@ local function create_client_switcher()
             end
         end
 
-        -- TODO mouse mode 
+        -- TODO fix mouse mode
         -- emit mouse::leave to client_list_children[client_index] if triggered by keyboard event and mouse starts moving
-        
+
         update_client_index(1)
 
         awful.keygrabber {

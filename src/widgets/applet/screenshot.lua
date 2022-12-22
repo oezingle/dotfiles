@@ -17,7 +17,6 @@ local function take_screenshot(args)
         "'/tmp/%F_%T_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f'" or
         "'/tmp/scrot.png'; mv /tmp/scrot.png $(zenity --file-selection --save --title='Save Your Screenshot' --filename=$HOME/Pictures/screenshot.png)"
 
-    -- TODO the delay isn't awesome but required because of picom's fade out - work around it?
     local delay = (args.delay or 0) + 0.4
 
     local area = ""

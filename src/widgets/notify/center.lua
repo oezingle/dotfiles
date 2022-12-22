@@ -12,14 +12,11 @@ local switch               = require("src.widgets.components.switch")
 -- local datetime   = require("src.widgets.components.datetime")
 local scrollable = require("src.widgets.util.scrollable")
 
-local config_dir = require("src.util.directories").config
-
 local do_not_disturb = require("src.notify.do_not_disturb")
 
 -- notification center
 
 -- TODO save notifications to file, on awesome::exit, reload on startup
--- TODO switch to applet format - center of screen
 
 local notif_constants = require("src.notify.constants")
 

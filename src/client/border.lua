@@ -32,5 +32,3 @@ for _, signal in ipairs({
         mod_width(c)
     end)
 end
-
--- TODO draggable borders with titlebars? probably a pipedream

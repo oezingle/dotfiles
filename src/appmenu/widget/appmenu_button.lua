@@ -38,8 +38,6 @@ local function appmenu_button(state, label, widget_args, get_menu, handle_click)
         markup = format_label(label, state.is_keygrabbing)
     }))
 
-    -- TODO top, bottom margins for vertical submenus
-
     local widget = wibox.widget {
         {
             text,

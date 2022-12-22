@@ -13,7 +13,6 @@ test.suite(
         end)
 
         -- check_dependencies works in async under AwesomeWM
-        -- TODO find a solution for that
         if not test.has_awesome() then
             assert(has_sh)            
         end

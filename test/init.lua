@@ -2,8 +2,6 @@
     Test handler injector for awesomewm signal / standalone tests
 ]]
 
--- TODO unload files once tests completed
-
 local test = require("lib.test")
 local fake_require = require("lib.test.fake_require")
 

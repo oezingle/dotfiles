@@ -1,8 +1,6 @@
 local class = require("lib.30log")
 local gvariant_ipairs = require("src.appmenu.gvariant_ipairs")
 
--- TODO test signals
-
 -- TODO greyed out options?
 
 local lgi = require("lgi")

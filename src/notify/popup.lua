@@ -9,7 +9,8 @@ local notif_constants = require("src.notify.constants")
 
 local notification = require("src.widgets.notify.notification")
 
--- TODO some wibox with a truly transparent background
+-- TODO a truly transparent background
+
 local function create_notification_area()
     local list = wibox.widget {
         layout = wibox.layout.fixed.vertical,

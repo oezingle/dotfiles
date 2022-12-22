@@ -49,7 +49,7 @@ local function canonical_get_children(i_menu_item)
         -- tell the child it's going to be visible
         local id_variant = GVariant("(i)", { child_id })
 
-        local res, err = i_menu_item._private.proxy.method.AboutToShow(id_variant)
+        local _, err = i_menu_item._private.proxy.method.AboutToShow(id_variant)
 
         if flags.DEBUG then
             if err then
@@ -95,7 +95,6 @@ function canonical_menu_item:get_children(callback)
     callback(canonical_get_children(self))
 end
 
--- TODO switch to get_children(callback) for async
 function canonical_menu_item:init(proxy, id, label)    
     self.id = id
 

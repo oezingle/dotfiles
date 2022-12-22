@@ -3,15 +3,11 @@ local get_font = require("src.util.get_font")
 local config   = require("config")
 local watch_widget = require("src.widgets.util.watch_widget")
 
--- TODO stop/start timers
-
 ---@param core_number number
 local function cpu_arc(core_number)
     local mpstat = "mpstat -P " .. tostring(core_number) .. " 1 1 | awk 'NR==4{print $13}'"
 
     local cmd = 'bash -c "' .. mpstat .. '"'
-
-    -- TODO %usage below?
 
     return watch_widget(
         cmd,

@@ -16,7 +16,7 @@ local icon_button  = require("src.widgets.components.icon_button")
 
 local config_dir = gears.filesystem.get_configuration_dir()
 
--- TODO volume/brightness sliders don't have correct initial values
+-- TODO volume/brightness sliders don't have initial values
 
 local function toggle_icon_button(icon, callback, tooltip, initial)
     local state = initial or false
@@ -144,7 +144,6 @@ local function create_control_center()
         3, 3, 1, 1
     )
 
-    -- TODO this button
     -- do not disturb
     -- might need to be a toggle_icon_button
     grid:add_widget_at(

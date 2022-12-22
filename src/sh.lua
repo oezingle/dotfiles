@@ -92,9 +92,13 @@ awful.spawn("xinput set-prop 10 325 0")
 -- TODO run this every time unlocked
 awful.spawn("xinput set-prop 10 333 1")
 
--- TODO fix custom network applet
 pidwatch("nm-applet")
 
+local function rofi()
+	awful.spawn(config.apps.rofi)	
+end
+
 return {
-    pidwatch = pidwatch
+    pidwatch = pidwatch,
+    rofi = rofi
 }

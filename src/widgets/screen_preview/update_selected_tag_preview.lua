@@ -138,12 +138,11 @@ local function update_selected_tag_preview(s, preview_width, preview_height)
                         forced_height = 24,
                     },
                     {
-                        -- TODO pretty unreadable on some backgrounds
                         widget = wibox.widget.textbox,
                         text = c.name,
                         font = get_font(14)
                     }
-                }
+                },
             },
             layout = wibox.layout.fixed.vertical,
             spacing = 5

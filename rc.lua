@@ -75,7 +75,7 @@ require("src.widgets.applet")
 local get_wallpaper = require("src.util.get_wallpaper")
 
 -- Rofi popup
-local rofi = require('src.rofi')
+local rofi = require('src.sh').rofi
 
 -- Themes define colours, icons, font and wallpapers.
 -- beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
@@ -132,9 +132,9 @@ end)
 -- {{{ Key bindings
 local globalkeys = gears.table.join(
 
--- TODO change this binding
--- awful.key({ modkey, }, "s", hotkeys_popup.show_help,
---     { description = "show help", group = "awesome" }),
+    -- TODO change this binding
+    -- awful.key({ modkey, }, "s", hotkeys_popup.show_help,
+    --     { description = "show help", group = "awesome" }),
 
     awful.key({ modkey, }, "Left", awful.tag.viewprev,
         { description = "view previous", group = "tag" }),
@@ -375,9 +375,6 @@ awful.rules.rules = {
             buttons = clientbuttons,
             screen = awful.screen.preferred,
 
-            -- placement = awful.placement.no_overlap + awful.placement.no_offscreen
-
-            -- TODO no_overlap but only considering floating windows?
             placement = awful.placement.centered
         }
     },

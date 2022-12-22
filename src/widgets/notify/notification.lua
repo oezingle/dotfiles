@@ -137,6 +137,8 @@ local function notification(args, s, is_notif_center)
 
     -- TODO make height of progress consider icon height
 
+    -- TODO text clipped by icons
+
     local notification_text = widget:get_children_by_id("notification-text")[1]
 
     local new_height = notification_text:get_height_for_width(notif_constants.size.width - notif_constants.size.close_button, s)

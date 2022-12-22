@@ -20,4 +20,3 @@ require_applet("system_info")
     -- bob don't even have a calculator button
 
 -- TODO some method of adding applets to rofi
-    -- might just end up writing my own rofi at this point

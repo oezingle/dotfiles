@@ -47,7 +47,7 @@ local function create_tag_switcher(screen)
 
         widget_template = {
             {
-                -- TODO some better version of a circle widget - this is super complex for the task
+                -- this all just creates a circle. stupid but at least it works
                 {
                     {
                         text = " ",

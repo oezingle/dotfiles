@@ -30,7 +30,6 @@ client.connect_signal("request::titlebars", function(c)
     )
 
     local close_button = awful.titlebar.widget.closebutton(c)
-    -- TODO hover button svgs, and desaturate unfocus buttons
     close_button:connect_signal("mouse::enter", function(w)
         w.image = config_dir .. "icon/titlebar/focus/close.svg"
     end)

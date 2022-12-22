@@ -1,7 +1,5 @@
 #!/usr/bin/lua
 
--- TODO open in xephyr if awesome isn't running
-
 -- TODO some way to expect output from awesome? tail cmd? async shit?
 
 local _, err = pcall(require, "gears")

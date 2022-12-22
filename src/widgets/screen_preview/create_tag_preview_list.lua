@@ -49,17 +49,10 @@ local function create_tag_preview_list(s, width, height)
             {
                 layout = wibox.container.place,
                 {
-                    {
-                        widget = wibox.widget.textbox,
+                    widget = wibox.widget.textbox,
 
-                        font = get_font(10),
-                        text = "Tag " .. t.name
-                    },
-                    -- TODO layoutbox doesn't work because it shows only the current tag's layout
-                    -- if I want to create a visual for the layout, I have to roll my own awful.widget.layoutbox
-                    -- https://github.com/awesomeWM/awesome/blob/master/lib/awful/widget/layoutbox.lua
-                    layout = wibox.layout.fixed.horizontal,
-                    spacing = 5
+                    font = get_font(10),
+                    text = "Tag " .. t.name
                 }
             },
 

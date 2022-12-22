@@ -161,7 +161,6 @@ local create_exit_screen = function(s)
 		)
 	)
 
-	-- TODO add get_decoration_color() border?
 	s.exit_screen:setup {
 		wibox.widget {
 			color_bg_widget {

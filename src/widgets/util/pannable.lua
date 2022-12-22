@@ -8,8 +8,6 @@ local pannable_layout = {}
 
 local pack = require("src.agnostic.version.pack")
 
--- TODO don't draw children that are out of frame (wow no way crazy an optimization)
-
 function pannable_layout:fit(_, width, height)
     return width, height
 end

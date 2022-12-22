@@ -1,10 +1,8 @@
--- TODO move to widgets
 
 local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
 local config = require("config")
-local get_font = require("src.util.get_font")
 
 local gfs = require("gears.filesystem")
 local config_dir = gfs.get_configuration_dir()

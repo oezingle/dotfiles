@@ -32,8 +32,12 @@ local function appmenu_menu(parent, direction)
     end)
 
     popup:connect_signal("mouse::leave", function()
-        -- TODO somehow gets triggered
-        if not popup then return end
+        if not popup then
+            -- somehow gets triggered
+            -- this is a real issue i've encountered
+
+            return
+        end
 
         if not popup.child or not popup.child.visible then
             popup.visible = false
@@ -53,7 +57,7 @@ local function appmenu_menu(parent, direction)
             if popup then
                 child = popup.child
             end
-            
+
             if child and not child.has_entered then
                 child:emit_signal("destroy")
             end
@@ -61,8 +65,12 @@ local function appmenu_menu(parent, direction)
     end)
 
     popup:connect_signal("destroy", function()
-        -- TODO somehow gets triggered
-        if not popup then return end
+        if not popup then
+            -- somehow gets triggered
+            -- this is a real issue i've encountered
+
+            return
+        end
 
         popup.visible = false
 

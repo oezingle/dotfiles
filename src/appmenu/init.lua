@@ -5,11 +5,9 @@ if not config.gimmicks.global_menu then
     return function() end
 end
 
--- TODO state.reload() blocks the mainloop for a while
 -- TODO state.reload() is bad pattern
 
 local flags   = require("src.appmenu.flags")
-local confirm = require("src.widgets.components.confirm")
 
 local pidwatch = require("src.sh").pidwatch
 local get_menu = require("src.appmenu.get_menu")
@@ -17,8 +15,10 @@ local get_menu = require("src.appmenu.get_menu")
 local wibox  = require("wibox")
 local gdebug = require("gears.debug")
 
+local dirs = require("src.util.directories")
+
 -- TODO assumes a folder
-pidwatch("~/.config/awesome/src/appmenu/server/main")
+pidwatch(dirs.config .. "src/appmenu/server/main")
 
 local appmenu_button          = require("src.appmenu.widget.appmenu_button")
 local appmenu_menu            = require("src.appmenu.widget.appmenu_menu")
@@ -64,13 +64,15 @@ local function create_appmenu()
         if reload_attempts > 5 then
             -- give up on reloading
 
-            -- TODO document this better
+            local err = "Failed to reload menu for client " .. c.name .. " after 5 attempts. X ID: " .. c.window
 
-            gdebug.print_warning("Giving up on reloading menu for client " .. c.name)
-            
+            gdebug.print_warning(err)
+
+            awesome.emit_signal("debug::error", err)
+
             return
         end
-        
+
         if flags.DEBUG then
             gdebug.print_warning("Reloading menu")
         end
@@ -117,9 +119,7 @@ local function create_appmenu()
 
                 -- Quit
                 items:add(appmenu_button(state, "Quit", {}, nil, function()
-                    confirm(function()
-                        c:kill()
-                    end, "quit " .. c.class)
+                    c:kill()
                 end))
 
                 if flags.DEBUG then
@@ -137,15 +137,15 @@ local function create_appmenu()
                         if child.label then
                             -- TODO this button might not have children of its own - then what?
                             local button = appmenu_button(state, child.label, {}, function(button)
-                                local success, res_or_err = pcall(function ()
-                                    return recursive_menu_gen(state, child, button)                                
+                                local success, res_or_err = pcall(function()
+                                    return recursive_menu_gen(state, child, button)
                                 end)
 
                                 if not success then
                                     gdebug.print_warning("Menu error: " .. tostring(res_or_err))
 
                                     state.reload(c)
-                                else 
+                                else
                                     return res_or_err
                                 end
                             end)

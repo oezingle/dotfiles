@@ -6,8 +6,6 @@ local gfs        = require("gears.filesystem")
 local config_dir = gfs.get_configuration_dir()
 
 local function scratch_terminal_widget()
-
-    -- TODO icons
     local langs = {
         {
             name = "Bash",
@@ -30,7 +28,7 @@ local function scratch_terminal_widget()
         {
             name = "Lua",
             cmd  = "lua",
-            icon = nil
+            icon = "Lua-Logo"
         },
 
         {

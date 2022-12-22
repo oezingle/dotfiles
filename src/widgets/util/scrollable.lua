@@ -95,7 +95,6 @@ local function scrollable(child)
         forced_height = child.forced_height or child_h
     }
 
-    -- TODO doesn't take offset right
     local function set_scroll_bar()
         local background = generate_background(bar, child, scroll_px)
 

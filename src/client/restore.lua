@@ -2,15 +2,12 @@
 -- https://www.reddit.com/r/awesomewm/comments/cn02m6/floating_clients_restore_position_after_layout/
 
 local awful  = require("awful")
-local gears  = require("gears")
 local config = require("config")
 
 local client_or_tag_floating = require("src.util.client.client_or_tag_floating")
 local should_show_titlebars = require("src.util.client.should_show_titlebars")
 
 local client_geos = {}
-
--- TODO still have titlebars on clients that request not to
 
 local function apply_geometry(c)
     if client_or_tag_floating(c) and not c.fullscreen then

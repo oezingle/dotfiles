@@ -111,10 +111,6 @@ local config = {
     wallpaper = "~/Pictures/wallpaper.jpg",
 }
 
--- create some commands
-config.cmd = {}
-config.cmd.editor = config.apps.terminal .. " -e " .. config.apps.editor
-
 -- gimmicks have to be explicitly set to false
 for _, gimmick in ipairs({ 
     "gestures",

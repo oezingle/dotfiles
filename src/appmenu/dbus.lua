@@ -3,9 +3,9 @@
 local pack = require("src.agnostic.version.pack")
 local unpack = require("src.agnostic.version.unpack")
 
--- TODO move to util
-
 -- TODO SmartTable.method_async - abusing the AwesomeWM mainloop does not fly!
+
+-- TODO signals seem to not work
 
 -- TODO lua types -> GVariant automatically?
 
@@ -155,7 +155,6 @@ function dbus.smart_proxy(proxy)
             end,
         },
 
-        -- TODO test the signals
         ---@param name string signal name
         ---@param fn fun(parameters: GVariant, sender_name: string): nil signal recieved callback
         connect_signal = function(name, fn)

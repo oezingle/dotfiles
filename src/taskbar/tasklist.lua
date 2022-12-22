@@ -3,8 +3,6 @@ local wibox              = require("wibox")
 local gears              = require("gears")
 local clienticon_or_xorg = require("src.widgets.components.clienticon_or_xorg")
 
-local arbitrary_icon = require("src.widgets.components.arbitrary_icon")
-
 local tasklist_buttons = gears.table.join(
     awful.button({}, 1, function(c)
         if c == client.focus then
@@ -54,8 +52,7 @@ local function create_tasklist(s)
                 if not c.skip_taskbar then
                     self:get_children_by_id("icon")[1].client = c
 
-                    -- TODO memory leak??
-                    local tooltip = awful.tooltip {
+                    awful.tooltip {
                         objects = { self },
                         text = c.name
                     }
