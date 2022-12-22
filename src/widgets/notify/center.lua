@@ -160,21 +160,6 @@ local function notify(args)
     notification_list:insert(1, notif)
 end
 
--- TODO remove this - why should I provide a helper for this?
-local function get_notification_center_button()
-    -- TODO nifty stack with notification icon and notif count
-    local button = wibox.widget {
-        widget = wibox.widget.imagebox,
-        image = config_dir .. "icon/notifications.svg"
-    }
-
-    button:connect_signal("button::press", no_scroll(function()
-        NotificationCenter.toggle()
-    end))
-
-    return button
-end
-
 NotificationCenter = {
     hide = function()
         notification_wibox.visible = false
@@ -197,8 +182,4 @@ NotificationCenter = {
     end,
 
     notify = notify
-}
-
-return {
-    get_button = get_notification_center_button,
 }

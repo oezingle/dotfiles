@@ -14,7 +14,6 @@ local create_battery_widget = require("src.taskbar.battery")
 local create_appmenu        = require("src.appmenu")
 local control_center        = require("src.widgets.control_center")
 local clock_widget          = require("src.widgets.clock")
-local notification_center   = require("src.widgets.notify.center")
 local create_tag_switcher   = require("src.taskbar.tag_switcher")
 local create_tasklist       = require("src.taskbar.tasklist")
 
@@ -90,7 +89,7 @@ local function create_taskbar()
                     top = config.taskbar.gap,
                     create_tasklist(s),
                 },
-                notification_center.get_button(),
+                nil,
                 {
                     widget = wibox.container.margin,
                     left = config.taskbar.gap,
