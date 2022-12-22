@@ -24,7 +24,6 @@
 
 - wallpapers
 	- looks like shit with light wallpaper
-	- use wal for font colors, and dynamic icons
 
 - custom polkit
 
@@ -50,8 +49,6 @@
 	- screen_preview is broken w/ multiple monitors
 	- check that all clients show up in client list, as left bar is missing from non-primaries
 
-- hover titlebar buttons
-
 - break keys out from rc.lua
 	- configurable?
 
@@ -60,6 +57,7 @@
 - thunar has an error under luajit: attempt to index field 'layout' (a userdata value)
 
 - there sometimes still are ghost appmenu items
+	- seems to happen when you leave and re-enter the same item too quickly
 
 - alt-tabbing kinda breaks under luajit
 
