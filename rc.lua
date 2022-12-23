@@ -1,6 +1,8 @@
 -- rebind print
 print = require("src.agnostic.print")
 
+print(string.rep("\n", 5) .. "AWESOMEWM RESTART" .. string.rep("\n", 5))
+
 -- seed random
 math.randomseed(os.time())
 -- some platforms have a recurring first random

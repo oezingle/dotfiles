@@ -1,7 +1,8 @@
 local fs = require("src.util.fs")
 local json = require("lib.json")
 
-local cache_dir = require("src.util.directories").cache
+local floor = math.floor
+local cache_dir = fs.dirs.cache
 
 local FILE_PATH = cache_dir .. "wm.json"
 
@@ -108,7 +109,8 @@ end
 ---@param s2 ScreenTable
 ---@return boolean
 local function screen_equal(s1, s2)
-    if s1.dpi ~= s2.dpi then
+    
+    if floor(s1.dpi) ~= floor(s2.dpi) then
         return false
     end
 
@@ -131,6 +133,25 @@ local function screen_equal(s1, s2)
 
     return true
 end
+
+--- Find the saved WM_STATE screen data for a given screen
+---@param s table
+---@return ScreenTable|nil
+local function get_saved_screen(s)
+    if not WM_STATE or not WM_STATE.screens then
+        return nil
+    end
+
+    local s_table = screen_table(s)
+
+    for _, saved_screen in ipairs(WM_STATE.screens) do
+        if screen_equal(saved_screen, s_table) then
+            return saved_screen
+        end
+    end
+end
+
+local print = require("src.agnostic.print")
 
 local function load_state()
     local contents = fs.read(FILE_PATH)
@@ -161,13 +182,9 @@ local function load_state()
         end
 
         for s in screen do
-            local index = s.index
+            if not get_saved_screen(s) then
+                print("invalidated WM_STATE: saved screen not found")
 
-            local saved = WM_STATE.screens[index]
-
-            local s_table = screen_table(s)
-
-            if not screen_equal(s_table, saved) then
                 WM_STATE.screens = nil
 
                 return
@@ -183,7 +200,7 @@ local function save_state()
 
     WM_STATE.screens = {}
 
-    for s in screen do
+    for s in screen do        
         table.insert(WM_STATE.screens, screen_table(s))
     end
 
@@ -196,23 +213,7 @@ awesome.connect_signal("exit", function()
     save_state()
 end)
 
---- Find the saved WM_STATE screen data for a given screen
----@param s table
----@return ScreenTable|nil
-local function get_saved_screen(s)
-    if not WM_STATE or not WM_STATE.screens then
-        return nil
-    end
-
-    local s_table = screen_table(s)
-
-    for _, saved_screen in ipairs(WM_STATE.screens) do
-        if screen_equal(saved_screen, s_table) then
-            return saved_screen
-        end
-    end
-end
-
+--- Restore saved tags for every screen
 local function restore_tags()
     if WM_STATE and WM_STATE.screens then
         for s in screen do
