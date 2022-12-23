@@ -32,20 +32,6 @@ local SaveState = class("SaveState", {
 ---@field demutator DemutatorFunction?
 ---@field default any?
 
-local function table_deep_copy (input)
-    local output = {}
-
-    for k, v in pairs(input) do
-        if type(v) == "table" then
-            output[k] = table_deep_copy(v)
-        else
-            output[k] = v
-        end
-    end
-
-    return output
-end
-
 --- Easily interact with JSON save states
 ---@param filename string a .json file name. folders do not work
 ---@param opts SaveStateOptArgs?
@@ -82,7 +68,7 @@ function SaveState:init(filename, opts)
         end)
     end
 
-    self.contents = table_deep_copy(opts.default) or {}
+    self.contents = opts.default or {}
 
     self:load_state()
 

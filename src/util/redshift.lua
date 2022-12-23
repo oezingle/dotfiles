@@ -69,10 +69,10 @@ function redshift.get_state()
 end 
 
 awesome.connect_signal("exit", function()
+    -- TODO doesn't exit right
     redshift.kill()
 
-    -- TODO doesn't exit right
-    spawn.with_shell("killall redshift")
+    spawn.with_shell("pkill redshift")
 end)
 
 return redshift
