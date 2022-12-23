@@ -82,7 +82,7 @@ local rofi = require('src.sh').rofi
 beautiful.init(gears.filesystem.get_configuration_dir() .. "mytheme.lua")
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-local layouts = {
+awful.layout.layouts = {
     awful.layout.suit.tile,
     --awful.layout.suit.tile.left,
     awful.layout.suit.floating,
@@ -99,17 +99,6 @@ local layouts = {
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
 }
-
-tag.connect_signal("request::default_layouts", function()    
-    awful.layout.append_default_layouts(layouts)
-
-    -- restore saved WM state
-    gears.timer.delayed_call(function()
-        require("src.save_state.wm").restore_tags()
-    end)
-end)
-
-awful.layout.layouts = layouts
 
 -- restore saved WM state
 gears.timer.delayed_call(function()
