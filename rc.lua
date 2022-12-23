@@ -82,7 +82,7 @@ local rofi = require('src.sh').rofi
 beautiful.init(gears.filesystem.get_configuration_dir() .. "mytheme.lua")
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-awful.layout.layouts = {
+local layouts = {
     awful.layout.suit.tile,
     --awful.layout.suit.tile.left,
     awful.layout.suit.floating,
@@ -99,6 +99,22 @@ awful.layout.layouts = {
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
 }
+
+tag.connect_signal("request::default_layouts", function()    
+    awful.layout.append_default_layouts(layouts)
+
+    -- restore saved WM state
+    gears.timer.delayed_call(function()
+        require("src.save_state.wm").restore_tags()
+    end)
+end)
+
+awful.layout.layouts = layouts
+
+-- restore saved WM state
+gears.timer.delayed_call(function()
+    require("src.save_state.wm").restore_tags()
+end)
 
 local function set_wallpaper(s)
     gears.wallpaper.maximized(get_wallpaper(s.geometry.width, s.geometry.height), s, true)
@@ -124,17 +140,12 @@ awful.screen.connect_for_each_screen(function(s)
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.suit.floating)
 end)
 
--- restore saved WM state
-gears.timer.delayed_call(function()
-    require("src.save_state.wm").restore_tags()
-end)
-
 -- {{{ Key bindings
 local globalkeys = gears.table.join(
 
-    -- TODO change this binding
-    -- awful.key({ modkey, }, "s", hotkeys_popup.show_help,
-    --     { description = "show help", group = "awesome" }),
+-- TODO change this binding
+-- awful.key({ modkey, }, "s", hotkeys_popup.show_help,
+--     { description = "show help", group = "awesome" }),
 
     awful.key({ modkey, }, "Left", awful.tag.viewprev,
         { description = "view previous", group = "tag" }),
