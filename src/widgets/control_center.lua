@@ -140,7 +140,7 @@ local function create_control_center()
     grid:add_widget_at(
         toggle_icon_button(config_dir .. "icon/control-center/moon.svg", function(state)
             redshift.toggle()
-        end, "Toggle Night Colors", redshift.state == 1),
+        end, "Toggle Night Colors", redshift.get_state() == 1),
         3, 3, 1, 1
     )
 

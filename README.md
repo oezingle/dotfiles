@@ -81,6 +81,6 @@ echo $(cd src/appmenu/server; make)
  - Multihead support (ish)
  - Radial Layout Selector (Ctrl+Mod+F)
  - Emoji CPU load indicator that opens `top` when clicked
- - Alt+Tab client switcher (current tag only)
+ - Alt+Tab client switcher (current tag)
  - Drag clients to tags in screen preview
  

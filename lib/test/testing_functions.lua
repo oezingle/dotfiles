@@ -1,15 +1,17 @@
 -- functions exposed to users
 
+---@alias TestingFunction fun(): string, boolean|nil, any
+
 --- Check if the script is running in awesome
 ---@return boolean has_awesome whether or not the script is running in AwesomeWM
 local function has_awesome()
     return type(awesome) ~= "nil" and next(awesome) ~= nil
 end
 
---- Create a test callback wrapped around a function that might throw an error
----@param callback function
----@param name string?
----@return fun(): string, boolean, any
+--- Create a test callback wrapped around a function
+---@param callback function a function that could throw an error
+---@param name string? the name of the test
+---@return TestingFunction test for internal use
 local function test(callback, name)
     name = name or "[Unnamed test]"
 
@@ -28,9 +30,9 @@ local function test(callback, name)
 end
 
 --- Create a test if in AwesomeWM context
----@param callback function
----@param name string?
----@return function
+---@param callback function a function that could throw an error
+---@param name string? the test's name
+---@return TestingFunction test for internal use
 local function awesome_only_test(callback, name)
     name = name or "[Unnamed test]"
 
@@ -44,9 +46,9 @@ local function awesome_only_test(callback, name)
 end
 
 --- Assert non-false / non-null value
----@param boolean any
----@param name string?
----@return function
+---@param boolean any the value to check for truthiness
+---@param name string? the test's name
+---@return TestingFunction test for internal use
 local function test_assert(boolean, name)
     return test(function()
         return assert(boolean)

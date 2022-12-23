@@ -39,7 +39,7 @@ end, "gnome polkit agent")
 check_dependencies({ 'redshift', '/usr/lib/geoclue-2.0/demos/agent' }, function()
     local redshift = require("src.util.redshift")
 
-    redshift.init(1)
+    redshift.init()
 
     -- TODO sort out geoclue man - why does the demo have to run?
     pidwatch("/usr/lib/geoclue-2.0/demos/agent")
