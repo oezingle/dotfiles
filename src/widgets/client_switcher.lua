@@ -48,6 +48,7 @@ local function client_preview(c)
 end
 
 local print = require("src.agnostic.print")
+local unpack = require("src.agnostic.version.unpack")
 
 local function create_client_switcher()
     local popup_widget = wibox.widget {
@@ -260,7 +261,7 @@ local function create_client_switcher()
             export_keybindings = true,
 
             keyreleased_callback = function (self, mods, key, event)
-                print("keyreleased", table.unpack(mods), key)
+                print("keyreleased", unpack(mods), key)
             end
         }
     end
