@@ -220,6 +220,8 @@ local function create_client_switcher()
 
         update_client_index(1)
 
+        print("starting keygrabber")
+
         awful.keygrabber {
             keybindings        = {
                 {
@@ -255,10 +257,10 @@ local function create_client_switcher()
 
                 hide()
             end,
-            export_keybindings = false,
+            export_keybindings = true,
 
-            keyreleased_callback = function (a)
-                print("key released", a)
+            keyreleased_callback = function (self, mods, key, event)
+                print("keyreleased", table.unpack(mods), key)
             end
         }
     end
