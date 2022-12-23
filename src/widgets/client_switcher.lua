@@ -12,6 +12,8 @@ local clienticon_or_xorg     = require("src.widgets.components.clienticon_or_xor
 
 local module_name = "client_switcher"
 
+local Alt = "Mod1"
+
 local PREVIEW_SIZE = 128
 
 -- TODO acts iffy on first use
@@ -44,6 +46,8 @@ local function client_preview(c)
         }
     end
 end
+
+local print = require("src.agnostic.print")
 
 local function create_client_switcher()
     local popup_widget = wibox.widget {
@@ -219,20 +223,20 @@ local function create_client_switcher()
         awful.keygrabber {
             keybindings        = {
                 {
-                    { 'Mod1' }, 'Tab',
+                    { Alt }, 'Tab',
                     function()
                         update_client_index(1)
                     end
                 },
                 {
-                    { 'Mod1', 'Shift' }, 'Tab',
+                    { Alt, 'Shift' }, 'Tab',
                     function()
                         update_client_index(-1)
                     end
                 },
             },
             -- Note that it is using the key name and not the modifier name.
-            stop_key           = 'Mod1',
+            stop_key           = Alt,
             stop_event         = 'release',
             start_callback     = awful.client.focus.history.disable_tracking,
             stop_callback      = function()
@@ -251,7 +255,11 @@ local function create_client_switcher()
 
                 hide()
             end,
-            export_keybindings = true,
+            export_keybindings = false,
+
+            keyreleased_callback = function (a)
+                print("key released", a)
+            end
         }
     end
 

@@ -150,6 +150,10 @@ local function load_state()
                     - screen DPI changes
         ]]
 
+        if not WM_STATE.screens then
+            return
+        end
+
         if screen.count() ~= #WM_STATE.screens then
             WM_STATE.screens = nil
 

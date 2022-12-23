@@ -4,7 +4,6 @@
 
 - remake older widgets - they're full of obtuse helpers and not optimal 
 	- color_bg_widget
-	- the way music updates
 
 - improve notification center
 	- kinda boring idk
@@ -59,10 +58,15 @@
 - there sometimes still are ghost appmenu items
 	- seems to happen when you leave and re-enter the same item too quickly
 
-- alt-tabbing kinda breaks under luajit
+- luajit loses keys sometimes
+	- alt-tabbing kinda breaks under luajit
 
 - profiling
 
-- luajit loses keys sometimes
-
 - diagnostic / debug menu?
+
+- ignore output from xfce4-power-manager etc
+
+- rewrite music widget
+	- album art doesn't update if it gets saved in /cache/
+	- only uses first output, instead of prioritizing a playing output

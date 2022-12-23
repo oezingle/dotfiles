@@ -72,6 +72,8 @@ function SaveState:init(filename, opts)
 
     self:load_state()
 
+    -- TODO option to fill keys in the default that don't exist in the file
+
     self:enable_signal()
 end
 
@@ -169,47 +171,3 @@ function SaveState:enable_signal()
 end
 
 return SaveState
-
---[[
-    2022-12-23 01:26:01 W: awesome: luaA_dofunction:78: error while running function!
-stack traceback:
-	[C]: in function 'error'
-	/home/zingle/.config/awesome/lib/json/json.lua:130: in upvalue 'encode'
-	/home/zingle/.config/awesome/lib/json/json.lua:93: in function </home/zingle/.config/awesome/lib/json/json.lua:59>
-	(...tail calls...)
-	/home/zingle/.config/awesome/lib/json/json.lua:135: in function 'lib.json.json.encode'
-	/home/zingle/.config/awesome/src/save_state/init.lua:146: in function 'src.save_state.save_state'
-	/home/zingle/.config/awesome/src/save_state/init.lua:170: in function </home/zingle/.config/awesome/src/save_state/init.lua:169>
-	[C]: in upvalue 'press'
-	/usr/share/awesome/lib/awful/key.lua:125: in function </usr/share/awesome/lib/awful/key.lua:125>
-error: /home/zingle/.config/awesome/lib/json/json.lua:130: unexpected type 'function'
-2022-12-23 01:26:01 W: awesome: 
-
-
-
-
-
-
-
-
-
- SAVING STATE 
-
-
-
-
- 
-2022-12-23 01:26:01 W: awesome: luaA_dofunction:78: error while running function!
-stack traceback:
-	[C]: in function 'error'
-	/home/zingle/.config/awesome/lib/json/json.lua:130: in upvalue 'encode'
-	/home/zingle/.config/awesome/lib/json/json.lua:93: in function </home/zingle/.config/awesome/lib/json/json.lua:59>
-	(...tail calls...)
-	/home/zingle/.config/awesome/lib/json/json.lua:135: in function 'lib.json.json.encode'
-	/home/zingle/.config/awesome/src/save_state/init.lua:146: in function 'src.save_state.save_state'
-	/home/zingle/.config/awesome/src/save_state/init.lua:160: in function 'src.save_state.save'
-	/home/zingle/.config/awesome/src/util/redshift.lua:61: in function </home/zingle/.config/awesome/src/util/redshift.lua:55>
-	[C]: in upvalue 'press'
-	/usr/share/awesome/lib/awful/key.lua:125: in function </usr/share/awesome/lib/awful/key.lua:125>
-
-]]
