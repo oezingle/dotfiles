@@ -101,23 +101,6 @@ local function cmd_slider(args)
         is_pressing = true
     end))
 
-    -- create a timer to recreate the background
-    -- TODO doesn't do anything
-    --[[
-    gears.timer {
-        timeout = 1,
-        single_shot = true,
-        autostart = true,
-        function ()
-            -- getting drawn means width and height are bound
-            slider:emit_signal("widget::redraw_needed")
-
-            -- set bar color properly this time
-            slider.bar_color = create_slider_bg(slider)
-        end
-    }
-    ]]
-
     return update_widget {
         widget = stack,
         update_callback = function()

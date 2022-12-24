@@ -1,7 +1,7 @@
 local wibox       = require("wibox")
 local gtable      = require("gears.table")
 local base        = require("wibox.widget.base")
-local format_date = require("src.util.date").format
+local format_datetime = require("src.util.time.format")
 local get_font    = require("src.util.get_font")
 local Class       = require("src.util.Class")
 
@@ -10,7 +10,7 @@ local pack = require("src.agnostic.version.pack")
 local datetime = {}
 
 function datetime:update()
-    self._private.widget.text = format_date(self.time)
+    self._private.widget.text = format_datetime(self.time)
 end
 
 function datetime:fit(context, width, height)

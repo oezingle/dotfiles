@@ -6,7 +6,6 @@
 	- color_bg_widget
 
 - improve notification center
-	- kinda boring idk
 	- add date/time
 
 - use 30log for widgets. somehow
@@ -17,7 +16,7 @@
 		- conflicting design languages
 			- lower radius on network-manager
 			- network-manager util should live as an applet
-		- Rebuild as frontend to 
+		- Rebuild as frontend to gnome network apps?
 	- finish calculator
 	- emoji selector
 
@@ -64,6 +63,6 @@
 
 - ignore output from xfce4-power-manager etc
 
-- rewrite music widget
-	- album art doesn't update if it gets saved in /cache/
-	- only uses first output, instead of prioritizing a playing output
+- set the correct close buttons for applets on hover
+
+- notification center doesn't auto close unless you click in it and then out of it

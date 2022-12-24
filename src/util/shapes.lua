@@ -4,13 +4,14 @@ local gears = require("gears")
 --- A rounded rectangle
 ---@param radius number?
 ---@return function shape the shape function for a drawable
-local rounded_rect = function(radius)
+local function rounded_rect(radius)
     radius = radius or beautiful.border_radius
 
     return function(cx, w, h)
         return gears.shape.rounded_rect(cx, w, h, radius)
     end
 end
+
 --- A rounded rectangle
 ---@param radius number?
 ---@param tl boolean?
@@ -26,9 +27,9 @@ local function partially_rounded_rect(radius, tl, tr, bl, br)
     bl = bl or false
     br = br or false
 
-    return function (cx, w, h)
-        return gears.shape.partially_rounded_rect(cx, w ,h, tl, tr, bl, br, radius)
-    end 
+    return function(cx, w, h)
+        return gears.shape.partially_rounded_rect(cx, w, h, tl, tr, bl, br, radius)
+    end
 end
 
 return {

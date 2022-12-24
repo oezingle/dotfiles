@@ -11,7 +11,7 @@ local table = table
 local math = math
 local awesome = awesome
 
-local wallpaper_dir = fs.dirs.wallpaper
+local wallpaper_dir = fs.directories.wallpaper
 
 do
     if type(config.wallpaper) == "string" then

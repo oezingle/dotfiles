@@ -1,6 +1,6 @@
 
 local fs = require("src.util.fs")
-local cache_dir = require("src.util.directories").cache
+local cache_dir = require("src.util.fs.directories").cache
 local json = require("lib.json")
 
 local JSON_PATH = cache_dir .. "notifications.json"

@@ -15,10 +15,10 @@ local get_menu = require("src.appmenu.get_menu")
 local wibox  = require("wibox")
 local gdebug = require("gears.debug")
 
-local dirs = require("src.util.directories")
+local directories = require("src.util.fs.directories")
 
 -- TODO assumes a folder
-pidwatch(dirs.config .. "src/appmenu/server/main")
+pidwatch(directories.config .. "src/appmenu/server/main")
 
 local appmenu_button          = require("src.appmenu.widget.appmenu_button")
 local appmenu_menu            = require("src.appmenu.widget.appmenu_menu")

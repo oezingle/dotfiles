@@ -2,7 +2,7 @@ local fs = require("src.util.fs")
 local json = require("lib.json")
 
 local floor = math.floor
-local cache_dir = fs.dirs.cache
+local cache_dir = fs.directories.cache
 
 local FILE_PATH = cache_dir .. "wm.json"
 

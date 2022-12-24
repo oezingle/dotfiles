@@ -9,7 +9,7 @@ local spawn = require("src.agnostic.spawn")
 local print = require("src.agnostic.print")
 
 local fs = require("src.util.fs")
-local directories = fs.dirs
+local directories = fs.directories
 
 --- Split a string into an array by newlines
 ---@param s string the string to split up

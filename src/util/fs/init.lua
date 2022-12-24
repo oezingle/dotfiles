@@ -2,7 +2,7 @@
 
 local has_awesome = require("lib.test").has_awesome
 
-local dirs = require("src.util.directories")
+local directories = require("src.util.fs.directories")
 
 -- https://stackoverflow.com/questions/1340230/check-if-directory-exists-in-lua
 
@@ -102,5 +102,5 @@ return {
     write  = write_file,
     rm     = remove,
 
-    dirs   = dirs
+    directories = directories,
 }

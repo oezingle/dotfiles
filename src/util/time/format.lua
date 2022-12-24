@@ -57,6 +57,4 @@ local function format_date(time)
     end
 end
 
-return {
-    format = format_date
-}
+return format_date

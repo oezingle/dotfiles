@@ -23,7 +23,7 @@ local function notification(args, s, is_notif_center)
     end
 
     local close_button = wibox.widget {
-        image = config_dir .. "icon/titlebar/focus/close.svg",
+        image = config_dir .. "icon/titlebar/unfocus/close.svg",
         widget = wibox.widget.imagebox,
 
         forced_width = notif_constants.size.close_button,

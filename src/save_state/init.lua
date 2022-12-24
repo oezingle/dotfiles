@@ -3,7 +3,7 @@ local fs = require("src.util.fs")
 local class = require("lib.30log")
 local has_awesome = require("lib.test").has_awesome
 
-local cache_dir = fs.dirs.cache
+local cache_dir = fs.directories.cache
 
 ---@alias SerializerFunction fun(table: table): string
 
