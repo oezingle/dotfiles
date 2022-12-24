@@ -3,6 +3,7 @@ local memory_usage = require("src.widgets.applet.system_info.memory_usage")
 local awful        = require("awful")
 local wibox        = require("wibox")
 local atk          = require("src.widgets.helper.applet.toolkit")
+local check_dependencies = require("src.util.check_dependencies")
 
 local function create_system_load()
     local system_load = wibox.widget {
@@ -36,24 +37,26 @@ local function create_system_load()
     }
 
     do
-        awful.spawn.easy_async("grep -c ^processor /proc/cpuinfo", function(result)
-            local layout = system_load:get_children_by_id("cpu-core-charts")[1]
-
-            local core_count = tonumber(result) - 1
-
-            for core = 0, core_count do
-                local arc, timer = cpu_arc(core)
-
-                system_load:connect_signal("property::visible", function (w)
-                    if w.visible then
-                        timer:again()
-                    else
-                        timer:stop()
-                    end
-                end)
-
-                layout:add(arc)
-            end
+        check_dependencies({ "mpstat"}, function ()
+            awful.spawn.easy_async("grep -c ^processor /proc/cpuinfo", function(result)
+                local layout = system_load:get_children_by_id("cpu-core-charts")[1]
+    
+                local core_count = tonumber(result) - 1
+    
+                for core = 0, core_count do
+                    local arc, timer = cpu_arc(core)
+    
+                    system_load:connect_signal("property::visible", function (w)
+                        if w.visible then
+                            timer:again()
+                        else
+                            timer:stop()
+                        end
+                    end)
+    
+                    layout:add(arc)
+                end
+            end)            
         end)
 
         --[[
