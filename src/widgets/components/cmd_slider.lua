@@ -7,7 +7,6 @@ local shapes                = require("src.util.shapes")
 local bind_width_and_height = require("src.widgets.helper.bind_width_and_height")
 local spawn                 = require("src.agnostic.spawn")
 
-local update_widget = require("src.widgets.helper.update")
 local config = require("config")
 
 local no_scroll = require("src.widgets.helper.no_scroll")
