@@ -17,6 +17,7 @@ local gtk_menu_info_cache = setmetatable({}, {
     __mode = "v"
 })
 
+--[[
 local function spawn_promise(command, ...)
     local args = pack(...)
 
@@ -26,6 +27,7 @@ local function spawn_promise(command, ...)
         end)
     end)
 end
+]]
 
 ---@param window_id number XWindow id to get the menu of
 ---@param callback fun(info: MenuInfo |nil): nil
