@@ -1,4 +1,4 @@
-local atk   = require("src.widgets.applet.applet.toolkit")
+local atk   = require("src.widgets.helper.applet.toolkit")
 local wibox = require("wibox")
 local wal   = require("src.util.wal")
 

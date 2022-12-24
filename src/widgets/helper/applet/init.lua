@@ -4,9 +4,11 @@ local class = require("lib.30log")
 local exitable_dialog = require("src.widgets.util.exitable_dialog")
 local check_dependencies = require("src.util.check_dependencies")
 
-local applet = class("Applet")
+local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
-applet.toolkit = require("src.widgets.applet.applet.toolkit")
+local applet = class("Applet", {
+    toolkit = require(folder_of_this_file .. "applet.toolkit")
+})
 
 function applet:init(widget, dependencies)
     dependencies = dependencies or {}
@@ -19,7 +21,7 @@ function applet:init(widget, dependencies)
 end
 
 function applet:set_dependencies(deps)
-    self.dependencies = {}
+    self.dependencies = deps
 end
 
 function applet:on_close(fn)

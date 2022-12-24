@@ -1,4 +1,4 @@
-local applet              = require("src.widgets.applet.applet")
+local applet              = require("src.widgets.helper.applet")
 local pagination          = require("src.widgets.util.pagination")
 local create_system_load  = require("src.widgets.applet.system_info.pages.system_load")
 local create_system_specs = require("src.widgets.applet.system_info.pages.system_specs")

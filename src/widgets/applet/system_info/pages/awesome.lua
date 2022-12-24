@@ -1,6 +1,6 @@
 local awful  = require("awful")
 local wibox  = require("wibox")
-local atk    = require("src.widgets.applet.applet.toolkit")
+local atk    = require("src.widgets.helper.applet.toolkit")
 local config = require("config")
 local spairs = require("src.util.spairs")
 

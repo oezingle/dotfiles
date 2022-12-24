@@ -20,10 +20,10 @@ local function exitable_dialog_box(args)
     }
 
     close_button:connect_signal("mouse::enter", function(w)
-        w.image = config_dir .. "icon/titlebar/unfocus/close.svg"
+        w.image = config_dir .. "icon/titlebar/focus/close.svg"
     end)
     close_button:connect_signal("mouse::leave", function(w)
-        w.image = config_dir .. "icon/titlebar/focus/close.svg"
+        w.image = config_dir .. "icon/titlebar/unfocus/close.svg"
     end)
 
     local decoration_color = args.bg or get_decoration_color()

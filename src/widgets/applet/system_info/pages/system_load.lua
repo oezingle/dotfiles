@@ -2,7 +2,7 @@ local cpu_arc      = require("src.widgets.applet.system_info.cpu_arc")
 local memory_usage = require("src.widgets.applet.system_info.memory_usage")
 local awful        = require("awful")
 local wibox        = require("wibox")
-local atk          = require("src.widgets.applet.applet.toolkit")
+local atk          = require("src.widgets.helper.applet.toolkit")
 
 local function create_system_load()
     local system_load = wibox.widget {

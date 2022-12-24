@@ -7,8 +7,8 @@ local select    = require("src.widgets.components.select")
 local textinput = require("src.widgets.components.textinput")
 local get_font  = require("src.util.get_font")
 
----@module 'widgets.applet.applet'
-local applet = require("src.widgets.applet.applet")
+---@module 'widgets.helper.applet'
+local applet = require("src.widgets.helper.applet")
 
 local function take_screenshot(args)
     local mouse_flag = args.include_mouse and "-p " or ""
