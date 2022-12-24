@@ -58,9 +58,6 @@
 - there sometimes still are ghost appmenu items
 	- seems to happen when you leave and re-enter the same item too quickly
 
-- luajit loses keys sometimes
-	- alt-tabbing kinda breaks under luajit
-
 - profiling
 
 - diagnostic / debug menu?

@@ -1,41 +1,51 @@
+local spawn = require("src.agnostic.spawn")
+local dirs = require("src.util.fs").dirs
+local cache_dir = dirs.cache
+local config_dir = dirs.config
 
-local awful = require("awful")
-local gfs = require("gears.filesystem")
-local config_dir = gfs.get_configuration_dir()
+local gsurface = require("gears.surface")
+local gtimer = require("gears.timer")
 
--- save the last url to check if a new download has to be made
-local last_art_url = ""
+-- save the last url and song data to check if a new download has to be made
+local last_song_info = ""
+-- save the last path so art can be restored
+local last_art_path = ""
 
-local function update_album_art(widget)
-    awful.spawn.easy_async(
-        "playerctl metadata --format '{{ mpris:artUrl }}'",
-        function(response)
-            -- remove \n from the url
-            local url = response:sub(1, -2)
+--- Update the album art display
+---@param widget any
+---@param metadata PlayerctlMetadataQueryResult
+local function update_album_art(widget, metadata)
+    if not metadata or not next(metadata) or #metadata.art_url == 0 then
+        widget.image = config_dir .. "icon/music/musical-notes.svg"
+    else
+        local art_url = metadata.art_url
 
-            if url == "No players found" or not url or #url == 0 then
-                widget.image = config_dir .. "icon/music/musical-notes.svg"
+        local song_info = metadata.artist .. metadata.title
+
+        if song_info ~= last_song_info then
+            -- check if we use wget to pull the image or just take a file:// path
+            if art_url:sub(1, 7) == "file://" then
+                last_art_path = art_url:sub(7)
+
+                widget.image = last_art_path
             else
-                if url ~= last_art_url then
-                    -- check if we use wget to pull the image or just take a file:// path
-                    if url:sub(1, 7) == "file://" then
-                        widget.image = url:sub(7)
-                    else
-                        awful.spawn.easy_async_with_shell(
-                            "cd " .. config_dir .. "cache; wget -O album_art \"" .. url .. "\"",
-                            function ()
-                                widget.image = ""
+                spawn(
+                    "cd " .. cache_dir .. "; wget -O album_art \"" .. art_url .. "\"",
+                    function()
+                        last_art_path = cache_dir .. "album_art"
 
-                                widget.image = config_dir .. "cache/album_art"
-                            end
-                        )
+                        -- clears cache :)
+                        widget.image = gsurface.load_uncached(last_art_path)
                     end
-
-                    last_art_url = url
-                end
+                )
             end
+
+            last_song_info = song_info
+        else
+            -- TODO is very wasteful
+            widget.image = gsurface.load(last_art_path)
         end
-    )
+    end
 end
 
 return update_album_art
