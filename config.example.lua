@@ -97,10 +97,6 @@ local config = {
         screen_preview = true
     },
 
-    applet = {
-        calculator = false
-    },
-
     -- time to lock the screen in minutes
     -- set to zero to disable locking
     lock_time = 10,

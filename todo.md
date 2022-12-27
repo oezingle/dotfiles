@@ -54,7 +54,7 @@
 
 - thunar has an error under luajit: attempt to index field 'layout' (a userdata value)
 
-- there sometimes still are ghost appmenu items
+- there sometimes still are ghost appmenu menus
 	- seems to happen when you leave and re-enter the same item too quickly
 
 - profiling
@@ -62,7 +62,5 @@
 - diagnostic / debug menu?
 
 - ignore output from xfce4-power-manager etc
-
-- set the correct close buttons for applets on hover
 
 - notification center doesn't auto close unless you click in it and then out of it

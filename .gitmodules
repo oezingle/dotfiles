@@ -13,3 +13,6 @@
 [submodule "lib/lua_reload"]
 	path = lib/lua_reload
 	url = https://github.com/anton-kl/lua-hot-reload
+[submodule "lib/luaxp"]
+	path = lib/luaxp
+	url = https://github.com/toggledbits/luaxp.git

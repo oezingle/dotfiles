@@ -1,7 +1,4 @@
 
----@class Class : table
----@operator call(...): any
-
 --- Bind base.new to base.__call
 ---@generic T : table
 ---@param base T?
