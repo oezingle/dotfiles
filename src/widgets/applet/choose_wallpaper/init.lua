@@ -6,11 +6,8 @@ local get_font         = require("src.util.get_font")
 local config           = require("config")
 local shapes           = require("src.util.shapes")
 local no_scroll        = require("src.widgets.helper.no_scroll")
-local get_wallpaper    = require("src.util.wallpaper.get_wallpaper")
 
 local wallpaper = require("src.util.wallpaper")
-
-local print = require("src.agnostic.print")
 
 local function create_choose_wallpaper()
 
@@ -65,8 +62,6 @@ local function create_choose_wallpaper()
             w.bg = config.button.hover
         end)
         button:connect_signal("mouse::leave", function(w)
-            print("get_current_identifier = " .. tostring(wallpaper.get_current_identifier()))
-
             if identifier == wallpaper.get_current_identifier() then
                 w.bg = config.button.active
             else

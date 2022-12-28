@@ -47,8 +47,8 @@ do
     end
 
     wallpaper.time = time.parse(
-        wallpaper_time or
-        time.to_seconds { hour = 1 }
+        (wallpaper_time == nil and time.to_seconds { hour = 1 }) or
+        wallpaper_time
     )
 
     wallpaper.all_identifiers = function()
@@ -93,15 +93,13 @@ do
 
         -- print("Changed wallpaper to " .. tostring(wallpaper.current_identifier))
 
-        awesome.emit_signal("wallpaper_should_change")        
+        awesome.emit_signal("wallpaper_should_change")
     end
 
-    wallpaper.set_identifier = function (identifier)
+    wallpaper.set_identifier = function(identifier)
         assert(wallpaper.table[identifier] ~= nil)
 
         wallpaper.current_identifier = identifier
-
-        print("set identifier to " .. tostring(identifier))
 
         awesome.emit_signal("wallpaper_should_change")
     end
@@ -119,15 +117,17 @@ do
     end
 
     if not wallpaper.is_list or #wallpaper.table > 1 then
-        wallpaper.timer = gtimer {
-            timeout = wallpaper.time,
+        if wallpaper.time and wallpaper.time > 1 then
+            wallpaper.timer = gtimer {
+                timeout = wallpaper.time,
 
-            autostart = true,
+                autostart = true,
 
-            callback = function()
-                wallpaper.set_current()
-            end
-        }
+                callback = function()
+                    wallpaper.set_current()
+                end
+            }
+        end
     end
 
     wallpaper.set_current()
