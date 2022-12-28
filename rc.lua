@@ -74,7 +74,7 @@ require("src.widgets.client_switcher")()
 require("src.widgets.applet")
 
 -- set wallpaper
-local get_wallpaper = require("src.util.get_wallpaper")
+local get_wallpaper = require("src.util.wallpaper.get_wallpaper")
 
 -- Rofi popup
 local rofi = require('src.sh').rofi
@@ -115,9 +115,11 @@ end
 screen.connect_signal("property::geometry", set_wallpaper)
 
 awesome.connect_signal("wallpaper_should_change", function()
-    for s in screen do
-        set_wallpaper(s)
-    end
+    gears.timer.delayed_call(function ()
+        for s in screen do
+            set_wallpaper(s)
+        end        
+    end)
 end)
 
 awful.screen.connect_for_each_screen(function(s)

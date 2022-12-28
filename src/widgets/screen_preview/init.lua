@@ -11,7 +11,7 @@ require("src.widgets.screen_preview.keygrabber")
 
 -- TODO clicking a tag/client doesn't work with multiple displays
 
-local get_wallpaper = require("src.util.get_wallpaper")
+local get_wallpaper = require("src.util.wallpaper.get_wallpaper")
 
 -- Broken out to save ~200loc
 local update_selected_tag_preview = require("src.widgets.screen_preview.update_selected_tag_preview")

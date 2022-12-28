@@ -1,6 +1,6 @@
 local awful = require('awful')
 local config = require('config')
-local get_wallpaper = require('src.util.get_wallpaper')
+local get_wallpaper = require('src.util.wallpaper.get_wallpaper')
 local check_dependencies = require('src.util.check_dependencies')
 
 -- keep a process around so long as awesome is active
@@ -94,8 +94,10 @@ awful.spawn("xinput set-prop 10 333 1")
 
 pidwatch("nm-applet")
 
+local rofi_cmd = "PATH=$PATH:~/.config/awesome/applets " .. config.apps.rofi
+
 local function rofi()
-	awful.spawn(config.apps.rofi)	
+    awful.spawn.with_shell(rofi_cmd)	
 end
 
 return {

@@ -64,3 +64,5 @@
 - ignore output from xfce4-power-manager etc
 
 - notification center doesn't auto close unless you click in it and then out of it
+
+- time doesn't localize

@@ -6,9 +6,17 @@ local check_dependencies = require("src.util.check_dependencies")
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
+---@module 'src.widgets.helper.applet.toolkit'
+local atk = require(folder_of_this_file .. "applet.toolkit")
+
 local applet = class("Applet", {
-    toolkit = require(folder_of_this_file .. "applet.toolkit")
+    toolkit = atk
 })
+
+-- annotations hack
+if false then
+    applet.toolkit = atk
+end
 
 function applet:init(widget, dependencies)
     dependencies = dependencies or {}

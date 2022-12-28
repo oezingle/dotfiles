@@ -1,7 +1,7 @@
 local test = require("lib.test")
 
 test.require_awesome("get_wallpaper", function(name)
-    local get_wallpaper = require("src.util.get_wallpaper")
+    local get_wallpaper = require("src.util.wallpaper.get_wallpaper")
 
     test.suite(
         name,

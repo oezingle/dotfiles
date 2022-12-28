@@ -1,5 +1,5 @@
 
---- Bind base.new to base.__call
+--- Bind base.init to base.__call
 ---@generic T : table
 ---@param base T?
 ---@return T

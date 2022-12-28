@@ -13,6 +13,7 @@ local function require_applet(name)
 end
 
 require_applet("calculator")
+require_applet("choose_wallpaper")
 require_applet("screenshot")
 require_applet("system_info")
 
