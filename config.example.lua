@@ -83,7 +83,7 @@ local config = {
         editor = os.getenv("EDITOR") or "vim",
         file_manager = "thunar",
         compositor = nil,
-        rofi = 'rofi -modi drun -show drun -show-icons'
+        rofi = 'rofi -modi run -show run -show-icons'
     },
 
     -- How long notifications stay around in the top middle of the screen
