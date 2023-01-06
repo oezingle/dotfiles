@@ -152,7 +152,7 @@ local function create_emoji_selector()
     }
 
     input:on_text_changed(function (text)
-        local emojis = backend.find_term(string.lower(text))
+        local emojis = backend.find_term(text)
 
         set_results(emojis)
     end)

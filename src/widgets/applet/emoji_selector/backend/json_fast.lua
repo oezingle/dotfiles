@@ -76,6 +76,8 @@ end
 
 ---@return DeserializedEmoji[]
 local function find_term(term)
+    term = term:lower()
+    
     ---@type GmojiEmoji[]
     local result = {}
 
@@ -84,13 +86,13 @@ local function find_term(term)
     for _, emoji in ipairs(emojis) do
         local is_match = false
 
-        if emoji.description:find(term) then
+        if emoji.description:lower():find(term) then
             is_match = true
         end
 
         if not is_match then
             for _, tag in ipairs(emoji.tags) do
-                if tag == term then
+                if tag:lower():find(term) then
                     is_match = true
 
                     break
@@ -100,7 +102,7 @@ local function find_term(term)
 
         if not is_match then
             for _, alias in ipairs(emoji.aliases) do
-                if alias:find(term) then
+                if alias:lower():find(term) then
                     is_match = true
 
                     break
