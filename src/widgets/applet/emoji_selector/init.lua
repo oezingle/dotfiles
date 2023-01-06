@@ -7,7 +7,7 @@ local awful = require("awful")
 local wibox = require("wibox")
 
 local directories = require("src.util.fs.directories")
-local backend = require("src.widgets.applet.emoji_selector.backend.json_fast")
+local backend = require("src.widgets.applet.emoji_selector.backend")
 
 -- TODO finish this
 

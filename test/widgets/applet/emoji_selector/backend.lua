@@ -1,6 +1,6 @@
 local test = require("lib.test")
 
-local backend = require("src.widgets.applet.emoji_selector.backend.json_fast")
+local backend = require("src.widgets.applet.emoji_selector.backend")
 
 --- Concatenate emojis into one string
 ---@param matches DeserializedEmoji[]
@@ -16,7 +16,7 @@ local function concat_emoji_results(matches)
 end
 
 test.suite(
-    "emoji_selector.backend.json_fast",
+    "emoji_selector.backend",
     test.test(function()
         local categories = backend.get_categories()
 
