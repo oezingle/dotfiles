@@ -12,12 +12,7 @@
 
 - applets
 	- Network Manager
-		- WPA/WPA2 enterprise networks
-		- conflicting design languages
-			- lower radius on network-manager
-			- network-manager util should live as an applet
 		- Rebuild as frontend to gnome network apps?
-	- finish calculator
 	- emoji selector
 
 - wallpapers
@@ -30,11 +25,6 @@
 - improve battery widget
 	 - click for applet w/ powertop-like stats
 
-- fun button to change wallpaper
-	- maybe even select?
-
-- set `inode/directory` mimetype to use thunar over VS Code 
-
 - no way to switch audio sink
 
 - Use Promises
@@ -43,7 +33,7 @@
 	- should fix mousegrabber issue
 
 - multihead
-	- brightness keys / control center controls an arbitrary display
+	- brightness keys / slider control an arbitrary display
 	- screen_preview is broken w/ multiple monitors
 	- check that all clients show up in client list, as left bar is missing from non-primaries
 
@@ -61,8 +51,16 @@
 
 - diagnostic / debug menu?
 
-- ignore output from xfce4-power-manager etc
-
 - notification center doesn't auto close unless you click in it and then out of it
 
 - time doesn't localize
+
+- default app selector (through rofi?)
+
+- use fs.json.load()
+
+- switch to fs.directories everywhere
+
+- wrap configuration in get_config() which does typechecking / makes refactors more easy
+
+- remove dropdown widget

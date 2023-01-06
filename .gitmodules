@@ -16,3 +16,6 @@
 [submodule "lib/luaxp"]
 	path = lib/luaxp
 	url = https://github.com/toggledbits/luaxp.git
+[submodule "lib/gemoji"]
+	path = lib/gemoji
+	url = https://github.com/github/gemoji

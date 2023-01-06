@@ -15,8 +15,11 @@ local cache_dir = config_dir .. "cache/"
 
 local wallpaper_dir = config_dir .. "cache/wallpaper/"
 
+local icon_dir = config_dir .. "icon/"
+
 return {
     config = config_dir,
     cache = cache_dir,
     wallpaper = wallpaper_dir,
+    icon = icon_dir
 }

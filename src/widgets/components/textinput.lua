@@ -7,6 +7,7 @@ local shapes = require("src.util.shapes")
 
 local Class = require("src.util.Class")
 
+---@class TextInput
 local textinput = {}
 
 -- TODO control + backspace
@@ -22,6 +23,10 @@ function textinput:init(args)
     local keypressed_callback = args.keypressed_callback or function() end
 
     self:on_key(keypressed_callback)
+
+    local text_changed_callback = args.on_text_change or function () end
+    
+    self:on_text_changed(text_changed_callback)
 
     self:_create_widget(args)
     self:_create_keygrabber()
@@ -161,6 +166,8 @@ function textinput:_create_keygrabber()
                 self.cursor_pos = #self.text + 1
             end
 
+            self.text_changed_callback(self.text)
+
             self:text_update()
         end
     }
@@ -221,6 +228,12 @@ end
 ---@param callback fun(mod: string[], key: string): boolean a callback function for when keys are pressed. Returns boolean of if the event should be stolen
 function textinput:on_key(callback)
     self.keypressed_callback = callback
+end
+
+--- Set a callback for every time the text changes
+---@param callback fun(input: string): nil
+function textinput:on_text_changed(callback)
+    self.text_changed_callback = callback
 end
 
 return Class(textinput)

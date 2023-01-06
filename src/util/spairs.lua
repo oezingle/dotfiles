@@ -12,7 +12,7 @@ local function spairs(t, order)
     -- if order function given, sort by it by passing the table and keys a, b,
     -- otherwise just sort the keys 
     if order then
-        table.sort(keys, function(a,b) return order(t, a, b) end)
+        table.sort(keys, function(a,b) return order(t, t[a], t[b]) end)
     else
         table.sort(keys)
     end

@@ -12,10 +12,11 @@ local function require_applet(name)
     end
 end
 
-require_applet("calculator")
 require_applet("choose_wallpaper")
-require_applet("screenshot")
+require_applet("emoji_selector")
 require_applet("system_info")
+require_applet("calculator")
+require_applet("screenshot")
 
 -- TODO also make the calculator usable
     -- bob don't even have a calculator button

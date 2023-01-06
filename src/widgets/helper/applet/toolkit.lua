@@ -17,11 +17,11 @@ toolkit.font_size = {
 ---@alias FontSize ToolkitFontSize|number
 
 --- Create a button
----@param content string
+---@param widget table|any
 ---@param callback function?
 ---@param style { hover: Color?, normal: Color?, radius: number? }?
 ---@return table widget
-toolkit.button = function(content, callback, style)
+toolkit.widget_button = function(widget, callback, style)
     style = style or {}
 
     style.normal = style.normal or config.button.normal
@@ -31,13 +31,7 @@ toolkit.button = function(content, callback, style)
 
     local widget = wibox.widget {
         {
-            {
-                widget = wibox.widget.textbox,
-                font = get_font(toolkit.font_size.BODY),
-                text = content,
-
-                id = "button-text"
-            },
+            widget,
             layout = wibox.container.place
         },
 
@@ -61,6 +55,25 @@ toolkit.button = function(content, callback, style)
     end
 
     return widget
+end
+
+--- Create a button
+---@param content string
+---@param callback function?
+---@param style { hover: Color?, normal: Color?, radius: number? }?
+---@return table widget
+toolkit.button = function(content, callback, style)
+    return toolkit.widget_button(
+        {
+            widget = wibox.widget.textbox,
+            font = get_font(toolkit.font_size.BODY),
+            text = content,
+
+            id = "button-text"
+        },
+        callback,
+        style
+    )
 end
 
 ---@param text string
@@ -99,7 +112,7 @@ end
 ---@param font_size FontSize? default 12
 function toolkit.id_text(id, font_size)
     font_size = font_size or toolkit.font_size.BODY
-    
+
     return {
         widget = wibox.widget.textbox,
         font = get_font(font_size),

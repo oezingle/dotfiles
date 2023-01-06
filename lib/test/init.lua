@@ -4,6 +4,8 @@ local folder_of_this_file = (...):match("(.-)[^%.]+$")
 local cli = require(folder_of_this_file .. "test.cli")
 ---@module "lib.test.testing_functions"
 local library = require(folder_of_this_file .. "test.testing_functions")
+---@module "lib.test.profile"
+local profile = require(folder_of_this_file .. "test.profile")
 
 local pack = table.pack or function(...)
     local tmp = { ... }
@@ -184,4 +186,6 @@ return {
     awesome_only_test = library.awesome_only_test,
     assert = library.assert,
     has_awesome = library.has_awesome,
+
+    profile = profile
 }

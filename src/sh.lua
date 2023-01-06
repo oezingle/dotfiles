@@ -2,14 +2,20 @@ local awful = require('awful')
 local config = require('config')
 local get_wallpaper = require('src.util.wallpaper.get_wallpaper')
 local check_dependencies = require('src.util.check_dependencies')
+local directories        = require('src.util.fs.directories')
+
+-- TODO use awful.spawn.single_instance
 
 -- keep a process around so long as awesome is active
 ---@param command string
-local function pidwatch(command)
+---@param silent boolean?
+local function pidwatch(command, silent)
+    silent = silent or false
+
     -- local pid = awful.spawn.with_shell(config_dir .. "sh/pidwatch.sh awesome " .. command)
 
     -- only drawback of this method is that it doesn't handle w mcrashes
-    local pid = awful.spawn.with_shell(command)
+    local pid = awful.spawn.with_shell(command .. (silent and " > /dev/null 2>&1" or ""))
 
     awesome.connect_signal("exit", function()
         -- -pid = kill group
@@ -33,7 +39,7 @@ pidwatch("xfce4-power-manager")
 --end, "xfce4 power manager - autosleep, battery management")
 
 check_dependencies("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1", function()
-    pidwatch("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+    pidwatch("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1", true)
 end, "gnome polkit agent")
 
 check_dependencies({ 'redshift', '/usr/lib/geoclue-2.0/demos/agent' }, function()
@@ -92,9 +98,9 @@ awful.spawn("xinput set-prop 10 325 0")
 -- TODO run this every time unlocked
 awful.spawn("xinput set-prop 10 333 1")
 
-pidwatch("nm-applet")
+pidwatch("nm-applet", true)
 
-local rofi_cmd = "PATH=$PATH:~/.config/awesome/applets " .. config.apps.rofi
+local rofi_cmd = "PATH=$PATH:" .. directories.config .. "applets " .. config.apps.rofi .. " > /dev/null 2>&1"
 
 local function rofi()
     awful.spawn.with_shell(rofi_cmd)	
@@ -104,3 +110,5 @@ return {
     pidwatch = pidwatch,
     rofi = rofi
 }
+
+-- xdg-mime default thunar.desktop inode/directory
