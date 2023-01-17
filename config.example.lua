@@ -1,3 +1,4 @@
+
 ---@type DotfileConfiguration
 local config = {
     decorations = {

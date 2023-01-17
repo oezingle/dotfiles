@@ -36,7 +36,7 @@
 ---@field terminal string
 ---@field editor string
 ---@field file_manager string
----@field compositor string
+---@field compositor string|nil
 
 ---@class DotfileConfigurationGimmicks
 ---@field gestures boolean

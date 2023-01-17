@@ -19,3 +19,6 @@
 [submodule "lib/gemoji"]
 	path = lib/gemoji
 	url = https://github.com/github/gemoji
+[submodule "lib/profiler"]
+	path = lib/profiler
+	url = https://github.com/charlesmallah/lua-profiler
