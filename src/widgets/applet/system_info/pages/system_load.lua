@@ -47,6 +47,8 @@ local function create_system_load()
                     local arc, timer = cpu_arc(core)
     
                     system_load:connect_signal("property::visible", function (w)
+                        -- TODO i think this doesn't work properly
+
                         if w.visible then
                             timer:again()
                         else

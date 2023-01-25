@@ -2,7 +2,6 @@ local wibox    = require("wibox")
 local config   = require("config")
 local shapes   = require("src.util.shapes")
 local gcolor   = require("gears.color")
-local gtimer   = require("gears.timer")
 local pannable = require("src.widgets.util.pannable")
 
 local bind_width_and_height = require("src.widgets.helper.bind_width_and_height")

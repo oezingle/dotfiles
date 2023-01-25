@@ -10,7 +10,6 @@
 ---@field unicode_version string
 ---@field ios_version string
 
-
 ---@class DeserializedEmoji
 ---@field emoji string
 ---@field description string

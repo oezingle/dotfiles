@@ -32,7 +32,7 @@ local function create_battery_widget(s)
                 bottom = 8,
                 right = 7,
                 {
-                    max_value = 1,
+                    max_value = 100,
                     forced_width = 14.7,
 
                     background_color = "#00000000",

@@ -488,3 +488,20 @@ end
 
 -- Garbage collection
 gears.timer.start_new(10, function() collectgarbage("step", 20000) return true end)
+
+--[[
+if false then
+    local profiler = require("lib.profiler")
+    local directories = require("src.util.fs.directories")
+
+    profiler.configuration({
+        fW = 50
+    })
+
+    profiler.start()
+
+    awesome.connect_signal("exit", function ()
+        profiler.report(directories.cache .. "profile.log")
+    end)
+end
+]]
