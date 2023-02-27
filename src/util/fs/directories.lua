@@ -15,9 +15,12 @@ local wallpaper_dir = config_dir .. "cache/wallpaper/"
 
 local icon_dir = config_dir .. "icon/"
 
+local translation_dir = config_dir .. "translation/"
+
 return {
     config = config_dir,
     cache = cache_dir,
     wallpaper = wallpaper_dir,
-    icon = icon_dir
+    icon = icon_dir,
+    translation = translation_dir
 }

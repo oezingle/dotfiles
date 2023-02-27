@@ -1,0 +1,16 @@
+{
+    "battery": {
+        "state": {
+            "unknown": "NOT_SET",
+            "charging": "NOT_SET",
+            "discharging": "NOT_SET",
+            "empty": "NOT_SET",
+            "fully_charged": "NOT_SET",
+            "pending_charge": "NOT_SET",
+            "pending_discharge": "NOT_SET",
+            "last": "NOT_SET"
+        },
+        "to_full": "NOT_SET",
+        "to_empty": "NOT_SET"
+    }
+}

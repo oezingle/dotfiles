@@ -1,0 +1,16 @@
+{
+    "battery": {
+        "state": {
+            "unknown": "Unknown",
+            "charging": "Charging",
+            "discharging": "Discharging",
+            "empty": "Empty",
+            "fully_charged": "Fully Charged",
+            "pending_charge": "Pending Charge",
+            "pending_discharge": "Pending Discharge",
+            "last": "Last"
+        },
+        "to_full": "until full",
+        "to_empty": "until empty"
+    }
+}
