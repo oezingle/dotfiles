@@ -12,11 +12,16 @@ local directories = require(folder_of_this_file .. "directories")
 local json = require(folder_of_this_file .. "json")
 ---@module "src.util.fs.operations"
 local operations = require(folder_of_this_file .. "operations")
+---@module "src.util.fs.get_icon"
+local get_icon = require(folder_of_this_file .. "get_icon")
+
 
 return setmetatable({
     directories = directories,
 
-    json = json
+    json = json,
+
+    get_icon = get_icon
 }, {
     __index = operations
 })

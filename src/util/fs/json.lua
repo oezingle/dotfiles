@@ -3,7 +3,7 @@ local json_lib = require("lib.json")
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
----@module "src.util.fs"
+---@module "src.util.fs.operations"
 local fs = require(folder_of_this_file .. "operations")
 
 local json = {}

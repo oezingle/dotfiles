@@ -1,7 +1,5 @@
 -- dead simple
 
--- TODO move to /src/util/fs/
-
 local has_awesome = require("lib.test").has_awesome
 
 local config_dir = os.getenv("PWD") .. "/"

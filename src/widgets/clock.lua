@@ -32,7 +32,7 @@ local function clock_widget(args)
 	{
 		objects = { clock_widget },
 		mode = 'outside',
-		delay_show = 1,
+		delay_show = 0,
 		preferred_positions = { 'right', 'left', 'top', 'bottom' },
 		preferred_alignments = { 'middle', 'front', 'back' },
 		margin_leftright = dpi(8),

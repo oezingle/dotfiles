@@ -15,10 +15,14 @@ end
 local UPowerGlib             = lgi.require("UPowerGlib")
 local awesome_battery_widget = require("lib.awesome-battery_widget")
 local wibox                  = require("wibox")
+local awful                  = require('awful')
 local config                 = require("config")
-local config_dir             = require("gears.filesystem").get_configuration_dir()
+local get_icon               = require("src.util.fs.get_icon")
 local no_scroll              = require("src.widgets.helper.no_scroll")
 local scratch                = require("src.util.scratch")
+local dpi                    = require("beautiful").xresources.apply_dpi
+local get_font               = require("src.util.get_font")
+
 
 local function create_battery_widget(s)
     local battery_widget = awesome_battery_widget {
@@ -49,10 +53,23 @@ local function create_battery_widget(s)
             },
             {
                 widget = wibox.widget.imagebox,
-                image = config_dir .. "icon/battery/battery-dead-outline.svg",
+                image = get_icon("battery-dead-outline.svg"),
                 id = "battery-icon"
             },
         }
+    }
+
+    local battery_tooltip = awful.tooltip {
+        objects = { battery_widget },
+        mode = 'outside',
+        delay_show = 0,
+        preferred_positions = { 'right', 'left', 'top', 'bottom' },
+        preferred_alignments = { 'middle', 'front', 'back' },
+        margin_leftright = dpi(8),
+        margin_topbottom = dpi(8),
+        bg = config.popup.bg,
+        fg = config.popup.fg,
+        font = get_font(10),
     }
 
     local cb = function(widget, device)
@@ -72,9 +89,9 @@ local function create_battery_widget(s)
         end
 
         if is_charging then
-            battery_icon.image = config_dir .. "icon/battery/battery-charging-outline.svg"
+            battery_icon.image = get_icon("battery/battery-charging-outline.svg")
         else
-            battery_icon.image = config_dir .. "icon/battery/battery-dead-outline.svg"
+            battery_icon.image = get_icon("battery/battery-dead-outline.svg")
         end
     end
 
