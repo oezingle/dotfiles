@@ -23,6 +23,7 @@ local scratch                = require("src.util.scratch")
 local dpi                    = require("beautiful").xresources.apply_dpi
 local get_font               = require("src.util.get_font")
 
+local print = require("src.agnostic.print")
 
 local function create_battery_widget(s)
     local battery_widget = awesome_battery_widget {
@@ -53,7 +54,7 @@ local function create_battery_widget(s)
             },
             {
                 widget = wibox.widget.imagebox,
-                image = get_icon("battery-dead-outline.svg"),
+                image = get_icon("battery/battery-dead-outline.svg"),
                 id = "battery-icon"
             },
         }
@@ -93,6 +94,8 @@ local function create_battery_widget(s)
         else
             battery_icon.image = get_icon("battery/battery-dead-outline.svg")
         end
+
+        battery_tooltip.textbox.text = device.state
     end
 
     cb(battery_widget, battery_widget.device)
