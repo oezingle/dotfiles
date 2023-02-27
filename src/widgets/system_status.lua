@@ -1,13 +1,13 @@
-local awful     = require("awful")
-local wibox     = require("wibox")
-local no_scroll = require("src.widgets.helper.no_scroll")
-local config    = require("config")
-local get_font  = require("src.util.get_font")
+local awful         = require("awful")
+local wibox         = require("wibox")
+local no_scroll     = require("src.widgets.helper.no_scroll")
+local config        = require("config")
+local get_font      = require("src.util.get_font")
 
 ---@alias StatusSet table<number, string>
 
 ---@enum StatusSets
-local status_sets = {
+local status_sets   = {
     ---@type StatusSet
     emoji_sad = {
         [10] = "😴",
@@ -34,6 +34,19 @@ local status_sets = {
         [50] = ":|",
         [75] = ":(",
         [100] = ">:(",
+    },
+    ---@type StatusSet
+    numbers = {
+        [10] = "0.1",
+        [20] = "0.2",
+        [30] = "0.3",
+        [40] = "0.4",
+        [50] = "0.5",
+        [60] = "0.6",
+        [70] = "0.7",
+        [80] = "0.8",
+        [90] = "0.9",
+        [100] = "1.0"
     }
 }
 

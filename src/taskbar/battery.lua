@@ -17,6 +17,8 @@ local awesome_battery_widget = require("lib.awesome-battery_widget")
 local wibox                  = require("wibox")
 local config                 = require("config")
 local config_dir             = require("gears.filesystem").get_configuration_dir()
+local no_scroll              = require("src.widgets.helper.no_scroll")
+local scratch                = require("src.util.scratch")
 
 local function create_battery_widget(s)
     local battery_widget = awesome_battery_widget {
@@ -32,17 +34,17 @@ local function create_battery_widget(s)
                 bottom = 8,
                 right = 7,
                 {
-                    max_value = 100,
-                    forced_width = 14.7,
+                    max_value        = 100,
+                    forced_width     = 14.7,
 
                     background_color = "#00000000",
 
-                    color = config.progressbar.fg,
+                    color            = config.progressbar.fg,
 
-                    value  = 0,
-                    widget = wibox.widget.progressbar,
+                    value            = 0,
+                    widget           = wibox.widget.progressbar,
 
-                    id = "battery-bar"
+                    id               = "battery-bar"
                 }
             },
             {
@@ -79,6 +81,10 @@ local function create_battery_widget(s)
     cb(battery_widget, battery_widget.device)
 
     battery_widget:connect_signal('upower::update', cb)
+
+    battery_widget:connect_signal("button::press", no_scroll(function()
+        scratch.terminal("pkexec powertop", true)
+    end))
 
     return battery_widget
 end

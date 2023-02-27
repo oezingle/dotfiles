@@ -30,6 +30,7 @@ echo $(cd src/appmenu/server; make)
 ## Dependencies
 ### Required
  - `awesome` (window manager)
+ - `lgi` (lua GObject introspection library)
  
 ### Optional
  - `appmenu-gtk-module` (appmenus for GTK apps)
