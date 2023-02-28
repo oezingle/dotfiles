@@ -140,7 +140,7 @@ local function create_battery_widget(s)
             (format_upower_time(device.time_to_full) .. " " .. translations.battery.to_full) or
             (format_upower_time(device.time_to_empty) .. " " .. translations.battery.to_empty)
             ) .. "\n"  ..
-            (device.capacity and (tostring(math.floor(device.capacity)) .. 
+            (device.capacity > 0 and (tostring(math.floor(device.capacity)) .. 
             "% " .. translations.battery.health) or "") .. 
             (warning_string and ("\n\n" ..
             translations.battery.warning.prefix .. 
