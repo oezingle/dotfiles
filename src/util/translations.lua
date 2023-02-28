@@ -30,6 +30,7 @@ end
 ---@field warning BatteryWarningsTranslation
 ---@field to_full string
 ---@field to_empty string
+---@field health string
 
 ---@class BatteryStateTranslation
 ---@field unknown string
@@ -44,7 +45,8 @@ end
 ---@class BatteryWarningsTranslation
 ---@field action string
 ---@field critical string
----@field 
+---@field prefix string
+---@field suffix string
 
 local translation_dir = fs.directories.translation
 

@@ -17,6 +17,7 @@
             "suffix": "Replace if possible"
         },
         "to_full": "until full",
-        "to_empty": "until empty"
+        "to_empty": "until empty",
+        "health": "battery health"
     }
 }

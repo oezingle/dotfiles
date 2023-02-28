@@ -17,6 +17,7 @@
             "suffix": "NOT_SET"
         },
         "to_full": "NOT_SET",
-        "to_empty": "NOT_SET"
+        "to_empty": "NOT_SET",
+        "health": "NOT_SET"
     }
 }

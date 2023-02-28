@@ -139,18 +139,15 @@ local function create_battery_widget(s)
             ((is_charging or fully_charged) and
             (format_upower_time(device.time_to_full) .. " " .. translations.battery.to_full) or
             (format_upower_time(device.time_to_empty) .. " " .. translations.battery.to_empty)
-            ) ..
+            ) .. "\n"  ..
+            (device.capacity and (tostring(math.floor(device.capacity)) .. 
+            "% " .. translations.battery.health) or "") .. 
             (warning_string and ("\n\n" ..
-            translations.battery.warning.prefix ..
-            " " ..
-            warning_string ..
-            ". " ..
+            translations.battery.warning.prefix .. 
+            " " .. warning_string .. ". " ..
             translations.battery.warning.suffix) or "")
 
         --[[
-            TODO
-                 - device.warning_level https://lazka.github.io/pgi-docs/UPowerGlib-1.0/classes/Device.html#UPowerGlib.Device.props.warning_level
-
             if i remove powertop:
                  - device.vendor
                  - device.technology
