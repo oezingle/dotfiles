@@ -27,6 +27,7 @@ end
 
 ---@class BatteryTranslation
 ---@field state BatteryStateTranslation
+---@field warning BatteryWarningsTranslation
 ---@field to_full string
 ---@field to_empty string
 
@@ -39,6 +40,11 @@ end
 ---@field pending_charge string
 ---@field pending_discharge string
 ---@field last string
+
+---@class BatteryWarningsTranslation
+---@field action string
+---@field critical string
+---@field 
 
 local translation_dir = fs.directories.translation
 

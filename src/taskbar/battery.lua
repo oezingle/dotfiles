@@ -42,7 +42,7 @@ end
 
 --- Turn an integer from UPower into a string
 ---@param time number
-local function format_upower_time (time)
+local function format_upower_time(time)
     local table = table_upower_time(time)
 
     return tostring(table.hours) .. "h " .. tostring(table.minutes) .. "m"
@@ -119,27 +119,37 @@ local function create_battery_widget(s)
         end
 
         local state_string = ({
-                [UPowerGlib.DeviceState.UNKNOWN] = translations.battery.state.unknown,
-                [UPowerGlib.DeviceState.CHARGING] = translations.battery.state.charging,
-                [UPowerGlib.DeviceState.DISCHARGING] = translations.battery.state.discharging,
-                [UPowerGlib.DeviceState.EMPTY] = translations.battery.state.empty,
-                [UPowerGlib.DeviceState.FULLY_CHARGED] = translations.battery.state.fully_charged,
-                [UPowerGlib.DeviceState.PENDING_CHARGE] = translations.battery.state.pending_charge,
+                [UPowerGlib.DeviceState.UNKNOWN]           = translations.battery.state.unknown,
+                [UPowerGlib.DeviceState.CHARGING]          = translations.battery.state.charging,
+                [UPowerGlib.DeviceState.DISCHARGING]       = translations.battery.state.discharging,
+                [UPowerGlib.DeviceState.EMPTY]             = translations.battery.state.empty,
+                [UPowerGlib.DeviceState.FULLY_CHARGED]     = translations.battery.state.fully_charged,
+                [UPowerGlib.DeviceState.PENDING_CHARGE]    = translations.battery.state.pending_charge,
                 [UPowerGlib.DeviceState.PENDING_DISCHARGE] = translations.battery.state.pending_discharge,
-                [UPowerGlib.DeviceState.LAST] = translations.battery.state.last
+                [UPowerGlib.DeviceState.LAST]              = translations.battery.state.last
             })[device.state]
 
-        battery_tooltip.textbox.text = state_string .. " - " .. tostring(math.floor(device.percentage)) .. "%" .. "\n" .. 
-            (is_charging and 
-                (format_upower_time(device.time_to_full) .. " " .. translations.battery.to_full) or
-                (format_upower_time(device.time_to_empty) .. " " .. translations.battery.to_empty)
-            )
+        local warning_string = ({
+                [UPowerGlib.DeviceLevel.ACTION]   = translations.battery.warning.action,
+                [UPowerGlib.DeviceLevel.CRITICAL] = translations.battery.warning.critical
+            })[device.warning_level]
+
+        battery_tooltip.textbox.text = state_string ..
+            " - " .. tostring(math.floor(device.percentage)) .. "%" .. "\n" ..
+            ((is_charging or fully_charged) and
+            (format_upower_time(device.time_to_full) .. " " .. translations.battery.to_full) or
+            (format_upower_time(device.time_to_empty) .. " " .. translations.battery.to_empty)
+            ) ..
+            (warning_string and ("\n\n" ..
+            translations.battery.warning.prefix ..
+            " " ..
+            warning_string ..
+            ". " ..
+            translations.battery.warning.suffix) or "")
 
         --[[
-            TODO 
+            TODO
                  - device.warning_level https://lazka.github.io/pgi-docs/UPowerGlib-1.0/classes/Device.html#UPowerGlib.Device.props.warning_level
-                 - device.power_supply (if the device is powering the system: maybe replace is_charging check?)
-                 - device.capacity
 
             if i remove powertop:
                  - device.vendor
@@ -149,10 +159,10 @@ local function create_battery_widget(s)
                  - device.has_statistics and statistics
                  - device.has_history and history
                  - device.energy_rate
+                 - device.capacity
 
             the UPower site wants me to use device.battery_level instead of percentages but nahh
         ]]
-
     end
 
     cb(battery_widget, battery_widget.device)

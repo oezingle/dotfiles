@@ -10,6 +10,12 @@
             "pending_discharge": "Pending Discharge",
             "last": "Last"
         },
+        "warning": {
+            "action": "Action required",
+            "critical": "Critical status",
+            "prefix": "Battery Warning:",
+            "suffix": "Replace if possible"
+        },
         "to_full": "until full",
         "to_empty": "until empty"
     }
