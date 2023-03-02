@@ -13,8 +13,7 @@
         "warning": {
             "action": "NOT_SET",
             "critical": "NOT_SET",
-            "prefix": "NOT_SET",
-            "suffix": "NOT_SET"
+            "message": "NOT_SET"
         },
         "to_full": "NOT_SET",
         "to_empty": "NOT_SET",

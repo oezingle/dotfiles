@@ -45,8 +45,7 @@ end
 ---@class BatteryWarningsTranslation
 ---@field action string
 ---@field critical string
----@field prefix string
----@field suffix string
+---@field message string
 
 local translation_dir = fs.directories.translation
 

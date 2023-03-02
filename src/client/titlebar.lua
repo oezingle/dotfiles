@@ -2,12 +2,10 @@ local gears = require("gears")
 local awful = require("awful")
 local should_show_titlebars = require("src.util.client.should_show_titlebars")
 
-local gfs = require("gears.filesystem")
-local config_dir = gfs.get_configuration_dir()
-
 local wibox = require("wibox")
 
 local config = require("config")
+local get_icon = require("src.util.fs.get_icon")
 
 local ensure_client_decoration = require("src.client.colorize")
 
@@ -31,30 +29,30 @@ client.connect_signal("request::titlebars", function(c)
 
     local close_button = awful.titlebar.widget.closebutton(c)
     close_button:connect_signal("mouse::enter", function(w)
-        w.image = config_dir .. "icon/titlebar/focus/close.svg"
+        w.image = get_icon("titlebar/focus/close.svg")
     end)
     close_button:connect_signal("mouse::leave", function(w)
-        w.image = config_dir .. "icon/titlebar/unfocus/close.svg"
+        w.image = get_icon("titlebar/unfocus/close.svg")
     end)
 
     local minimize_button = awful.titlebar.widget.minimizebutton(c)
     minimize_button:connect_signal("mouse::enter", function(w)
-        w.image = config_dir .. "icon/titlebar/focus/min.svg"
+        w.image = get_icon("titlebar/focus/min.svg")
     end)
     minimize_button:connect_signal("mouse::leave", function(w)
-        w.image = config_dir .. "icon/titlebar/unfocus/min.svg"
+        w.image = get_icon("titlebar/unfocus/min.svg")
     end)
 
     local maximized_button = awful.titlebar.widget.maximizedbutton(c)
     maximized_button:connect_signal("mouse::enter", function(w)
         if c.maximized then
-            w.image = config_dir .. "icon/titlebar/focus/max_active.svg"
+            w.image = get_icon("titlebar/focus/max_active.svg")
         else
-            w.image = config_dir .. "icon/titlebar/focus/max_inactive.svg"
+            w.image = get_icon("titlebar/focus/max_inactive.svg")
         end
     end)
     maximized_button:connect_signal("mouse::leave", function(w)
-        w.image = config_dir .. "icon/titlebar/unfocus/max.svg"
+        w.image = get_icon("titlebar/unfocus/max.svg")
     end)
 
     awful.titlebar(

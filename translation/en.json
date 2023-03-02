@@ -13,8 +13,7 @@
         "warning": {
             "action": "Action required",
             "critical": "Critical status",
-            "prefix": "Battery Warning:",
-            "suffix": "Replace if possible"
+            "message": "Battery Warning: %s. Replace if possible"
         },
         "to_full": "until full",
         "to_empty": "until empty",

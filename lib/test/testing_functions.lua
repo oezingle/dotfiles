@@ -55,9 +55,18 @@ local function test_assert(boolean, name)
     end, name)
 end
 
+--- A test that hasn't been implemented
+---@param name string? the test's name
+local function test_not_implemented(name)
+    return function()
+        return name, nil, "Not yet implemented"
+    end
+end
+
 return {
     test              = test,
     awesome_only_test = awesome_only_test,
     assert            = test_assert,
+    not_implemented   = test_not_implemented,
     has_awesome       = has_awesome
 }

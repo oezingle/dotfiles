@@ -2,8 +2,7 @@ local radial_menu      = require("src.widgets.util.radial_menu")
 local scratch_terminal = require("src.util.scratch").terminal
 local easy_menu_item   = require("src.widgets.util.radial_menu.easy_menu_item")
 
-local gfs        = require("gears.filesystem")
-local config_dir = gfs.get_configuration_dir()
+local get_icon = require("src.util.fs.get_icon")
 
 local function scratch_terminal_widget()
     local langs = {
@@ -43,7 +42,7 @@ local function scratch_terminal_widget()
     for _, lang in ipairs(langs) do
         lang.icon = lang.icon or "help-circle-outline"
 
-        local icon = config_dir .. "icon/scratch-term/" .. lang.icon .. ".svg"
+        local icon = get_icon("scratch-term/") .. lang.icon .. ".svg"
 
         local lang_widget = easy_menu_item(lang.name, icon)
         

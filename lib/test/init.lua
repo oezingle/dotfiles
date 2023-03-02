@@ -8,11 +8,11 @@ local library = require(folder_of_this_file .. "test.testing_functions")
 local profile = require(folder_of_this_file .. "test.profile")
 
 local pack = table.pack or function(...)
-    local tmp = { ... }
-    tmp.n = select("#", ...)
+        local tmp = { ... }
+        tmp.n = select("#", ...)
 
-    return tmp
-end
+        return tmp
+    end
 
 ---@class TestResult
 ---@field success boolean|nil
@@ -94,7 +94,7 @@ local function overall_success(results)
 end
 
 --- Group similar tests, indenting them in the printed results
----@param ... function
+---@param ... TestingFunction|TestResult
 ---@return (TestResult|TestResult[])[] results
 local function test_collection(...)
     ---@type (function|TestResult[])[]
@@ -122,7 +122,6 @@ local function test_collection(...)
                 tests_passed = tests_passed + 1
             end
             ]]
-
             table.insert(results, {
                 success = success,
                 name = name,
@@ -170,22 +169,23 @@ local function require_awesome(name, callback)
         callback(name)
     else
         print("     " ..
-            cli.success.get_color(nil) ..
-            cli.success.get_character(nil) .. " Tests for " ..
-            name .. " require AwesomeWM" .. cli.colors.RESET)
+        cli.success.get_color(nil) ..
+        cli.success.get_character(nil) .. " Tests for " ..
+        name .. " require AwesomeWM" .. cli.colors.RESET)
         print()
     end
 end
 
 return {
-    suite = suite,
-    require_awesome = require_awesome,
-    collection = test_collection,
-
-    test = library.test,
+    suite             = suite,
+    require_awesome   = require_awesome,
+    collection        = test_collection,
+    --
+    test              = library.test,
     awesome_only_test = library.awesome_only_test,
-    assert = library.assert,
-    has_awesome = library.has_awesome,
-
-    profile = profile
+    assert            = library.assert,
+    not_implemented   = library.not_implemented,
+    has_awesome       = library.has_awesome,
+    --
+    profile           = profile
 }

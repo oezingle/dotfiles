@@ -4,8 +4,7 @@ local wibox = require("wibox")
 local gears = require("gears")
 local config = require("config")
 
-local gfs = require("gears.filesystem")
-local config_dir = gfs.get_configuration_dir()
+local fs = require("src.util.fs")
 
 local shapes = require("src.util.shapes")
 
@@ -137,7 +136,7 @@ local volume_changed = function()
             svg_path = "volume-mute-outline.svg"
         end
 
-        get_widget("popup-image").image = config_dir .. "icon/volume/" .. svg_path
+        get_widget("popup-image").image = fs.get_icon("volume/") .. svg_path
 
         popup.visible = true
 
@@ -152,7 +151,7 @@ local brightness_changed = function()
         -- get_widget("popup-text").text = "Brightness"
         get_widget("popup-progress").value = brightness
 
-        get_widget("popup-image").image = config_dir .. "icon/sunny-outline.svg"
+        get_widget("popup-image").image = fs.get_icon("sunny-outline.svg")
 
         popup.visible = true
 
@@ -175,10 +174,10 @@ local keys = {
     ),
 
     awful.key({}, "XF86MonBrightnessDown",
-        cmd_callback(config_dir .. "sh/brightness.sh sub 10", brightness_changed)
+        cmd_callback(fs.directories.script .. "brightness.sh sub 10", brightness_changed)
     ),
     awful.key({}, "XF86MonBrightnessUp",
-        cmd_callback(config_dir .. "sh/brightness.sh add 10", brightness_changed)
+        cmd_callback(fs.directories.script .. "brightness.sh add 10", brightness_changed)
     ),
 
 }

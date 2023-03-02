@@ -8,8 +8,7 @@ local spawn = require("src.agnostic.spawn")
 local json = require("lib.json")
 local get_current_player = require("src.widgets.music.get_current_player")
 
-local gfs = gears.filesystem
-local config_dir = gfs.get_configuration_dir()
+local get_icon = require("src.util.fs.get_icon")
 
 local get_font = require("src.util.get_font")
 
@@ -31,9 +30,9 @@ local update_album_art = require("src.widgets.music.update_album_art")
 ---@param widget table
 local function set_correct_playback_button_state(status, widget)
     if status == "Playing" then
-        widget.image = config_dir .. "icon/music/pause.svg"
+        widget.image = get_icon("music/pause.svg")
     else
-        widget.image = config_dir .. "icon/music/play.svg"
+        widget.image = get_icon("music/play.svg")
     end
 end
 
@@ -88,7 +87,7 @@ local function music_widget()
                     {
                         {
                             widget = wibox.widget.imagebox,
-                            image = config_dir .. "icon/music/musical-notes.svg",
+                            image = get_icon("music/musical-notes.svg"),
 
                             resize = true,
 
@@ -168,7 +167,7 @@ local function music_widget()
                 {
                     {
                         widget = wibox.widget.imagebox,
-                        image = config_dir .. "icon/music/play-back.svg",
+                        image = get_icon("music/play-back.svg"),
                         id = "button-skip-back",
 
                         forced_width = 32,
@@ -176,14 +175,14 @@ local function music_widget()
                     },
                     {
                         widget = wibox.widget.imagebox,
-                        image = config_dir .. "icon/music/play.svg",
+                        image = get_icon("music/play.svg"),
                         id = "button-play-pause",
                         forced_width = 32,
                         forced_height = 32,
                     },
                     {
                         widget = wibox.widget.imagebox,
-                        image = config_dir .. "icon/music/play-forward.svg",
+                        image = get_icon("music/play-forward.svg"),
                         id = "button-skip-forward",
 
                         forced_width = 32,

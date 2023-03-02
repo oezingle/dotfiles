@@ -1,18 +1,18 @@
-local awful      = require("awful")
-local wibox      = require("wibox")
-local Class      = require("src.util.Class")
-local gtable     = require("gears.table")
-local base       = require("wibox.widget.base")
-local no_scroll  = require("src.widgets.helper.no_scroll")
-local shapes     = require("src.util.shapes")
-local config     = require("config")
-local config_dir = require("gears.filesystem").get_configuration_dir()
+local awful              = require("awful")
+local wibox              = require("wibox")
+local Class              = require("src.util.Class")
+local gtable             = require("gears.table")
+local base               = require("wibox.widget.base")
+local no_scroll          = require("src.widgets.helper.no_scroll")
+local shapes             = require("src.util.shapes")
+local config             = require("config")
+local get_icon           = require("src.util.fs.get_icon")
 local get_preferred_size = require("src.widgets.helper.get_preferred_size")
 
-local pack = require("src.agnostic.version.pack")
+local pack               = require("src.agnostic.version.pack")
 
 -- small layout that fits a widget very badly so that it's centered
-local center_badly = Class({})
+local center_badly       = Class({})
 
 function center_badly:fit(context, width, height)
     return base.fit_widget(self, context, self._private.widget, width, height);
@@ -59,9 +59,9 @@ local function create_radial_menu()
     local box = wibox {
         widget = radial,
 
-        ontop = true,
+        ontop  = true,
 
-        bg = "#00000066",
+        bg     = "#00000066",
 
         x      = 0,
         y      = 0,
@@ -78,11 +78,11 @@ local radial_menu_wibox, radial_menu = create_radial_menu()
 ---@param children { widget: table, callback: function }[] the list of items in the menu
 ---@param use_mouse boolean? if the mouse coordinates should be the menu's center
 local function radial_menu_contents(children, use_mouse)
-    children = children or {}
+    children                 = children or {}
 
-    use_mouse = use_mouse or false
+    use_mouse                = use_mouse or false
 
-    local s = awful.screen.focused()
+    local s                  = awful.screen.focused()
 
     radial_menu_wibox.screen = s
 
@@ -221,7 +221,6 @@ local function radial_menu_contents(children, use_mouse)
 
             create_symbolic_child(wrapped_child, { x = x, y = y })
         end
-
     end
 
     do
@@ -231,7 +230,7 @@ local function radial_menu_contents(children, use_mouse)
                 {
                     {
                         widget = wibox.widget.imagebox,
-                        image = config_dir .. "icon/close-outline.svg",
+                        image = get_icon("close-outline.svg"),
 
                         forced_height = 32,
                         forced_width = 32,
@@ -282,58 +281,58 @@ local function radial_menu_contents(children, use_mouse)
 
     --- point to the closest menu item
     mousegrabber.run(
-        function ()
+        function()
             local coords = mouse.coords()
-    
+
             if mouse.current_widget_geometries then
                 local closest_child
                 local closest_child_dist = 32767
-    
+
                 for _, geometry in ipairs(mouse.current_widget_geometries) do
                     local is_symbolic_child = (function()
-                        for _, symbolic_child in ipairs(symbolic_children) do
-                            if geometry.widget == symbolic_child then
-                                return true
+                            for _, symbolic_child in ipairs(symbolic_children) do
+                                if geometry.widget == symbolic_child then
+                                    return true
+                                end
                             end
-                        end
-    
-                        return false
-                    end)()
-    
+
+                            return false
+                        end)()
+
                     if is_symbolic_child then
                         local center_x = geometry.x + (geometry.width / 2)
                         local center_y = geometry.y + (geometry.height / 2)
-    
+
                         local dist = dist2d(coords, {
                             x = center_x,
                             y = center_y
                         })
-    
+
                         geometry.widget:emit_signal("mouse::leave")
-    
+
                         if dist < closest_child_dist then
                             closest_child = geometry.widget
-    
+
                             closest_child_dist = dist
                         end
                     end
                 end
-    
+
                 if closest_child then
                     closest_child:emit_signal("mouse::enter")
-    
+
                     local buttons = coords.buttons
-    
+
                     if buttons[1] then
                         closest_child:emit_signal("button::press", 1)
-    
+
                         hide_menu()
-    
+
                         return false
                     end
                 end
             end
-    
+
             return true
         end,
         -- TODO better cursor

@@ -6,8 +6,7 @@ local get_decoration_color = require("src.util.color.get_decoration_color")
 
 local arbitrary_icon = require("src.widgets.components.arbitrary_icon")
 
-local gfs = require("gears.filesystem")
-local config_dir = gfs.get_configuration_dir()
+local get_icon = require("src.util.fs.get_icon")
 
 local config = require("config")
 
@@ -23,7 +22,7 @@ local function notification(args, s, is_notif_center)
     end
 
     local close_button = wibox.widget {
-        image = config_dir .. "icon/titlebar/unfocus/close.svg",
+        image = get_icon("titlebar/unfocus/close.svg"),
         widget = wibox.widget.imagebox,
 
         forced_width = notif_constants.size.close_button,

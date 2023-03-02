@@ -139,13 +139,10 @@ local function create_battery_widget(s)
             ((is_charging or fully_charged) and
             (format_upower_time(device.time_to_full) .. " " .. translations.battery.to_full) or
             (format_upower_time(device.time_to_empty) .. " " .. translations.battery.to_empty)
-            ) .. "\n"  ..
-            (device.capacity > 0 and (tostring(math.floor(device.capacity)) .. 
-            "% " .. translations.battery.health) or "") .. 
-            (warning_string and ("\n\n" ..
-            translations.battery.warning.prefix .. 
-            " " .. warning_string .. ". " ..
-            translations.battery.warning.suffix) or "")
+            ) ..
+            (device.capacity > 0 and ("\n" .. tostring(math.floor(device.capacity)) ..
+            "% " .. translations.battery.health) or "") ..
+            (warning_string and string.format("\n\n" .. translations.battery.warning.message, warning_string) or "")
 
         --[[
             if i remove powertop:

@@ -5,8 +5,8 @@ local no_scroll = require("src.widgets.helper.no_scroll")
 local autoclose = require("src.widgets.helper.autoclose")
 
 local gears = require("gears")
-local gfs = gears.filesystem
-local config_dir = gfs.get_configuration_dir()
+
+local get_icon = require("src.util.fs.get_icon")
 
 local config = require("config")
 
@@ -43,8 +43,8 @@ function dropdown:init (args)
         end
     end)
 
-    self.icon_closed = args.icon_closed or config_dir.."icon/arrow/caret-down-outline.svg"
-    self.icon_open = args.icon_open or config_dir.."icon/arrow/caret-up-outline.svg"
+    self.icon_closed = args.icon_closed or get_icon("arrow/caret-down-outline.svg")
+    self.icon_open = args.icon_open or get_icon("arrow/caret-up-outline.svg")
     
     self.__index = self
 

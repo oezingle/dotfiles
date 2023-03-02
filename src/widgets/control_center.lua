@@ -14,7 +14,7 @@ local dropdown     = require("src.widgets.util.dropdown")
 local cmd_slider   = require("src.widgets.components.cmd_slider")
 local icon_button  = require("src.widgets.components.icon_button")
 
-local config_dir = gears.filesystem.get_configuration_dir()
+local get_icon = require("src.util.fs.get_icon")
 
 -- TODO volume/brightness sliders don't have initial values
 
@@ -84,14 +84,14 @@ local function create_control_center()
         widget = widget,
         shape = shapes.rounded_rect(),
 
-        icon_closed = config_dir .. "icon/options-outline.svg",
-        icon_open = config_dir .. "icon/options-outline.svg",
+        icon_closed = get_icon("options-outline.svg"),
+        icon_open = get_icon("options-outline.svg"),
     }
 
     local grid = widget:get_children_by_id("layout-grid")[1]
 
     local brightness_control = cmd_slider {
-        image = config_dir .. "icon/sunny-outline.svg",
+        image = get_icon("sunny-outline.svg"),
         on_value_change = function(slider_value)
             awful.spawn("xbacklight -set " .. slider_value)
         end,
@@ -105,7 +105,7 @@ local function create_control_center()
     )
 
     local volume_control = cmd_slider {
-        image = config_dir .. "icon/volume/volume-high-outline.svg",
+        image = get_icon("volume/volume-high-outline.svg"),
         on_value_change = function(slider_value)
             awful.spawn("pactl -- set-sink-volume 0 " .. slider_value .. "%")
         end,
@@ -121,7 +121,7 @@ local function create_control_center()
 
     -- network manager
     grid:add_widget_at(
-        icon_button(config_dir .. "icon/control-center/wifi-outline.svg", function()
+        icon_button(get_icon("control-center/wifi-outline.svg"), function()
             -- TODO integrate into a thin applet - select network, create config
             
             awful.spawn("nm-connection-editor")
@@ -131,14 +131,14 @@ local function create_control_center()
 
     -- bluetooth
     grid:add_widget_at(
-        icon_button(config_dir .. "icon/control-center/bluetooth-outline.svg", function(state)
+        icon_button(get_icon("control-center/bluetooth-outline.svg"), function(state)
             -- TODO bluetooth applet
         end, "Bluetooth Configuration"),
         2, 3, 1, 1
     )
 
     grid:add_widget_at(
-        toggle_icon_button(config_dir .. "icon/control-center/moon.svg", function(state)
+        toggle_icon_button(get_icon("control-center/moon.svg"), function(state)
             redshift.toggle()
         end, "Toggle Night Colors", redshift.get_state() == 1),
         3, 3, 1, 1
@@ -147,7 +147,7 @@ local function create_control_center()
     -- do not disturb
     -- might need to be a toggle_icon_button
     grid:add_widget_at(
-        icon_button(config_dir .. "icon/control-center/notifications-outline.svg", function()
+        icon_button(get_icon("control-center/notifications-outline.svg"), function()
             NotificationCenter.toggle()
         end),
         4, 1, 1, 1
@@ -155,7 +155,7 @@ local function create_control_center()
 
     -- system specs
     grid:add_widget_at(
-        icon_button(config_dir .. "icon/control-center/hardware-chip-outline.svg", function()
+        icon_button(get_icon("control-center/hardware-chip-outline.svg"), function()
             SystemInfo.toggle()
         end),
         4, 2, 1, 1
@@ -163,7 +163,7 @@ local function create_control_center()
 
     -- power menu
     grid:add_widget_at(
-        icon_button(config_dir .. "icon/exit-outline.svg", function()
+        icon_button(get_icon("exit-outline.svg"), function()
             awesome.emit_signal('module::exit_screen:show')
         end),
         4, 3, 1, 1

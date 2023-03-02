@@ -58,12 +58,11 @@
 
 - default app selector (through rofi?)
 
-- use fs.json.load()
-
-- switch to fs.directories everywhere
-
 - wrap configuration in get_config() which does typechecking / makes refactors more easy
 
 - remove dropdown widget
 
 - translation tables?
+
+- Xorg intel config
+	- [disable TearFree, TripleBuffer, SwapbuffersWait](https://wiki.archlinux.org/title/Intel_graphics#Disabling_TearFree,_TripleBuffer,_SwapbuffersWait)

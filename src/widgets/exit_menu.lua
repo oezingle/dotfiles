@@ -9,8 +9,7 @@ local dpi = beautiful.xresources.apply_dpi
 
 local config = require("config")
 
-local gfs = require("gears.filesystem")
-local config_dir = gfs.get_configuration_dir()
+local get_icon = require("src.util.fs.get_icon")
 
 local button_widget = require("src.widgets.util.button")
 local color_bg_widget = require("src.widgets.util.color_bg")
@@ -121,11 +120,11 @@ local reboot_command = function()
 	awesome.emit_signal('module::exit_screen:hide')
 end
 
-local poweroff = build_power_button('Shutdown', config_dir .. "icon/exit-menu/power-outline.svg", poweroff_command)
-local reboot = build_power_button('Restart', config_dir .. "icon/exit-menu/refresh-outline.svg", reboot_command)
-local suspend = build_power_button('Sleep', config_dir .. "icon/exit-menu/bed-outline.svg", suspend_command)
-local logout = build_power_button('Logout', config_dir .. "icon/exit-outline.svg", logout_command)
-local lock = build_power_button('Lock', config_dir .. "icon/exit-menu/lock-closed-outline.svg", lock_command)
+local poweroff = build_power_button('Shutdown', get_icon("exit-menu/power-outline.svg"), poweroff_command)
+local reboot = build_power_button('Restart', get_icon("exit-menu/refresh-outline.svg"), reboot_command)
+local suspend = build_power_button('Sleep', get_icon("exit-menu/bed-outline.svg"), suspend_command)
+local logout = build_power_button('Logout', get_icon("exit-outline.svg"), logout_command)
+local lock = build_power_button('Lock', get_icon("exit-menu/lock-closed-outline.svg"), lock_command)
 
 local create_exit_screen = function(s)
 	s.exit_screen = wibox

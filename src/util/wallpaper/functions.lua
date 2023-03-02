@@ -10,12 +10,12 @@ local awesome = awesome
 
 do
     if type(config.wallpaper) == "string" then
-        config.wallpaper = { config.wallpaper }
+        config.wallpaper = { list = { config.wallpaper } }
     end
 end
 
 -- check that there is at least 1 wallpaper
-assert(next(config.wallpaper))
+assert(next(config.wallpaper.list))
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
@@ -24,11 +24,9 @@ require(folder_of_this_file .. "reset")
 
 local wallpaper = {}
 
-local print = require("src.agnostic.print")
-
 do
     ---@type table<string|number, string>
-    wallpaper.table = config.wallpaper
+    wallpaper.table = config.wallpaper.list
 
     wallpaper.is_list = wallpaper.table[1] ~= nil
 

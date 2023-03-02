@@ -21,7 +21,7 @@
 ---@class DotfileConfigurationPopup
 ---@field bg Color
 ---@field fg Color
----@field border Color
+---@field border Color?
 
 ---@class DotfileConfigurationProgressbar
 ---@field bg Color
@@ -61,7 +61,6 @@
 ---@field apps DotfileConfigurationApps
 ---@field notification_lifespan number
 ---@field gimmicks DotfileConfigurationGimmicks
----@field wallpaper table<string|number, string>|string
----@field cmd table<string, string>
+---@field wallpaper { time: string?, list: table<string, string>|string[] }|string
 ---@field applet DotfileConfigurationApplets|nil
 ---@field lock_time number

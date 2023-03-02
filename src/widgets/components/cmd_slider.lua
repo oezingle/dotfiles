@@ -11,7 +11,7 @@ local config = require("config")
 
 local no_scroll = require("src.widgets.helper.no_scroll")
 
-local config_dir = gears.filesystem.get_configuration_dir()
+local get_icon = require("src.util.fs.get_icon")
 
 local function do_nothing(...) end
 
@@ -110,7 +110,7 @@ local function cmd_slider(args)
         rotate,
         {
             {
-                image = args.image or config_dir .. "icon/sunny-outline.svg",
+                image = args.image or get_icon("sunny-outline.svg"),
                 resize = true,
                 forced_width = 32,
                 forced_height = 32,

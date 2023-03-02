@@ -4,8 +4,7 @@ local no_scroll = require("src.widgets.helper.no_scroll")
 
 local config = require("config")
 
-local gfs = require("gears.filesystem")
-local config_dir = gfs.get_configuration_dir()
+local get_icon = require("src.util.fs.get_icon")
 
 local shapes               = require("src.util.shapes")
 local get_decoration_color = require("src.util.color.get_decoration_color")
@@ -13,17 +12,17 @@ local get_decoration_color = require("src.util.color.get_decoration_color")
 local function exitable_dialog_box(args)
     local close_button = wibox.widget {
         widget = wibox.widget.imagebox,
-        image = config_dir .. "icon/titlebar/unfocus/close.svg",
+        image = get_icon("titlebar/unfocus/close.svg"),
 
         forced_width = 24,
         forced_height = 24,
     }
 
     close_button:connect_signal("mouse::enter", function(w)
-        w.image = config_dir .. "icon/titlebar/focus/close.svg"
+        w.image = get_icon("titlebar/focus/close.svg")
     end)
     close_button:connect_signal("mouse::leave", function(w)
-        w.image = config_dir .. "icon/titlebar/unfocus/close.svg"
+        w.image = get_icon("titlebar/unfocus/close.svg")
     end)
 
     local decoration_color = args.bg or get_decoration_color()
