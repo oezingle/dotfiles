@@ -58,21 +58,9 @@ if config.gimmicks.gestures then
     end, "gesture support")
 end
 
-if config.gimmicks.pywal then
-    -- light wallpaper: check if 1x1 version is more than half white, add -l flag
+local wal = require("src.util.wal")
 
-    check_dependencies({ 'wal' }, function()
-        local function update_pywal()
-            awful.spawn.easy_async_with_shell("wal -i '" .. get_wallpaper() .. "'", function ()
-                awesome.emit_signal("wal::changed")
-            end)
-        end
-
-        update_pywal()
-
-        awesome.connect_signal("wallpaper_should_change", update_pywal)
-    end, 'pywal color scheme generation')
-end
+wal.create_hook()
 
 -- pulse audio
 check_dependencies({ "start-pulseaudio-x11" }, function()
@@ -82,12 +70,12 @@ end, "pulseaudio audio")
 -- screen locking
 if config.lock_time then
     -- TODO better fix for copies of xautolock
-    awful.spawn("pkill xautolock")
+    -- awful.spawn("pkill xautolock")
 
     check_dependencies({ "xautolock" }, function()
         -- TODO re-enable xautolock
-        
-        -- pidwatch("xautolock -time " .. tostring(config.lock_time) .. " -locker \"dm-tool lock\"")
+
+        pidwatch(string.format("xautolock -secure -detectsleep -time %s -locker \"dm-tool lock\"",  tostring(config.lock_time)))
     end, "xautolock screen locking")
 end
 
@@ -100,7 +88,7 @@ awful.spawn("xinput set-prop 10 333 1")
 
 pidwatch("nm-applet", true)
 
-local rofi_cmd = "PATH=$PATH:" .. directories.config .. "applets " .. config.apps.rofi .. " > /dev/null 2>&1"
+local rofi_cmd = string.format("PATH=$PATH:%s %s > /dev/null 2>&1", directories.config .. "applets", config.apps.rofi)
 
 local function rofi()
     awful.spawn.with_shell(rofi_cmd)	

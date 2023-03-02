@@ -1,6 +1,23 @@
 local time   = require("src.util.time")
 local config = require("config")
-local gtimer = require("gears.timer")
+local has_gears, gtimer = xpcall(function () 
+    return require("gears.timer")
+end, debug.traceback)
+
+if not has_gears then
+    gtimer = function (_)
+
+    end
+
+    -- FIXME global typed mock
+    awesome = {
+        ---@param signal string
+        emit_signal = function (signal) end,
+        ---@param signal string
+        ---@param callback function
+        connect_signal = function (signal, callback) end
+    }
+end
 
 local pairs   = pairs
 local ipairs  = ipairs

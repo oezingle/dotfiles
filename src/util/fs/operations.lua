@@ -1,3 +1,4 @@
+-- TODO check if system has LuaFileSystem, and use it if it does for SPEEED https://github.com/lunarmodules/luafilesystem
 
 -- https://stackoverflow.com/questions/1340230/check-if-directory-exists-in-lua
 
@@ -91,6 +92,17 @@ local function write_file(path, content)
     file:close()
 end
 
+---@param dir string the path of the directory to list out
+---@return string[] files the files in the directory
+local function list(dir)
+    local files = {}
+    for file in io.popen(string.format([[ls -pa %s | grep -v /]], dir)):lines() do
+        table.insert(files, file)
+    end
+
+    return files
+end
+
 return {
     exists = exists,
     mkdir  = mkdir,
@@ -98,4 +110,5 @@ return {
     read   = read_file,
     write  = write_file,
     rm     = remove,
+    list   = list
 }

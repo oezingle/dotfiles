@@ -1,8 +1,11 @@
 local fs                 = require("src.util.fs")
 local check_dependencies = require("src.util.check_dependencies")
 local has_awesome        = require("lib.test").has_awesome
+local spawn              = require("src.agnostic.spawn")
+local get_wallpaper      = require("src.util.wallpaper.get_wallpaper")
+local is_light           = require("src.util.wallpaper.is_light")
 
-local config = nil
+local config             = nil
 if has_awesome() then
     config = require("config")
 end
@@ -69,30 +72,58 @@ local ret = setmetatable({
     --- Call a callback when the pywal changes
     ---@param callback fun(scheme: Wal): nil
     on_change = function(callback)
-        if config.gimmicks.pywal then
-            local cb = function()
-                if has_pywal_installed then
-                    local scheme = wal()
+        if not config.gimmicks.pywal then
+            return
+        end
+        local cb = function()
+            if has_pywal_installed then
+                local scheme = wal()
 
-                    if scheme then
-                        callback(scheme)
-                    end
+                if scheme then
+                    callback(scheme)
                 end
             end
-
-            -- callbacks when pywal is found to be installed
-            awesome.connect_signal("wal::init", cb)
-
-            awesome.connect_signal("wal::changed", cb)
-
-            if has_pywal_installed then
-                cb()
-            end
         end
-    end
+
+        -- callbacks when pywal is found to be installed
+        awesome.connect_signal("wal::init", cb)
+
+        awesome.connect_signal("wal::changed", cb)
+
+        if has_pywal_installed then
+            cb()
+        end
+    end,
+    update = function()
+        if not config.gimmicks.pywal then
+            return
+        end
+
+        is_light(function(is_light)
+            -- n skips wallpaper
+            -- t skips tty
+            -- s skips terminals
+            spawn(string.format("wal %s -n -t -i '%s'", is_light and "-l" or "", get_wallpaper()), function()
+                awesome.emit_signal("wal::changed")
+            end)
+        end)
+    end,
 }, {
     __call = wal
 })
+
+ret.create_hook = function()
+    if not config.gimmicks.pywal then
+        return
+    end
+
+    check_dependencies({ 'wal' }, function()
+        ret.update()
+
+        awesome.connect_signal("wallpaper_should_change", ret.update)
+    end, 'pywal color scheme generation')
+end
+
 
 ---@operator call:Wal|nil
 return ret
