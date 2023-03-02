@@ -100,9 +100,9 @@ local ret = setmetatable({
         end
 
         is_light(function(is_light)
+            -- l for light mode
             -- n skips wallpaper
             -- t skips tty
-            -- s skips terminals
             spawn(string.format("wal %s -n -t -i '%s'", is_light and "-l" or "", get_wallpaper()), function()
                 awesome.emit_signal("wal::changed")
             end)

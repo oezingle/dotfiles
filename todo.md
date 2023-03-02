@@ -13,10 +13,10 @@
 - applets
 	- Network Manager
 		- Rebuild as frontend to gnome network apps?
-	- emoji selector
 
 - wallpapers
-	- looks like shit with light wallpaper
+	- partially looks like shit with light wallpaper
+	- pywal for svg's
 
 - custom polkit
 
