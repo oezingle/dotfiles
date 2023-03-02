@@ -2,8 +2,7 @@
 - task bar
 	- calendar (click clock)
 
-- remake older widgets - they're full of obtuse helpers and not optimal 
-	- color_bg_widget
+- rename src.widgets.util.color_bg - src.widgets.util.box?
 
 - improve notification center
 	- add date/time
@@ -16,7 +15,7 @@
 
 - wallpapers
 	- partially looks like shit with light wallpaper
-	- pywal for svg's
+	- wal for svg's
 
 - custom polkit
 
@@ -36,8 +35,6 @@
 
 - break keys out from rc.lua
 	- configurable?
-
-- store color from src.taskbar.battery / src.widgets.components.switch somewhere smart
 
 - thunar has an error under luajit: attempt to index field 'layout' (a userdata value)
 

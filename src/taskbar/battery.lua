@@ -23,6 +23,7 @@ local scratch                = require("src.util.scratch")
 local dpi                    = require("beautiful").xresources.apply_dpi
 local get_font               = require("src.util.get_font")
 local translations           = require("src.util.translations")
+local good_thing_green       = require("src.util.color.good_thing_green")
 
 --- Turn an integer from UPower into a table
 ---@param time number
@@ -64,14 +65,10 @@ local function create_battery_widget(s)
                 {
                     max_value        = 100,
                     forced_width     = 14.7,
-
                     background_color = "#00000000",
-
                     color            = config.progressbar.fg,
-
                     value            = 0,
                     widget           = wibox.widget.progressbar,
-
                     id               = "battery-bar"
                 }
             },
@@ -100,14 +97,15 @@ local function create_battery_widget(s)
         local battery_bar = widget:get_children_by_id("battery-bar")[1]
         local battery_icon = widget:get_children_by_id("battery-icon")[1]
 
-        battery_bar.value = device.percentage
+        -- only change the value every 10%, so that redraws aren't too often
+        battery_bar.value = math.floor(device.percentage / 10) * 10
 
         local is_charging = device.state == UPowerGlib.DeviceState.CHARGING
 
         local fully_charged = device.state == UPowerGlib.DeviceState.FULLY_CHARGED
 
         if is_charging or fully_charged then
-            battery_bar.color = "#6CC551"
+            battery_bar.color = good_thing_green
         else
             battery_bar.color = config.progressbar.fg
         end
@@ -119,19 +117,19 @@ local function create_battery_widget(s)
         end
 
         local state_string = ({
-                [UPowerGlib.DeviceState.UNKNOWN]           = translations.battery.state.unknown,
-                [UPowerGlib.DeviceState.CHARGING]          = translations.battery.state.charging,
-                [UPowerGlib.DeviceState.DISCHARGING]       = translations.battery.state.discharging,
-                [UPowerGlib.DeviceState.EMPTY]             = translations.battery.state.empty,
-                [UPowerGlib.DeviceState.FULLY_CHARGED]     = translations.battery.state.fully_charged,
-                [UPowerGlib.DeviceState.PENDING_CHARGE]    = translations.battery.state.pending_charge,
-                [UPowerGlib.DeviceState.PENDING_DISCHARGE] = translations.battery.state.pending_discharge,
-                [UPowerGlib.DeviceState.LAST]              = translations.battery.state.last
+                    [UPowerGlib.DeviceState.UNKNOWN]       = translations.battery.state.unknown,
+                    [UPowerGlib.DeviceState.CHARGING]      = translations.battery.state.charging,
+                    [UPowerGlib.DeviceState.DISCHARGING]   = translations.battery.state.discharging,
+                    [UPowerGlib.DeviceState.EMPTY]         = translations.battery.state.empty,
+                    [UPowerGlib.DeviceState.FULLY_CHARGED] = translations.battery.state.fully_charged,
+                    [UPowerGlib.DeviceState.PENDING_CHARGE] = translations.battery.state.pending_charge,
+                    [UPowerGlib.DeviceState.PENDING_DISCHARGE] = translations.battery.state.pending_discharge,
+                    [UPowerGlib.DeviceState.LAST]          = translations.battery.state.last
             })[device.state]
 
         local warning_string = ({
-                [UPowerGlib.DeviceLevel.ACTION]   = translations.battery.warning.action,
-                [UPowerGlib.DeviceLevel.CRITICAL] = translations.battery.warning.critical
+                    [UPowerGlib.DeviceLevel.ACTION] = translations.battery.warning.action,
+                    [UPowerGlib.DeviceLevel.CRITICAL] = translations.battery.warning.critical
             })[device.warning_level]
 
         battery_tooltip.textbox.text = state_string ..

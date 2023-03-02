@@ -1,14 +1,15 @@
-
 -- A very pretty MacOS-style toggle switch
 
-local wibox = require("wibox")
-local no_scroll = require("src.widgets.helper.no_scroll")
+local wibox            = require("wibox")
+local no_scroll        = require("src.widgets.helper.no_scroll")
+local good_thing_green = require("src.util.color.good_thing_green")
 
-local config = require("config")
-local shapes = require("src.util.shapes")
+local config           = require("config")
+local shapes           = require("src.util.shapes")
 
 local function switch_widget(callback, state)
-    callback = callback or function () end
+    callback = callback or function()
+    end
 
     local bar = wibox.widget {
         widget = wibox.widget.progressbar,
@@ -34,15 +35,15 @@ local function switch_widget(callback, state)
 
     state = state or false
 
-    local function update_value_and_bg ()
-        bar.background_color = state and "#6CC551" or config.progressbar.bg
+    local function update_value_and_bg()
+        bar.background_color = state and good_thing_green or config.progressbar.bg
 
         rotate.direction = state and "south" or "north"
     end
 
     update_value_and_bg()
 
-    rotate:connect_signal("button::press", no_scroll(function ()
+    rotate:connect_signal("button::press", no_scroll(function()
         state = not state
 
         update_value_and_bg()
