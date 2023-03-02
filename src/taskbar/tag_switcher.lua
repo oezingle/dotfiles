@@ -24,9 +24,6 @@ local taglist_buttons = gears.table.join(
     awful.button({}, 5, function(t) awful.tag.viewprev(t.screen) end)
 )
 
-local print = require("src.agnostic.print")
-local spairs = require("src.util.spairs")
-
 local function create_tag_switcher(screen)
     local style = {
         shape = gears.shape.circle,
@@ -86,23 +83,8 @@ local function create_tag_switcher(screen)
                     end
                 end)
             end,
-            update_callback = function(self, c3, index, objects) --luacheck: no unused args
-                --self:get_children_by_id('index_role')[1].markup = index
-
-                local elem = self:get_children_by_id('background_role')[1]
-            end,
         },
     }
-
-    --[[
-        2023-03-02 14:55:54 W: awesome:       widget::emit_recursive table: 0x56428094cbd0 
-2023-03-02 14:55:54 W: awesome:       button::press table: 0x56427d6a5520 
-2023-03-02 14:55:54 W: awesome:       widget::redraw_needed table: 0x56428094c950 
-2023-03-02 14:55:54 W: awesome:       widget::layout_changed table: 0x56427d6a59c0 
-2023-03-02 14:55:54 W: awesome:       widget::reseted table: 0x564280c068c0 
-2023-03-02 14:55:54 W: awesome:       widget::updated table: 0x56427d6a5240 
-2023-03-02 14:55:54 W: awesome:       button::release table: 0x56427d6a5710
-    ]]
 
     wal.on_change(function (scheme)
         style.bg_occupied = scheme.special.foreground
