@@ -2,7 +2,9 @@
 
 local validate_config = require("src.util.get_config.validate")
 
-local success, err = validate_config()
+local config = require("config")
+
+local success, err = validate_config(config)
 
 if success then
     print("No errors found in config.lua")

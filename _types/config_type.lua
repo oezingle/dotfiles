@@ -1,4 +1,3 @@
----@meta
 
 ---@class DotfileConfigurationDecorations
 ---@field titlebar { pos: Direction }
@@ -64,3 +63,8 @@
 ---@field wallpaper { time: string?, list: table<string, string>|string[] }|string
 ---@field applet DotfileConfigurationApplets|nil
 ---@field lock_time number
+
+---@type DotfileConfiguration|nil
+local a = nil
+
+return a

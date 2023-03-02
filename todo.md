@@ -22,9 +22,6 @@
 
 - more unit tests
 
-- improve battery widget
-	 - click for applet w/ powertop-like stats
-
 - no way to switch audio sink
 
 - Use Promises
@@ -62,7 +59,7 @@
 
 - remove dropdown widget
 
-- translation tables?
+- translation tables
 
 - Xorg intel config
 	- [disable TearFree, TripleBuffer, SwapbuffersWait](https://wiki.archlinux.org/title/Intel_graphics#Disabling_TearFree,_TripleBuffer,_SwapbuffersWait)
