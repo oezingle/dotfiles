@@ -34,7 +34,6 @@ local function generate_literal(word)
     }
 end
 
---- TODO almost-global alias table?
 ---@param type Type
 ---@return ComplexType
 local function generate_alias(type)

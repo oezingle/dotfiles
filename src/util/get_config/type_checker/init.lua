@@ -27,11 +27,6 @@ local TypeChecker = require(folder_of_this_file .. "type_checker.class")
 
 -- TODO complex functions
 
--- TODO handle references using either:
--- - optional third argument for all stored type names
--- - class based approach, where type_checker.check generates an instance for us
-
-
 local type_checker = setmetatable({
     check = check_type,
     generate = generate,

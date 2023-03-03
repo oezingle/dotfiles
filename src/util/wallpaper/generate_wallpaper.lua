@@ -8,8 +8,6 @@ local wallpaper = require(folder_of_this_file .. "init")
 
 local wallpaper_dir = fs.directories.wallpaper
 
---- TODO if width and height are nil, use screen size
-
 --- Generate a wallpaper for a given iterator
 ---@param identifier any
 ---@param width number

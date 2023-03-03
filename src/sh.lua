@@ -1,6 +1,5 @@
-local awful = require('awful')
-local config = require('config')
-local get_wallpaper = require('src.util.wallpaper.get_wallpaper')
+local awful              = require('awful')
+local config             = require('config')
 local check_dependencies = require('src.util.check_dependencies')
 local directories        = require('src.util.fs.directories')
 
@@ -69,13 +68,9 @@ end, "pulseaudio audio")
 
 -- screen locking
 if config.lock_time then
-    -- TODO better fix for copies of xautolock
-    -- awful.spawn("pkill xautolock")
-
     check_dependencies({ "xautolock" }, function()
-        -- TODO re-enable xautolock
-
-        pidwatch(string.format("xautolock -secure -detectsleep -time %s -locker \"dm-tool lock\"",  tostring(config.lock_time)))
+        pidwatch(string.format("xautolock -secure -detectsleep -time %s -locker \"dm-tool lock\"",
+            tostring(config.lock_time)))
     end, "xautolock screen locking")
 end
 
@@ -91,7 +86,7 @@ pidwatch("nm-applet", true)
 local rofi_cmd = string.format("PATH=$PATH:%s %s > /dev/null 2>&1", directories.config .. "applets", config.apps.rofi)
 
 local function rofi()
-    awful.spawn.with_shell(rofi_cmd)	
+    awful.spawn.with_shell(rofi_cmd)
 end
 
 return {
