@@ -56,7 +56,7 @@ local function is_light(callback, identifier)
 
         local average = (tonumber(r, 16) + tonumber(g, 16) + tonumber(b, 16)) / 3
 
-        local threshold = 85
+        local threshold = 128
 
         local is_light = average > threshold
 

@@ -42,8 +42,6 @@
 	- seems to happen when you leave and re-enter the same item too quickly
 	- clicking an appmenu item doesn't close the menu
 
-- profiling
-
 - diagnostic / debug features in system menu?
 
 - notification center doesn't auto close unless you click in it and then out of it
