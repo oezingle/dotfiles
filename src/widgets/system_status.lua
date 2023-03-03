@@ -3,6 +3,7 @@ local wibox         = require("wibox")
 local no_scroll     = require("src.widgets.helper.no_scroll")
 local config        = require("config")
 local get_font      = require("src.util.get_font")
+local scratch       = require("src.util.scratch")
 
 ---@alias StatusSet table<number, string>
 
@@ -10,43 +11,43 @@ local get_font      = require("src.util.get_font")
 local status_sets   = {
     ---@type StatusSet
     emoji_sad = {
-        [10] = "😴",
-        [25] = "🥶",
-        [35] = "🙁",
-        [60] = "😦",
-        [75] = "😥",
-        [90] = "🔥",
-        [100] = "💯",
+            [10] = "😴",
+            [25] = "🥶",
+            [35] = "🙁",
+            [60] = "😦",
+            [75] = "😥",
+            [90] = "🔥",
+            [100] = "💯",
     },
     ---@type StatusSet
     emoji_mad = {
-        [10] = "😴",
-        [25] = "🥶",
-        [35] = "😬",
-        [60] = "😠",
-        [75] = "😡",
-        [90] = "🔥",
-        [100] = "💯",
+            [10] = "😴",
+            [25] = "🥶",
+            [35] = "😬",
+            [60] = "😠",
+            [75] = "😡",
+            [90] = "🔥",
+            [100] = "💯",
     },
     ---@type StatusSet
     emoticon = {
-        [25] = ":)",
-        [50] = ":|",
-        [75] = ":(",
-        [100] = ">:(",
+            [25] = ":)",
+            [50] = ":|",
+            [75] = ":(",
+            [100] = ">:(",
     },
     ---@type StatusSet
     numbers = {
-        [10] = "0.1",
-        [20] = "0.2",
-        [30] = "0.3",
-        [40] = "0.4",
-        [50] = "0.5",
-        [60] = "0.6",
-        [70] = "0.7",
-        [80] = "0.8",
-        [90] = "0.9",
-        [100] = "1.0"
+            [10] = "0.1",
+            [20] = "0.2",
+            [30] = "0.3",
+            [40] = "0.4",
+            [50] = "0.5",
+            [60] = "0.6",
+            [70] = "0.7",
+            [80] = "0.8",
+            [90] = "0.9",
+            [100] = "1.0"
     }
 }
 
@@ -85,7 +86,7 @@ local function create_system_status()
     )
 
     widget:connect_signal("button::press", no_scroll(function()
-        awful.spawn(config.apps.terminal .. " -e top")
+        scratch.terminal("top", true)
     end))
 
     return widget
