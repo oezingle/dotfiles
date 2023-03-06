@@ -21,8 +21,6 @@
 
 - more unit tests
 
-- no way to switch audio sink
-
 - Use Promises
 
 - limit hovered clients to 1 while using screen preview
@@ -58,5 +56,3 @@
 
 - Xorg intel config
 	- [disable TearFree, TripleBuffer, SwapbuffersWait](https://wiki.archlinux.org/title/Intel_graphics#Disabling_TearFree,_TripleBuffer,_SwapbuffersWait)
-
-- brightness and volume bars don't take effect unless dragged
