@@ -58,3 +58,5 @@
 
 - Xorg intel config
 	- [disable TearFree, TripleBuffer, SwapbuffersWait](https://wiki.archlinux.org/title/Intel_graphics#Disabling_TearFree,_TripleBuffer,_SwapbuffersWait)
+
+- brightness and volume bars don't take effect unless dragged
