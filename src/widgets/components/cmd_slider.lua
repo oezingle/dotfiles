@@ -1,19 +1,21 @@
-local wibox = require("wibox")
-local gears = require("gears")
-local gcolor = gears.color
-local gtimer = gears.timer
+local wibox                 = require("wibox")
+local gears                 = require("gears")
+local gcolor                = gears.color
+local gtimer                = gears.timer
 
 local shapes                = require("src.util.shapes")
 local bind_width_and_height = require("src.widgets.helper.bind_width_and_height")
-local spawn                 = require("src.agnostic.spawn")
 
-local config = require("config")
+local config                = require("config")
 
-local no_scroll = require("src.widgets.helper.no_scroll")
+local no_scroll             = require("src.widgets.helper.no_scroll")
 
-local get_icon = require("src.util.fs.get_icon")
+local get_icon              = require("src.util.fs.get_icon")
 
-local function do_nothing(...) end
+local function do_nothing(...)
+end
+
+-- TODO volume/brightness sliders don't have initial values
 
 -- I don't need no stinking handle!
 ---@param w table slider widget to create handle for
@@ -26,28 +28,31 @@ local function create_slider_bg(w)
     local percent_pos = (value - minimum) / (maximum - minimum)
 
     return gcolor {
-        type = "linear",
+        type  = "linear",
 
-        from = { 0, 1 },
-        to   = { w.width, 1 },
+        from  = { 0, 1 },
+        to    = { w.width, 1 },
 
         stops = {
-            { 0, config.button.hover },
+            { 0,           config.button.hover },
             { percent_pos, config.button.hover },
             { percent_pos, config.button.normal },
-            { 1, config.button.normal },
+            { 1,           config.button.normal },
         }
     }
 end
 
+---@alias PromiseYieldingFunction fun(): Promise
+
+---@param args { on_value_change: function?, image: string?, id: string?, on_right_click: function?, update: PromiseYieldingFunction }
 local function cmd_slider(args)
     args = args or {}
 
-    local throttle = args.throttle or false
-
     local on_value_change = args.on_value_change or do_nothing
 
-    local update_command = args.update_command
+    local on_right_click = args.on_right_click
+
+    local update = args.update
 
     local slider = wibox.widget {
         bar_shape    = shapes.rounded_rect(),
@@ -56,47 +61,43 @@ local function cmd_slider(args)
         maximum      = 100,
         minimum      = 0,
 
-        id = args.id,
+        id           = args.id,
 
-        bar_color = config.button.normal,
+        bar_color    = config.button.normal,
 
-        widget = wibox.widget.slider
+        widget       = wibox.widget.slider
     }
 
     bind_width_and_height(slider)
 
     local is_pressing = false
 
-    local last_value = 0.0
-
-    -- timer that gets constantly cancelled and re-inited so that
-    -- command calls are throttled
-    local submit_change = gtimer {
-        timeout = 0.5,
-        single_shot = true,
-        callback = function()
-            if throttle then
-                on_value_change(slider.value)
+    slider:connect_signal("button::press", function(w, _, _, button)
+        if button == 1 then
+            is_pressing = true
+        elseif button == 3 then
+            if on_right_click then
+                on_right_click()
             end
-
-            is_pressing = false
         end
-    }
+    end)
+    slider:connect_signal("button::release", no_scroll(function()
+        is_pressing = false
+    end))
+
+    local last_value = -1.0
 
     slider:connect_signal("property::value", function(w)
-        if is_pressing then
-            if w.value ~= last_value and not throttle then
+        local value = w.value
+
+        if value ~= last_value then
+            if is_pressing then
                 on_value_change(slider.value)
             end
 
-            submit_change:stop()
-            submit_change:again()
-        end
-
-        if w.value ~= last_value then
             w.bar_color = create_slider_bg(w)
 
-            last_value = w.value
+            last_value = value
         end
     end)
 
@@ -122,62 +123,26 @@ local function cmd_slider(args)
         layout = wibox.layout.stack
     }
 
-    slider:connect_signal("button::press", no_scroll(function()
-        is_pressing = true
-    end))
-
-    --[[
-        return update_widget {
-        widget = stack,
-        update_callback = function()
-            -- Let the user take the wheel
-            if is_pressing then
-                return
-            end
-
-            spawn(update_command, function(result)
-                -- Check again in case there was a state change during execution time
-                if is_pressing then
-                    return
-                end
-
-                local asnumber = tonumber(result)
-
-                if type(asnumber) ~= "nil" then
-                    slider.value = asnumber
-                end
-            end)
-        end,
-        timeout = 0.5
-    }
-    ]]
-
     -- timer to update the visual
     gtimer {
         timeout = 0.5,
-        call_now = true,
         autostart = true,
         callback = function()
             if not stack.visible then
                 return
             end
 
-            -- Let the user take the wheel
+            -- don't bother updating the slider if the user is pressing on it
             if is_pressing then
                 return
             end
 
-            spawn(update_command, function(result)
-                -- Check again in case there was a state change during execution time
+            update():after(function(value)
                 if is_pressing then
                     return
                 end
 
-                local asnumber = tonumber(result)
-
-                if type(asnumber) ~= "nil" then
-                    slider.value = asnumber
-                end
+                slider.value = value
             end)
         end
     }

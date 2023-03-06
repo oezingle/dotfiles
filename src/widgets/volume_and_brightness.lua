@@ -105,14 +105,9 @@ local get_widget = function(id)
 end
 
 -- Function that runs a command without any args
-local cmd_callback = function(cmd, callback, shell)
-    shell = shell or false
-
-    -- determine function used. Some might need a shell
-    local spawn_function = shell and awful.spawn.easy_async_with_shell or awful.spawn.easy_async
-
+local cmd_callback = function(cmd, callback)
     return function()
-        spawn_function(
+        awful.spawn.easy_async_with_shell(
             cmd,
             callback
         )
@@ -163,14 +158,14 @@ end
 
 local keys = {
     awful.key({}, "XF86AudioRaiseVolume",
-        cmd_callback("pactl -- set-sink-volume 0 +10%", volume_changed)
+        cmd_callback("pactl -- set-sink-volume $(pactl get-default-sink) +10%", volume_changed)
     ),
     awful.key({}, "XF86AudioLowerVolume",
-        cmd_callback("pactl -- set-sink-volume 0 -10%", volume_changed)
+        cmd_callback("pactl -- set-sink-volume $(pactl get-default-sink) -10%", volume_changed)
     ),
     -- TODO proper mute/unmute toggle
     awful.key({}, "XF86AudioMute",
-        cmd_callback("pactl -- set-sink-volume 0 0%", volume_changed)
+        cmd_callback("pactl -- set-sink-volume $(pactl get-default-sink) 0%", volume_changed)
     ),
 
     awful.key({}, "XF86MonBrightnessDown",

@@ -54,7 +54,7 @@ local function Promise_settle(self, value, reject)
 
     -- Check if the returned value is a Promise,
     -- in which case that Promise is passed down to this scope
-    if #value == 1 and type(value) == "table" and value[1].__is_a_promise then
+    if #value == 1 and type(value) == "table" and type(value[1]) == "table" and value[1].__is_a_promise then
         local child = value[1]
 
         if child.fulfilled then

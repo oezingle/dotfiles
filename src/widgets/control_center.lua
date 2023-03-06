@@ -1,22 +1,23 @@
-local wibox     = require("wibox")
-local awful     = require("awful")
-local gears     = require("gears")
-local config    = require("config")
-local no_scroll = require("src.widgets.helper.no_scroll")
-local check_dependencies = require("src.util.check_dependencies")
+local wibox               = require("wibox")
+local awful               = require("awful")
+local config              = require("config")
+local no_scroll           = require("src.widgets.helper.no_scroll")
+local check_dependencies  = require("src.util.check_dependencies")
+local spawn               = require("src.agnostic.spawn")
 
-local shapes = require("src.util.shapes")
-local redshift = require("src.util.redshift")
+local shapes              = require("src.util.shapes")
+local redshift            = require("src.util.redshift")
 
 local create_music_widget = require("src.widgets.music")
 -- local network_manager_widget = require("src.widgets.network_manager")
-local dropdown     = require("src.widgets.util.dropdown")
-local cmd_slider   = require("src.widgets.components.cmd_slider")
-local icon_button  = require("src.widgets.components.icon_button")
+local dropdown            = require("src.widgets.util.dropdown")
+local cmd_slider          = require("src.widgets.components.cmd_slider")
+local icon_button         = require("src.widgets.components.icon_button")
 
-local get_icon = require("src.util.fs.get_icon")
+local get_icon            = require("src.util.fs.get_icon")
+local scratch             = require("src.util.scratch")
 
--- TODO volume/brightness sliders don't have initial values
+local Promise             = require("src.util.Promise")
 
 local function toggle_icon_button(icon, callback, tooltip, initial)
     local state = initial or false
@@ -58,7 +59,6 @@ local function create_control_center()
                 bg = config.button.normal,
                 widget = wibox.container.background,
                 shape = shapes.rounded_rect(),
-
                 id = "music-container",
                 visible = false
             },
@@ -95,7 +95,16 @@ local function create_control_center()
         on_value_change = function(slider_value)
             awful.spawn("xbacklight -set " .. slider_value)
         end,
-        update_command = "xbacklight -get",
+        update_command = "",
+        update = function()
+            return Promise(function(res)
+                spawn("xbacklight -get", function(result)
+                    local value = tonumber(result)
+
+                    res(value)
+                end)
+            end)
+        end
     }
 
     -- brightness slider
@@ -107,10 +116,23 @@ local function create_control_center()
     local volume_control = cmd_slider {
         image = get_icon("volume/volume-high-outline.svg"),
         on_value_change = function(slider_value)
-            awful.spawn("pactl -- set-sink-volume 0 " .. slider_value .. "%")
+            spawn("pactl -- set-sink-volume $(pactl get-default-sink) " .. slider_value .. "%")
         end,
-        update_command = "pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \\([0-9][0-9]*\\)%.*,\\1,'",
-        id = "cmd-slider-volume"
+        id = "cmd-slider-volume",
+        update = function()
+            return Promise(function(res)
+                spawn("pactl get-sink-volume $(pactl get-default-sink)", function(result)
+                    local percentage = result:match("(%d+)%%")
+
+                    local value = tonumber(percentage)
+
+                    res(value)
+                end)
+            end)
+        end,
+        on_right_click = function()
+            spawn("pavucontrol")
+        end
     }
 
     -- volume slider
@@ -123,7 +145,7 @@ local function create_control_center()
     grid:add_widget_at(
         icon_button(get_icon("control-center/wifi-outline.svg"), function()
             -- TODO integrate into a thin applet - select network, create config
-            
+
             awful.spawn("nm-connection-editor")
         end, "Network Configuration"),
         1, 3, 1, 1
@@ -173,7 +195,7 @@ local function create_control_center()
     volume_control.visible = false
 
     -- show music widget if playerctl is installed
-    check_dependencies({ "playerctl" }, function ()
+    check_dependencies({ "playerctl" }, function()
         widget:get_children_by_id("music-container")[1].visible = true
     end)
 

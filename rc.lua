@@ -396,14 +396,15 @@ awful.rules.rules = {
             "Arandr",
             "Blueman-manager",
             "Gpick",
+            "KColorChooser",
             "Kruler",
             "MessageWin", -- kalarm.
+            "Pavucontrol",
             "Sxiv",
-            "KColorChooser",
             "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
             "Wpa_gui",
             "veromix",
-            "xtightvncviewer"
+            "xtightvncviewer",
         },
 
         -- Note that the name property shown in xprop might be set slightly after creation of the client
@@ -482,7 +483,7 @@ do
             title = "Oops, an error happened!",
             text = tostring(err) })
 
-        error_log(tostring(err))
+        error_log(debug.traceback(tostring(err)))
 
         in_error = false
     end)
