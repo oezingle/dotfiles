@@ -10,11 +10,6 @@ local config                = require("config")
 
 local no_scroll             = require("src.widgets.helper.no_scroll")
 
-local get_icon              = require("src.util.fs.get_icon")
-
-local function do_nothing(...)
-end
-
 -- TODO volume/brightness sliders don't have initial values
 
 -- I don't need no stinking handle!
@@ -44,11 +39,11 @@ end
 
 ---@alias PromiseYieldingFunction fun(): Promise
 
----@param args { on_value_change: function?, image: string?, id: string?, on_right_click: function?, update: PromiseYieldingFunction }
+---@param args { on_value_change: function?, image: string, id: string?, on_right_click: function?, update: PromiseYieldingFunction }
 local function cmd_slider(args)
     args = args or {}
 
-    local on_value_change = args.on_value_change or do_nothing
+    local on_value_change = args.on_value_change
 
     local on_right_click = args.on_right_click
 
@@ -88,11 +83,14 @@ local function cmd_slider(args)
     local last_value = -1.0
 
     slider:connect_signal("property::value", function(w)
+        -- TODO limit to 20 notches or so?
         local value = w.value
 
         if value ~= last_value then
             if is_pressing then
-                on_value_change(slider.value)
+                if on_value_change then
+                    on_value_change(value)                    
+                end
             end
 
             w.bar_color = create_slider_bg(w)
@@ -111,7 +109,7 @@ local function cmd_slider(args)
         rotate,
         {
             {
-                image = args.image or get_icon("sunny-outline.svg"),
+                image = args.image,
                 resize = true,
                 forced_width = 32,
                 forced_height = 32,

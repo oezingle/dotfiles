@@ -95,7 +95,6 @@ local function create_control_center()
         on_value_change = function(slider_value)
             awful.spawn("xbacklight -set " .. slider_value)
         end,
-        update_command = "",
         update = function()
             return Promise(function(res)
                 spawn("xbacklight -get", function(result)
@@ -104,6 +103,9 @@ local function create_control_center()
                     res(value)
                 end)
             end)
+        end,
+        on_right_click = function()
+            spawn("arandr")
         end
     }
 
