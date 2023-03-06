@@ -69,7 +69,7 @@ end, "pulseaudio audio")
 -- screen locking
 if config.lock_time then
     check_dependencies({ "xautolock" }, function()
-        pidwatch(string.format("xautolock -secure -detectsleep -time %s -locker \"dm-tool lock\"",
+        pidwatch(string.format("xautolock -secure -detectsleep -time %s -locker \"dm-tool lock; systemctl suspend\"",
             tostring(config.lock_time)))
     end, "xautolock screen locking")
 end
