@@ -48,7 +48,8 @@
 
 - default app selector (through rofi?)
 
-- wrap configuration in get_config() which does typechecking / makes refactors more easy
+- configuration interface
+	- webserver? for shits and giggles?
 
 - remove dropdown widget
 

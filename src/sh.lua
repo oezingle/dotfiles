@@ -18,7 +18,7 @@ local function pidwatch(command, silent)
 
     awesome.connect_signal("exit", function()
         -- -pid = kill group
-        awesome.kill(-pid, awesome.unix_signal['SIGTERM'])
+        awesome.kill(-pid, awesome.unix_signal.SIGTERM)
     end)
 end
 

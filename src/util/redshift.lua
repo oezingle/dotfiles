@@ -33,7 +33,7 @@ end
 
 function redshift.kill()
     if redshift.pid ~= nil then
-        awesome.kill(-redshift.pid, awesome.unix_signal['SIGTERM'])
+        awesome.kill(-redshift.pid, awesome.unix_signal.SIGTERM)
 
         redshift.pid = nil
     end
