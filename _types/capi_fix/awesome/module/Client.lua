@@ -82,7 +82,9 @@
 
 ---@alias Client CClient | InstanceSignalAble<ClientSignal>
 
----@class ClientModule
+---@class CClientModule
 ---@field focus Client|nil The focused client or nil (in case there is none).
 ---@field instances fun(): integer Get the number of instances. This includes closed clients
 ---@field get fun(screen: Screen?, stacked: boolean?): Client[] Get all clients into a table.
+
+---@alias ClientModule CClientModule | ClassSignalAble<ClientSignal>

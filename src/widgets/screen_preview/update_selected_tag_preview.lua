@@ -205,6 +205,11 @@ local function update_selected_tag_preview(s, preview_width, preview_height)
                 -- If the mouse isn't pressed, check if there's a tag preview that the client can be moved into
                 local hover_widgets = mouse.current_widgets
 
+                -- Should never happen, but mouse.current_widgets needs check nil
+                if not hover_widgets then
+                    return true
+                end
+
                 for _, hover_widget in ipairs(hover_widgets) do
                     if hover_widget.get_children_by_id and #hover_widget:get_children_by_id("tag-preview") > 0 then
                         local tag_preview = hover_widget

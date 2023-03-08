@@ -25,5 +25,7 @@
 
 ---@alias Tag CTag | InstanceSignalAble<TagSignal>
 
----@class TagModule
+---@class CTagModule
 ---@field instances fun(): integer Get the number of instances. This includes removed tags
+
+---@alias TagModule CTagModule | ClassSignalAble<TagSignal>

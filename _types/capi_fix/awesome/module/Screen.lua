@@ -31,10 +31,12 @@
 
 ---@alias FakeScreen CFakeScreen | InstanceSignalAble<ScreenSignal>
 
----@class ScreenModule
+---@class CScreenModule
 ---@field primary Screen The primary screen
 ---@field instances fun(): integer Get the number of instances. This includes removed screens
 ---@field screen fun(): fun(): Screen Iterate over screens
 ---@field count fun(): integer Get the number of screens
 ---@field fake_add fun(x: integer, y: integer, width: integer, height: integer): FakeScreen
 ---@field set_auto_dpi_enabled fun(enabled: boolean) Enable the automatic calculation of the screen DPI (experimental). [link](https://awesomewm.org/doc/api/classes/screen.html#screen:set_auto_dpi_enabled)
+
+---@alias ScreenModule CScreenModule | ClassSignalAble<ScreenSignal> | fun(): Screen https://awesomewm.org/doc/api/classes/screen.html

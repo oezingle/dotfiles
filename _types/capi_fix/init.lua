@@ -14,21 +14,23 @@
 ---@type Awesome
 awesome = awesome or {}
 
----@type ClientModule | ClassSignalAble<ClientSignal>
+---@type ClientModule
 client = client or {}
 
----@type ScreenModule | ClassSignalAble<ScreenSignal> | fun(): Screen https://awesomewm.org/doc/api/classes/screen.html
+---@type ScreenModule
 screen = screen or {}
 
 ---@type Root
 root = root or {}
 
----@type TagModule | ClassSignalAble<TagSignal>
+---@type TagModule
 tag = tag or {}
 
 ---@type Mouse
 mouse        = mouse or {}
 
-
+---@type Mousegrabber
 mousegrabber = mousegrabber or {}
+
+---@type ButtonModule
 button       = button or {}
