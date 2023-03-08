@@ -1,9 +1,9 @@
 ---@meta
 
 ---@class Coordinates
----@field x number
----@field y number
+---@field x integer
+---@field y integer
 
 ---@class Geometry : Coordinates
----@field width number
----@field height number
+---@field width integer
+---@field height integer
