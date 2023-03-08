@@ -7,3 +7,6 @@
 ---@class Geometry : Coordinates
 ---@field width integer
 ---@field height integer
+
+---@class GeometryWithWidget : Geometry
+---@field widget Widget
