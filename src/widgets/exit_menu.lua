@@ -235,6 +235,7 @@ awesome.connect_signal(
 	'module::exit_screen:show',
 	function()
 		for s in screen do
+			---@diagnostic disable-next-line:undefined-field
 			s.exit_screen.visible = false
 		end
 		awful.screen.focused().exit_screen.visible = true
@@ -248,6 +249,7 @@ awesome.connect_signal(
 		update_greeter_msg()
 		exit_screen_grabber:stop()
 		for s in screen do
+			---@diagnostic disable-next-line:undefined-field
 			s.exit_screen.visible = false
 		end
 	end

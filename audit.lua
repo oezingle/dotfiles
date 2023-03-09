@@ -1,4 +1,3 @@
-local cli = require("lib.test.cli")
 local fs  = require("src.util.fs")
 
 local spawn = require("src.agnostic.spawn")

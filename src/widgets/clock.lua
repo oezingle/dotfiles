@@ -43,7 +43,7 @@ local function clock_widget(args)
 		timer_function = function()
 			local ordinal = nil
 
-			local day = os.date('%d')
+			local day = tostring(os.date('%d'))
 			local month = os.date('%B')
 
 			local first_digit = string.sub(day, 0, 1)

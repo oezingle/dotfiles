@@ -2,7 +2,7 @@
 
 ---@alias ClientSignal "focus" | "list" | "swapped" | "manage" | "button::press" | "button::release" | "mouse::enter" | "mouse::leave" | "mouse::move" | "property::window" | "request::activate" | "request::geometry" | "request::tag" | "request::urgent" | "tagged" | "unfocus" | "unmanage" | "untagged" | "raised" | "lowered" | "property::size" | "property::position" | "property::floating_geometry" | "request::titlebars" | "marked" | "unmarked"
 
----@class CClient
+---@class CClient : table<string, any>
 ---@field window string The X window id.
 ---@field name string The client title.
 ---@field skip_taskbar boolean True if the client does not want to be in taskbar.
@@ -79,6 +79,10 @@
 ---@field to_selected_tags fun(self: CClient) Tag a client with the set of current tags
 ---@field get_transient_for_matching fun(self: CClient, matcher: fun(c: CClient): boolean): CClient? Get a matching transient_for client if any
 ---@field is_transient_for fun(self: CClient, c: CClient): boolean Is this client transient for another one?
+---@field titlebar_top fun(self: CClient): unknown, number Get the space used by the top titlebar
+---@field titlebar_left fun(self: CClient): unknown, number Get the space used by the left titlebar
+---@field titlebar_right fun(self: CClient): unknown, number Get the space used by the right titlebar
+---@field titlebar_bottom fun(self: CClient): unknown, number Get the space used by the bottom titlebar
 
 ---@alias Client CClient | InstanceSignalAble<ClientSignal>
 

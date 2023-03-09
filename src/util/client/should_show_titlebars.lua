@@ -6,8 +6,8 @@ local function should_show_titlebars(c)
     -- stupidest fix ever: client.request::titlebars is only called for windows that request titlebars, 
     -- and is never explicitly called, so I can just set boolean c.has_titlebar
 
+    ---@diagnostic disable-next-line:undefined-field
     return (not c.requests_no_titlebar) and c.has_titlebar and client_or_tag_floating(c)
 end
 
 return should_show_titlebars
-    

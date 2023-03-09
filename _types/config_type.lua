@@ -37,6 +37,7 @@
 ---@field editor string
 ---@field file_manager string
 ---@field compositor string|nil
+---@field rofi string
 
 ---@class DotfileConfigurationGimmicks
 ---@field gestures boolean

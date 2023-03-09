@@ -2,7 +2,7 @@ local class = require("lib.30log")
 local pack = require("src.agnostic.version.pack")
 local unpack = require("src.agnostic.version.unpack")
 
----@alias PromiseCallback fun(resolve: function, reject: function?)
+---@alias PromiseCallback fun(resolve: function, reject: function?) | nil
 
 ---@class Promise Similar to JavaScript promises
 ---@field _private { callback: PromiseCallback, value: any, was_resolved: boolean }

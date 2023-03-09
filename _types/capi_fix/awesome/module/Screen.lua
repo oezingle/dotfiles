@@ -2,7 +2,7 @@
 
 ---@alias ScreenSignal "primary_changed" | "added"| "removed"| "list"| "swapped"| "tag::history::update"
 
----@class CScreen
+---@class CScreen : table
 ---@field geometry Geometry The screen coordinates. [Link](https://awesomewm.org/doc/api/classes/screen.html#screen.geometry)
 ---@field index integer The internal screen number. The indeces are a continuous sequence from 1 to screen.count(). It is NOT related to the actual screen position relative to each other. 1 is NOT necessarily the primary screen. When screens are added and removed indices CAN change. [Link](https://awesomewm.org/doc/api/classes/screen.html#screen.index)
 ---@field outputs { [string]: { mm_width: integer, mm_height: integer } }
