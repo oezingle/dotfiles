@@ -15,9 +15,7 @@
 
 - wallpapers
 	- partially looks like shit with light wallpaper
-	- wal for svg's
-
-- custom polkit
+		- wal for svg's
 
 - more unit tests
 
@@ -41,8 +39,6 @@
 	- clicking an appmenu item doesn't close the menu
 
 - diagnostic / debug features in system menu?
-
-- notification center doesn't auto close unless you click in it and then out of it
 
 - time doesn't localize
 

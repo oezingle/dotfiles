@@ -5,7 +5,6 @@
 ---@alias Surface table
 ---@alias GearsShape function
 ---@alias Struts { right: integer, left: integer, top: integer, bottom: integer }
----@alias Button table
 ---@alias Key table
 ---@alias Wibox table
 ---@alias Widget table
