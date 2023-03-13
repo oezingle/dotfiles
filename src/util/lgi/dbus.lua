@@ -31,7 +31,7 @@ local dbus = {}
 
 
 --- Get the Gio.BusType.SESSION or Gio.BusType.SYSTEM DBus
----@param bus_type string|nil
+---@param bus_type string?
 ---@return GDBusConnection GDBusConnection
 function dbus.get_bus(bus_type)
     if type(bus_type) == "nil" then

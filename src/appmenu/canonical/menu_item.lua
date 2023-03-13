@@ -1,6 +1,6 @@
 local class = require("lib.30log")
 local flags = require("src.appmenu.flags")
-local gvariant_ipairs = require("src.appmenu.gvariant_ipairs")
+local gvariant_ipairs = require("src.util.lgi.gvariant_ipairs")
 
 -- TODO add back the LayoutChanged signal to deal with layout changing while the system sleeps
 

@@ -19,7 +19,7 @@ local function error_log(message, startup)
         message = "==== ENCOUNTERED DURING STARTUP ====\n" .. message
     end
 
-    fs.write(error_dir .. "report_" .. time.utc(), message)
+    fs.write(error_dir .. "report_" .. time.utc() .. ".txt", message)
 end
 
 return error_log

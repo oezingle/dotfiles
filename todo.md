@@ -9,10 +9,6 @@
 
 - use 30log for widgets. somehow
 
-- applets
-	- Network Manager
-		- Rebuild as frontend to gnome network apps?
-
 - wallpapers
 	- partially looks like shit with light wallpaper
 		- wal for svg's
@@ -45,11 +41,10 @@
 - default app selector (through rofi?)
 
 - configuration interface
-	- webserver? for shits and giggles?
 
 - remove dropdown widget
 
-- translation tables
+- translations everywhere
 
 - Xorg intel config
 	- [disable TearFree, TripleBuffer, SwapbuffersWait](https://wiki.archlinux.org/title/Intel_graphics#Disabling_TearFree,_TripleBuffer,_SwapbuffersWait)

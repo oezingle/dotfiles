@@ -1,5 +1,5 @@
 local class = require("lib.30log")
-local gvariant_ipairs = require("src.appmenu.gvariant_ipairs")
+local gvariant_ipairs = require("src.util.lgi.gvariant_ipairs")
 
 -- TODO greyed out options?
 

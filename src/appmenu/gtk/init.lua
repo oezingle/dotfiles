@@ -1,7 +1,7 @@
 local agnostic_spawn = require("src.agnostic.spawn")
 local agnostic_print = require("src.agnostic.print")
 local gtk_menu_item = require("src.appmenu.gtk.menu_item")
-local dbus = require("src.appmenu.dbus")
+local dbus = require("src.util.lgi.dbus")
 local flags = require("src.appmenu.flags")
 --[[
 local Promise = require("src.util.Promise")

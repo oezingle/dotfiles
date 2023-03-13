@@ -7,7 +7,7 @@ local GVariant = GLib.Variant
 local canonical_menu_item = require("src.appmenu.canonical.menu_item")
 
 local agnostic_print = require("src.agnostic.print")
-local dbus = require("src.appmenu.dbus")
+local dbus = require("src.util.lgi.dbus")
 
 local app_menu_proxy, err = dbus.new_smart_proxy(
     "com.canonical.AppMenu.Registrar",

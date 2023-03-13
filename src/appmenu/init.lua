@@ -17,7 +17,6 @@ local gdebug = require("gears.debug")
 
 local directories = require("src.util.fs.directories")
 
--- TODO assumes a folder
 pidwatch(directories.config .. "src/appmenu/server/main")
 
 local appmenu_button          = require("src.appmenu.widget.appmenu_button")
