@@ -132,8 +132,6 @@ function gtk_menu_item:init(menu_proxy, actions_proxy, subscription_group, label
         -- invalidate children cache
         self._private.children = {}
     end)
-
-    return self
 end
 
 return gtk_menu_item

@@ -103,8 +103,6 @@ function canonical_menu_item:init(proxy, id, label)
     self._private = {}
 
     self._private.proxy = proxy
-
-    return self
 end
 
 return canonical_menu_item

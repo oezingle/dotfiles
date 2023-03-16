@@ -2,6 +2,7 @@
 
 local pack = require("src.agnostic.version.pack")
 local unpack = require("src.agnostic.version.unpack")
+local native_error = require("src.util.lgi.native_error")
 
 -- TODO SmartTable.method_async - abusing the AwesomeWM mainloop does not fly!
 
@@ -61,7 +62,8 @@ end
 ---@param path string dbus path string
 ---@param interface string dbus interface to employ over said path
 dbus.new_proxy_with_connection = function(connection, service, path, interface)
-    local res, err = Gio.DBusProxy.new_sync(
+    return native_error(
+        Gio.DBusProxy.new_sync,
         connection,
         {},
         nil,
@@ -71,12 +73,6 @@ dbus.new_proxy_with_connection = function(connection, service, path, interface)
         nil,
         nil
     )
-
-    if err then
-        error(err)
-    end
-
-    return res, err
 end
 
 --- Construct a SmartProxy
@@ -125,6 +121,7 @@ function dbus.smart_proxy(proxy)
             __index = function(_, key)
                 ---@param variant GVariant gvariant argument value
                 return function(variant)
+                    --[[
                     local res, err = proxy:call_sync(
                         key,
                         variant,
@@ -139,6 +136,18 @@ function dbus.smart_proxy(proxy)
                     end
 
                     return res
+                    ]]
+
+                    return native_error(
+                        proxy.call_sync,
+                        proxy,
+                        key,
+                        variant,
+                        {},
+                        -1,
+                        nil,
+                        nil
+                    )
                 end
             end
         }),

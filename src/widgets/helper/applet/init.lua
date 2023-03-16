@@ -24,8 +24,6 @@ function applet:init(widget, dependencies)
     self:set_dependencies(dependencies)
 
     self.widget = widget
-
-    return self
 end
 
 function applet:set_dependencies(deps)

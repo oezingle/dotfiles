@@ -47,8 +47,6 @@ function dropdown:init (args)
     self.icon_open = args.icon_open or get_icon("arrow/caret-up-outline.svg")
     
     self.__index = self
-
-    return self
 end
 
 function dropdown:get_button()

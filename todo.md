@@ -15,6 +15,9 @@
 
 - more unit tests
 
+- improve powertop 
+	- https://askubuntu.com/questions/678779/powertop-auto-tune-without-messing-with-usb-and-touchpad
+
 - Use Promises
 
 - limit hovered clients to 1 while using screen preview
@@ -48,3 +51,10 @@
 
 - Xorg intel config
 	- [disable TearFree, TripleBuffer, SwapbuffersWait](https://wiki.archlinux.org/title/Intel_graphics#Disabling_TearFree,_TripleBuffer,_SwapbuffersWait)
+
+- Optimize
+	- https://www.lua.org/gems/sample.pdf
+	- http://lua-users.org/wiki/OptimisationTips
+	- http://lua-users.org/wiki/OptimisationCodingTips
+	- http://lua-users.org/wiki/OptimisingUsingLocalVariables
+	- http://lua-users.org/wiki/MinimisingClosures

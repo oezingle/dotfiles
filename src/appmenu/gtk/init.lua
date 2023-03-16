@@ -37,46 +37,6 @@ local function get_gtk_menu_info(window_id, callback)
     if existing_info then
         callback(existing_info)
     else
-        --[[
-        -- TODO throws an error somewhere
-        Promise.resolve()
-            :after(function()
-                return spawn_promise('xprop -id ' ..
-                    tostring(window_id) .. ' _GTK_UNIQUE_BUS_NAME | grep -oP "\\"\\S+\\"" | grep -oP "[^\\"]+"')
-            end)
-            :after(function(result)
-                local service = result:sub(1, -2)
-
-                return #service ~= 0 and service
-            end)
-            :after(function(service)
-                if not service then
-                    error("No service")
-                end
-
-                return spawn_promise('xprop -id ' ..
-                    tostring(window_id) .. ' _GTK_MENUBAR_OBJECT_PATH | grep -oP "\\"\\S+\\"" | grep -oP "[^\\"]+"',
-                    service)
-            end)
-            :after(function(result, service)
-                local menu_path = result:sub(1, -2)
-
-                local info = {
-                    service = service,
-                    path = menu_path
-                }
-
-                gtk_menu_info_cache[window_id] = info
-
-                callback(info)
-
-                return info
-            end)
-            :catch(function ()
-                callback(nil)
-            end)
-            ]]
-
         agnostic_spawn(
             'xprop -id ' .. tostring(window_id) .. ' _GTK_UNIQUE_BUS_NAME | grep -oP "\\"\\S+\\"" | grep -oP "[^\\"]+"',
             function(result)

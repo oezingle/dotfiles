@@ -22,3 +22,6 @@
 [submodule "lib/profiler"]
 	path = lib/profiler
 	url = https://github.com/charlesmallah/lua-profiler
+[submodule "lib/argparse"]
+	path = lib/argparse
+	url = https://github.com/luarocks/argparse
