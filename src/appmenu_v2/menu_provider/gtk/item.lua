@@ -200,4 +200,11 @@ function gtk_menu_item:get_children()
     end)
 end
 
+function gtk_menu_item:has_children()
+    return self:get_children()
+        :after(function(children)
+            return next(children) ~= nil
+        end)
+end
+
 return gtk_menu_item

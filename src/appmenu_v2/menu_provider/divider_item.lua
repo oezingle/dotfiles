@@ -16,4 +16,8 @@ function divider_item.get_children()
     return Promise.resolve({})
 end
 
+function divider_item.has_children()
+    return Promise.resolve(false)
+end
+
 return divider_item

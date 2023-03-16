@@ -11,6 +11,7 @@ local menu_provider = class("menu provider", {
 ---@class MenuItem : LogBaseFunctions
 ---@field activate fun(self: MenuItem): Promise<nil>
 ---@field get_children fun(self: MenuItem): Promise<MenuItem[]>
+---@field has_children fun(self: MenuItem): Promise<boolean>
 ---@field label string?
 
 ---@alias MenuSection { type: "section", items: MenuItem[] }

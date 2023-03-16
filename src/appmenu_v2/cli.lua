@@ -1,11 +1,11 @@
 local argparse = require("lib.argparse")
 local Promise  = require("src.util.Promise")
 
-local spawn = require("src.agnostic.spawn.promise")
-local appmenu = require("src.appmenu_v2.appmenu")
+local spawn    = require("src.agnostic.spawn.promise")
+local appmenu  = require("src.appmenu_v2.appmenu")
 
 ---@param menu_items MenuItem[]
----@return fun(): MenuItem
+---@return fun(): MenuItem|nil
 local function ichildren(menu_items)
     local i = nil
 
@@ -13,6 +13,10 @@ local function ichildren(menu_items)
 
     return function()
         i, menu_item = next(menu_items, i)
+
+        if not menu_item then
+            return nil
+        end
 
         if not menu_item.label then
             error("Child menu item doesn't have a label")
@@ -38,13 +42,9 @@ local function recursive_menu_finder(menu, path, activate)
                 if #path > 0 then
                     local wanted_name = path:match("([^%.]+)[%.]?")
 
-                    print(wanted_name)
-
                     for menu_item in ichildren(menu_items) do
                         if menu_item.label:gsub(" ", "_") == wanted_name then
                             local new_path = path:gsub("[^%.]+.?", "", 1)
-
-                            print(new_path)
 
                             return recursive_menu_finder(menu_item, new_path, activate)
                         end
@@ -52,11 +52,30 @@ local function recursive_menu_finder(menu, path, activate)
 
                     print("No menu item found by path segment " .. wanted_name)
                 else
-                    print("Menu Items:")
+                    print("\nMenu Items:")
 
-                    for menu_item in ichildren(menu_items) do
-                        print("", menu_item.label)
+                    local next_menu_item = ichildren(menu_items)
+
+                    local function recurse()
+                        local menu_item = next_menu_item()
+
+                        if not menu_item then
+                            return
+                        end
+
+                        menu_item:has_children()
+                            :after(function(has_children)
+                                local children = has_children and ">" or " "
+
+                                print("", "|" .. menu_item.label, children)
+                            end)
+                            :after(recurse)
+                            :catch(function(err)
+                                print("err", err)
+                            end)
                     end
+
+                    recurse()
                 end
             end)
     end
@@ -74,7 +93,7 @@ end
 local function main()
     local parser = argparse("cli.lua", "A dirty command line to test GTK/Canonical DBus menus")
 
-    parser:option("-p --path", "the menu items to navigate through, using periods as seperators. ie File.Open_Recent")
+    parser:option("-p --path", "the menu items to navigate through, using periods as seperators. ie File.Open_Recent", "")
     parser:option("-w --window", "The X window id")
     parser:flag("-a --activate", "Activate the resulting menu item")
 
