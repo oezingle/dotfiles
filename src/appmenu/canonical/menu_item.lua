@@ -57,14 +57,11 @@ local function canonical_get_children(i_menu_item)
             end
         end
 
-        local new_menu_item = canonical_menu_item.init(
-            {},
+        local new_menu_item = canonical_menu_item(
             i_menu_item._private.proxy,
             child_id,
             child_label
         )
-
-        setmetatable(new_menu_item, {__index = canonical_menu_item})
 
         table.insert(
             menu_item_children,

@@ -11,6 +11,8 @@ local get_preferred_size = require("src.widgets.helper.get_preferred_size")
 
 local pack               = require("src.agnostic.version.pack")
 
+-- TODO rewrite with 30log class for RadialMenu
+
 -- small layout that fits a widget very badly so that it's centered
 local center_badly       = Class({})
 
@@ -281,9 +283,7 @@ local function radial_menu_contents(children, use_mouse)
 
     --- point to the closest menu item
     mousegrabber.run(
-        function()
-            local coords = mouse.coords()
-
+        function(coords)
             if mouse.current_widget_geometries then
                 local closest_child
                 local closest_child_dist = 32767

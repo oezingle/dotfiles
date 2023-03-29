@@ -54,26 +54,41 @@ end
 local function Promise_settle(self, value, reject)
     local reject = reject or false
 
-    -- Check if the returned value is a Promise,
-    -- in which case that Promise is passed down to this scope
-    if #value == 1 and type(value) == "table" and type(value[1]) == "table" and value[1].__is_a_promise then
-        local child = value[1]
-
-        if child.fulfilled then
-            -- set value now
-            value = child._private.value
-        else
-            -- throw in the child promise
-            self.next = child
-        end
-    end
-
-    self._private.value = value
-
     -- stupid simple solution but it works
     self._private.was_resolved = not reject
 
     self.fulfilled = true
+
+    -- Check if the returned value is a Promise,
+    -- in which case that Promise is passed down to this scope
+    if #value == 1 and type(value) == "table" and type(value[1]) == "table" and value[1].__is_a_promise then
+        ---@type Promise
+        local child = value[1]
+
+        if child.fulfilled then
+            -- set value now
+            self._private.value = child._private.value
+        else
+            -- TODO this doesn't work
+
+            --- Attach returned promise's chain into this chain
+            if self.next then
+                local last = child
+                while last.next do
+                    last = last.next
+                end
+                last.next = self.next
+                last.next.prev = last
+            end
+
+            -- throw in the child promise
+            self.next = child
+
+            return
+        end
+    else
+        self._private.value = value
+    end
 
     if self.next and not self.next.triggered then
         self.next:_trigger()
@@ -134,7 +149,7 @@ function Promise:chain(after, catch)
             -- :after's errors should be handled by :catch
 
             local after_succeded, after_res = xpcall(function()
-                return pack(after(unpack(arguments)))
+                return pack(after(unpack(arguments or {})))
             end, function(err) return err end)
 
             if after_succeded then

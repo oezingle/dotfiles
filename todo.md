@@ -18,8 +18,6 @@
 - improve powertop 
 	- https://askubuntu.com/questions/678779/powertop-auto-tune-without-messing-with-usb-and-touchpad
 
-- Use Promises
-
 - limit hovered clients to 1 while using screen preview
 	- should fix mousegrabber issue
 
@@ -58,3 +56,6 @@
 	- http://lua-users.org/wiki/OptimisationCodingTips
 	- http://lua-users.org/wiki/OptimisingUsingLocalVariables
 	- http://lua-users.org/wiki/MinimisingClosures
+
+- cool button library
+	- https://github.com/streetturtle/awesome-buttons

@@ -27,7 +27,6 @@ local dbus = {}
 ---@field connect_signal fun(name: string, fn: fun(parameters: GVariant, sender_name: string): nil): nil connect dbus signals
 ---@field disconnect_signal fun(name: string, fn: fun(parameters: GVariant, sender_name: string): nil): nil disconnect dbus signals
 
-
 --------------------------------------------------------------------------------
 
 
@@ -152,6 +151,7 @@ function dbus.smart_proxy(proxy)
             end
         }),
 
+        -- TODO switch to __newindex and __index metatable events you fucking cunt
         property = {
             get = function(name)
                 return proxy:get_cached_property(name)

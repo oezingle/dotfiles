@@ -4,7 +4,7 @@ local GVariant = require("src.util.lgi.GVariant")
 local Promise = require("src.util.Promise")
 local gvariant_ipairs = require("src.util.lgi.gvariant_ipairs")
 
-local divider_item = require("src.appmenu_v2.menu_provider.divider_item")
+local divider_item = require("src.appmenu_v2.menu_provider.divider")
 
 -- TODO calling org.gtk.Menus.End is good practice, but not required
 -- TODO menu number is hard coded here as 0

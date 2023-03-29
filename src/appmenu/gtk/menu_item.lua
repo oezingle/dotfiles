@@ -76,16 +76,13 @@ local function gtk_get_children(i_menu_item)
 
         local submenu_subscription = submenu and submenu[1] or nil
 
-        local new_menu_item = gtk_menu_item.init(
-            {},
+        local new_menu_item = gtk_menu_item(
             i_menu_item._private.menu_proxy,
             i_menu_item._private.actions_proxy,
             submenu_subscription,
             label,
             action
         )
-
-        setmetatable(new_menu_item, { __index = gtk_menu_item })
 
         table.insert(
             i_menu_item._private.children,

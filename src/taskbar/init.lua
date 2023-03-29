@@ -17,6 +17,8 @@ local clock_widget          = require("src.widgets.clock")
 local create_tag_switcher   = require("src.taskbar.tag_switcher")
 local create_tasklist       = require("src.taskbar.tasklist")
 
+local create_appmenu_v2 = require("src.appmenu_v2.widget")
+
 local unpack = require("src.agnostic.version.unpack")
 
 local function color_border_widget(args)
@@ -130,6 +132,7 @@ local function create_taskbar()
                 {
                     is_primary and system_status(),
                     is_primary and create_appmenu(),
+                    is_primary and create_appmenu_v2(),
 
                     layout = wibox.layout.fixed.horizontal,
                     spacing = 5

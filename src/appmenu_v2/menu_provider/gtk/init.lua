@@ -1,4 +1,3 @@
--- TODO not complete
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
@@ -17,38 +16,6 @@ local gtk_menu = base:extend("GTKMenu", {
         __mode = "v"
     })
 })
-
---[[
-[
-    (0, 0, [{':section': (0, 1)}]),
-    (0, 1, [{':section': (0, 2)}]),
- (0,
-  2,
-  [{':submenu': (1, 0),
-    'action': 'unity.-File',
-    'label': '_File',
-    'submenu-action': 'unity.-File-0'},
-   {':submenu': (2, 0),
-    'action': 'unity.-Edit',
-    'label': '_Edit',
-    'submenu-action': 'unity.-Edit-0'},
-   {':submenu': (3, 0),
-    'action': 'unity.-View',
-    'label': '_View',
-    'submenu-action': 'unity.-View-0'},
-   {':submenu': (4, 0),
-    'action': 'unity.-Terminal',
-    'label': '_Terminal',
-    'submenu-action': 'unity.-Terminal-0'},
-   {':submenu': (5, 0),
-    'action': 'unity.T-abs',
-    'label': 'T_abs',
-    'submenu-action': 'unity.T-abs-0'},
-   {':submenu': (6, 0),
-    'action': 'unity.-Help',
-    'label': '_Help',
-    'submenu-action': 'unity.-Help-0'}])]
-]]
 
 ---@param client Client client to get the menu of
 ---@return Promise<MenuInfo|nil>

@@ -38,6 +38,7 @@ local naughty = require("naughty")
 
 local config = require("config")
 
+-- TODO why the fuck
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:

@@ -118,8 +118,6 @@ local function main()
                     else
                         print("No appmenu")
                     end
-
-                    local path = ""
                 end)
                 :catch(function(err)
                     print("err", err)
