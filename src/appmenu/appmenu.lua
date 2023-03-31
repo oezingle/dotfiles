@@ -1,25 +1,50 @@
 local Promise = require("src.util.Promise")
+local start_server = require("src.appmenu.start_server")
 
-local canonical_menu = require("src.appmenu_v2.menu_provider.canonical")
-local gtk_menu = require("src.appmenu_v2.menu_provider.gtk")
+local canonical_menu = require("src.appmenu.menu_provider.canonical")
+local gtk_menu = require("src.appmenu.menu_provider.gtk")
 
 local traceback = debug.traceback
 
 -- TODO icons - kde specialty?
 
+-- TODO re-add canonical registrar server
+
 -- visual for if a menu item has children
 -- - MenuItem:has_children() - saves system from doing constant reloads to check for child items under canonical
+
+---@alias AppmenuConfig { menu_template: { vertical: WidgetTemplate, horizontal: WidgetTemplate }?, button_template: WidgetTemplate? }
 
 ---@class Appmenu
 ---@field client Client|nil
 ---@field providers MenuProvider[]
+---@field config AppmenuConfig
 local appmenu = {
     client = nil,
     providers = {
         gtk_menu,
         canonical_menu
+    },
+    config = {
+        menu_template = {}
     }
 }
+
+-- TODO I don't really like this. It's anti-pattern
+start_server()
+
+---@param config AppmenuConfig
+function appmenu.set_config(config)
+    --- Overwrite only keys that exist
+    for k, v in pairs(config) do
+        appmenu.config[k] = v
+    end
+end
+
+---@return AppmenuConfig
+function appmenu.get_config()
+    return appmenu.config
+end
 
 --- Change the client the appmenu uses
 ---@param client Client | nil

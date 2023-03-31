@@ -1,12 +1,50 @@
 ---@meta
 
+---@enum UnixSignal
+local unix_signal = {
+    SIGCHLD = 17,
+    SIGPOLL = 29,
+    SIGHUP = 1,
+    SIGSTKFLT = 16,
+    SIGALRM = 14,
+    SIGSTOP = 19,
+    SIGTTOU = 22,
+    SIGPROF = 27,
+    SIGUSR1 = 10,
+    SIGTERM = 15,
+    SIGIOT = 6,
+    SIGSYS = 31,
+    SIGXFSZ = 25,
+    SIGXCPU = 24,
+    SIGTRAP = 5,
+    SIGVTALRM = 26,
+    SIGILL = 4,
+    SIGQUIT = 3,
+    SIGTTIN = 21,
+    SIGURG = 23,
+    SIGFPE = 8,
+    SIGPIPE = 13,
+    SIGABRT = 6,
+    SIGSEGV = 11,
+    SIGPWR = 30,
+    SIGIO = 29,
+    SIGBUS = 7,
+    SIGWINCH = 28,
+    SIGCONT = 18,
+    SIGINT = 2,
+    SIGUSR2 = 12,
+    SIGCLD = 17,
+    SIGTSTP = 20,
+    SIGKILL = 9
+}
+
 --- https://awesomewm.org/doc/api/libraries/awesome.html
 ---@class CAwesome
 ---@field register_xproperty fun(name: string, type: "string"|"number"|"boolean")
 ---@field quit fun(code: integer?) quit Awesome
 ---@field exec fun(cmd: string) Execute another application, probably a window manager, to replace awesome.
 ---@field restart fun() restart Awesome
----@field kill fun(pid: integer, signal: integer? ) kill a process. 0 and negative values have special meaning. See `man kill`.
+---@field kill fun(pid: integer, signal: UnixSignal? ) kill a process. 0 and negative values have special meaning. See `man kill`.
 ---@field sync fun() Synchronize with the X11 server.
 ---@field pixbuf_to_surface fun(pixbuf: table, path: unknown?): Surface Translate a GdkPixbuf to a cairo image surface.
 ---@field load_image fun(path: string): Surface Load an image from its path and return it as a cairo image

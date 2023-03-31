@@ -1,9 +1,7 @@
 
-local folder_of_this_file = (...):match("(.-)[^%.]+$")
+local gtk_menu_item = require("src.appmenu.menu_provider.gtk.item")
 
-local gtk_menu_item = require(folder_of_this_file .. "gtk.item")
-
-local base = require("src.appmenu_v2.menu_provider.base")
+local base = require("src.appmenu.menu_provider.base")
 local Promise = require("src.util.Promise")
 local dbus = require("src.util.lgi.dbus")
 

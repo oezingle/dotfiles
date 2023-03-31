@@ -1,12 +1,13 @@
-local class               = require("lib.30log")
-local Promise             = require("src.util.Promise")
+local class                 = require("lib.30log")
+local Promise               = require("src.util.Promise")
+local appmenu               = require("src.appmenu.appmenu")
 
-local wibox               = require("wibox")
+local wibox                 = require("wibox")
 
-local folder_of_this_file = (...):match("(.-)[^%.]+$")
+local parse_widget_template = require("src.appmenu.parse_widget_template")
 
----@module 'widget.menu.button'
-local menu_button         = require(folder_of_this_file .. "button")
+---@module 'widget.button'
+local menu_button
 
 ---@class MenuBuilder : LogBaseFunctions
 ---@operator call:MenuBuilder
@@ -17,10 +18,7 @@ local menu_button         = require(folder_of_this_file .. "button")
 ---@field parent MenuButton|nil
 ---@field children MenuButton[]
 ---@field is_hovered boolean
-local menu_builder        = class("MenuWidgetBuilder", {})
-
--- STUPID BAD DEPENDENCY INJECTION
-menu_button.set_menu_builder(menu_builder)
+local menu_builder          = class("MenuWidgetBuilder", {})
 
 function menu_builder:init()
     self.is_hovered = false
@@ -94,18 +92,20 @@ function menu_builder:set_menu_item(menu_item)
     self:get_children()
     ---@param children MenuItem[]
         :after(function(children)
-            self.widget:reset()
+            for _, menu_role in ipairs(self.widget:get_children_by_id("menu-role")) do
+                menu_role:reset()
 
-            self.children = {}
+                self.children = {}
 
-            for i, child in ipairs(children) do
-                local button = menu_button(child)
-                    :set_layout_table(self.layout_table, self.depth)
-                    :set_parent(self)
+                for i, child in ipairs(children) do
+                    local button = menu_button(child)
+                        :set_layout_table(self.layout_table, self.depth)
+                        :set_parent(self)
 
-                self.children[i] = button
+                    self.children[i] = button
 
-                self.widget:add(button:get_widget())
+                    menu_role:add(button:get_widget())
+                end
             end
         end)
         :catch(function(err)
@@ -131,28 +131,29 @@ function menu_builder:connect_signal(name, callback)
     self.widget:connect_signal(name, callback)
 end
 
+local default_vertical = {
+    layout = wibox.layout.fixed.vertical,
+    spacing = 2,
+    id = "menu-role"
+}
+
+local default_horizontal = {
+    layout = wibox.layout.fixed.horizontal,
+    spacing = 2,
+    id = "menu-role"
+}
+
+
 --- Internal function
 ---@param layout_name "vertical" | "horizontal"
 function menu_builder:_create_widget(layout_name)
-    local layout
+    local widget
 
     if layout_name == "vertical" then
-        layout = wibox.layout.fixed.vertical
+        widget = parse_widget_template(appmenu.config.menu_template.vertical or default_vertical)
     else
-        layout = wibox.layout.fixed.horizontal
+        widget = parse_widget_template(appmenu.config.menu_template.horizontal or default_horizontal)
     end
-
-    -- TODO pywal background
-    -- TODO minumum width/height - child that exists only to have a forced size property
-    local widget = wibox.widget {
-        layout = layout,
-        spacing = 2,
-
-        {
-            widget = wibox.widget.textbox,
-            text = "FUCK EM ALL 100000 DEAD COPS"
-        }
-    }
 
     widget:connect_signal("mouse::leave", function()
         self.is_hovered = false
@@ -188,9 +189,15 @@ function menu_builder:leave_children()
     end
 end
 
---- Generate the menu widget.
+--- Get the menu widget.
 function menu_builder:get_widget()
     return self.widget
+end
+
+--- A really stupid function
+---@param menu_button_ MenuButton
+function menu_builder.set_button_builder(menu_button_)
+    menu_button = menu_button_
 end
 
 return menu_builder

@@ -17,24 +17,19 @@
     - KEYBOARD control
         - no navigation code should be linked to signal callbacks
 
-    - ribbon menu and dropdowns should have the same base class
-        - control code at least
-
-    - allow grace periods
-        - mouse moves back to parent menu briefly (<5s) keep it open
-        - switching submenus closes the child immediately
-        - shouldn't have a single 'child' menu that can open, but instead any amount of children? might be a good idea
-        - child menus are stored by parent menus, but track their own timers for grace periods
-
     - keep menu in memory as much as possible
         - limits DBus calls, therefore increasing speed
 ]]
-local appmenu                 = require("src.appmenu_v2.appmenu")
-local fake_menu_item          = require("src.appmenu_v2.menu_provider.fake")
-local menu_widget             = require("src.appmenu_v2.widget.menu.menu")
-local awful                   = require("awful")
+local appmenu        = require("src.appmenu.appmenu")
+local fake_menu_item = require("src.appmenu.menu_provider.fake")
 
 local uppercase_first_letters = require("src.util.uppercase_first_letters")
+
+local menu_builder   = require("src.appmenu.widget.menu")
+local button_builder = require("src.appmenu.widget.button")
+
+button_builder.set_menu_builder(menu_builder)
+menu_builder.set_button_builder(button_builder)
 
 -- TODO multihead?
 ---@param callback fun(tag: Tag): any
@@ -56,7 +51,7 @@ local function set_menu_client(menu, client)
     if appmenu.set_client(client) then
         if not client then
             menu:set_menu_item(nil)
-    
+
             return
         end
 
@@ -89,7 +84,7 @@ local function set_menu_client(menu, client)
                                 fake_menu_item("Quit", function()
                                     client:kill()
                                 end),
-                                fake_menu_item("Appmenu V2")
+                                -- fake_menu_item("Appmenu V2")
                             })
                     })
 
@@ -105,8 +100,13 @@ local function set_menu_client(menu, client)
     end
 end
 
-local function create_appmenu()
-    local menu = menu_widget()
+---@param config AppmenuConfig?
+local function create_appmenu(config)
+    if config then
+        appmenu.set_config(config)
+    end
+
+    local menu = menu_builder()
         :set_layout_table({
             [0] = {
                 layout = "horizontal",
@@ -125,6 +125,7 @@ local function create_appmenu()
     -- appmenu should store its chosen provider and
     -- then be able to call appmenu.reload_provider()
     -- which calls provider.reload() if it exists
+    -- TODO consider provider.on_activate()?
     menu.widget:connect_signal("menu_item::child::activated", function()
         local client = appmenu.client
 
@@ -141,7 +142,14 @@ local function create_appmenu()
     end)
 
     ---@param client Client
-    client.connect_signal("lowered", function(client)
+    client.connect_signal("unfocus", function(client)
+        if not client:isvisible() and appmenu.get_client() == client then
+            set_menu_client(menu, nil)
+        end
+    end)
+
+    ---@param client Client
+    client.connect_signal("unmanage", function(client)
         if appmenu.get_client() == client then
             set_menu_client(menu, nil)
         end
@@ -152,10 +160,6 @@ local function create_appmenu()
         if not appmenu.get_client() then
             set_menu_client(menu, client)
         end
-    end)
-
-    screen.connect_signal("tag::history::update", function ()
-        set_menu_client(menu, nil)
     end)
 
     return menu:get_widget()

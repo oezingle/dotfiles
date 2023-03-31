@@ -2,7 +2,7 @@ local argparse = require("lib.argparse")
 local Promise  = require("src.util.Promise")
 
 local spawn    = require("src.agnostic.spawn.promise")
-local appmenu  = require("src.appmenu_v2.appmenu")
+local appmenu  = require("src.appmenu.appmenu")
 
 ---@param menu_items MenuItem[]
 ---@return fun(): MenuItem|nil

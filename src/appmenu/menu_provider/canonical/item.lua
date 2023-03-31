@@ -4,7 +4,7 @@ local GVariant = require("src.util.lgi.GVariant")
 local Promise = require("src.util.Promise")
 local gvariant_ipairs = require("src.util.lgi.gvariant_ipairs")
 
-local divider_item = require("src.appmenu_v2.menu_provider.divider")
+local divider_item = require("src.appmenu.menu_provider.divider")
 
 ---@class CanonicalMenuItem : MenuItem
 ---@field activate fun(self: MenuItem): Promise<nil>

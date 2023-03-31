@@ -1,11 +1,10 @@
-local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
-local base = require("src.appmenu_v2.menu_provider.base")
+local base = require("src.appmenu.menu_provider.base")
 local Promise = require("src.util.Promise")
 local dbus = require("src.util.lgi.dbus")
 
 local GVariant = require("src.util.lgi.GVariant")
-local canonical_menu_item = require(folder_of_this_file .. "canonical.item")
+local canonical_menu_item = require("src.appmenu.menu_provider.canonical.item")
 
 local registrar = dbus.new_smart_proxy(
     "com.canonical.AppMenu.Registrar",

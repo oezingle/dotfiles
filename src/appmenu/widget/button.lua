@@ -1,4 +1,5 @@
 local class     = require("lib.30log")
+local parse_widget_template = require("src.appmenu.parse_widget_template")
 
 local wibox     = require("wibox")
 local awful     = require("awful")
@@ -9,7 +10,9 @@ local no_scroll = require("src.widgets.helper.no_scroll")
 local wal       = require("src.util.wal")
 local config    = require("config")
 
----@module "widget.menu.menu"
+local appmenu = require("src.appmenu.appmenu")
+
+---@module "widget.menu"
 local menu_builder
 
 ---@alias MenuLayout { layout: "vertical" | "horizontal", popup_direction: Direction, click_focus: boolean?, has_focus: boolean? }
@@ -187,6 +190,18 @@ function menu_button:leave(force)
     self.widget.bg = nil
 end
 
+local default_widget = {
+    layout = wibox.container.background,
+    {
+        layout = wibox.container.margin,
+        margins = 2,
+        {
+            widget = wibox.widget.textbox,
+            id = "text-role"
+        }
+    }
+}
+
 function menu_button:_create_widget()
     local button = nil
 
@@ -196,24 +211,11 @@ function menu_button:_create_widget()
             margins = 5
         }
     else
-        button = wibox.widget {
-            layout = wibox.container.background,
-            {
-                layout = wibox.container.margin,
-                margins = 2,
-                {
-                    widget = wibox.widget.textbox,
-                    font = get_font(13),
-                    markup = self:_format_label()
-                }
-            }
-        }
+        button = parse_widget_template(appmenu.get_config().button_template or default_widget)
 
-        wal.on_change(function(scheme)
-            button.fg = scheme.special.foreground
-        end)
-
-        --- TODO deactivate siblings
+        for _, child in ipairs(button:get_children_by_id("text-role")) do
+            child.markup = self:_format_label()                            
+        end
 
         button:connect_signal("button::press", no_scroll(function()
             if self.click_focus then

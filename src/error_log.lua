@@ -1,4 +1,6 @@
 
+-- TODO set upper limit for crash log count
+
 local fs = require("src.util.fs")
 
 local cache_dir = require("src.util.fs.directories").cache
