@@ -45,6 +45,9 @@ local function for_every_tag(callback)
     return rets
 end
 
+---@type Client|nil
+local last_retried_client = nil
+
 ---@param client Client|nil
 ---@param menu MenuBuilder
 local function set_menu_client(menu, client)
@@ -103,6 +106,8 @@ local function set_menu_client(menu, client)
                 end
 
                 menu:set_menu_item(fake)
+
+                last_retried_client = nil
             end)
             :catch(function(err)
                 print("menu error:", tostring(debug.traceback(err)))
@@ -144,11 +149,9 @@ local function create_appmenu(config)
         set_menu_client(menu, client)
     end)
 
-    ---@type Client|nil
-    local last_retried_client = nil
-
+    -- TODO if the menu loads properly, the last_retried_client lock should be reset to nil
     menu.widget:connect_signal("menu_item::error", function(err)
-        print(debug.traceback(err))
+        -- print(debug.traceback(err))
 
         local client = appmenu.get_client()
 
@@ -157,9 +160,9 @@ local function create_appmenu(config)
 
             set_menu_client(menu, nil)
 
-            set_menu_client(menu, client)
-
             last_retried_client = client
+
+            set_menu_client(menu, client)
         else
             print("not reloading menu - already attempted")
         end

@@ -13,7 +13,7 @@ local traceback = debug.traceback
 -- visual for if a menu item has children
 -- - MenuItem:has_children() - saves system from doing constant reloads to check for child items under canonical
 
----@alias AppmenuConfig { menu_template: { vertical: WidgetTemplate, horizontal: WidgetTemplate }?, button_template: WidgetTemplate?, divider_template: WidgetTemplate? }
+---@alias AppmenuConfig { menu_template: { vertical: WidgetTemplate, horizontal: WidgetTemplate }?, button_template: WidgetTemplate|{ vertical: WidgetTemplate, horizontal: WidgetTemplate }|nil, divider_template: WidgetTemplate?, popup_shape: GearsShape? }
 
 ---@class Appmenu
 ---@field client Client|nil

@@ -34,7 +34,7 @@ local menu_builder
 ---@field click_focus boolean
 ---@field child MenuBuilder|nil
 ---@field is_hovered boolean
-local menu_button = class("MenuButton")
+local menu_button           = class("MenuButton")
 
 ---@param menu_item MenuItem
 function menu_button:init(menu_item)
@@ -100,6 +100,28 @@ function menu_button:activate()
         end)
 end
 
+function menu_button:_create_popup()
+    self.popup = awful.popup {
+        widget = self.child
+            :get_widget(),
+
+        ontop = true,
+        visible = false,
+
+        bg = config.taskbar.bg,
+        fg = config.popup.fg,
+
+        preferred_positions = { self.popup_direction },
+        preferred_anchors = { 'front' },
+
+        shape = appmenu.get_config().popup_shape
+    }
+
+    self.popup:connect_signal("mouse::leave", function()
+        self:_on_mouse_leave()
+    end)
+end
+
 -- TODO remove predetermined colors - appmenu.get_config().hover_color?
 function menu_button:hover()
     if self.parent then
@@ -130,27 +152,13 @@ function menu_button:hover()
                     self.popup.widget = self.child
                         :get_widget()
                 else
-                    self.popup = awful.popup {
-                        widget = self.child
-                            :get_widget(),
-
-                        ontop = true,
-                        visible = true,
-
-                        bg = config.taskbar.bg,
-                        fg = config.popup.fg,
-
-                        preferred_positions = { self.popup_direction },
-                        preferred_anchors = { 'front' }
-                    }
-
-                    self.popup:connect_signal("mouse::leave", function()
-                        self:_on_mouse_leave()
-                    end)
+                    self:_create_popup()
                 end
 
                 -- move to mouse
                 self.popup:move_next_to(mouse.current_widget_geometry)
+
+                self.popup.visible = true
             end)
             :catch(function(err)
                 self.widget:emit_signal("menu_item::error", err)
@@ -197,13 +205,24 @@ function menu_button:_on_mouse_leave()
     }
 end
 
+-- TODO icons - esp for KDE apps
 function menu_button:_create_widget()
     local button = nil
 
     if self.menu_item.label == "" then
         button = parse_widget_template(appmenu.get_config().divider_template or default_divider)
     else
-        button = parse_widget_template(appmenu.get_config().button_template or default_button)
+        local template = appmenu.get_config().button_template
+
+        if type(template) == "table" and (template.vertical or template.horizontal) then
+            if self.depth == 0 then
+                button = parse_widget_template(template.horizontal or default_button)
+            else
+                button = parse_widget_template(template.vertical or default_button)
+            end
+        else
+            button = parse_widget_template(template or default_button)
+        end
 
         for _, child in ipairs(button:get_children_by_id("text-role")) do
             child.markup = self:_format_label()
@@ -211,7 +230,7 @@ function menu_button:_create_widget()
 
         if self.depth ~= 0 then
             self.menu_item:has_children():after(function(children)
-                for _, child in ipairs(button:get_children_by_id("icon-role")) do
+                for _, child in ipairs(button:get_children_by_id("shortcut-role")) do
                     --[[
                         ⌘ Command (or Cmd)
                         ⇧ Shift

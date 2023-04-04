@@ -41,7 +41,7 @@ function gtk_menu_item:init(proxies, subscription_group, label, action)
 end
 
 function gtk_menu_item:activate()
-    return Promise(function(res)
+    return Promise(function(res, rej)
         if not self.action then
             -- No bound action id for this menu item, so no action taken
 
@@ -54,7 +54,9 @@ function gtk_menu_item:activate()
 
         local activate_variant = GVariant("(sava{sv})", { action, {}, {} })
 
-        self.proxies.actions.method.Activate(activate_variant)
+        xpcall(function ()
+            self.proxies.actions.method.Activate(activate_variant)        
+        end, rej)
 
         res(true)
     end)
@@ -197,9 +199,7 @@ function gtk_menu_item:get_children()
         if not self.children then
             xpcall(function ()
                 self:_get_children_uncached()
-            end, function (err)
-                rej(err)
-            end)
+            end, rej)
         end
 
         res(self.children)

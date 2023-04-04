@@ -16,7 +16,7 @@ local function default_button()
                 nil,
                 {
                     widget = wibox.widget.textbox,
-                    id = "icon-role"
+                    id = "shortcut-role"
                 }
             }
         }
