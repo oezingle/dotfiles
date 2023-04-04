@@ -35,18 +35,30 @@ function canonical_menu_item:activate()
 
     local event_variant = GVariant("(isvu)", { self.id, 'clicked', nil_variant, 0 })
 
-    return Promise(function(res)
-        self.proxy.method.Event(event_variant)
+    return Promise(function(res, rej)
+        local success = xpcall(function ()
+            self.proxy.method.Event(event_variant)        
+        end, rej)
+
+        if not success then
+            return
+        end
 
         res(true)
     end)
 end
 
 function canonical_menu_item:get_children()
-    return Promise(function(res)
+    return Promise(function(res, rej)
         local variant = GVariant("(iias)", { self.id, 1, {} })
 
-        local layout = self.proxy.method.GetLayout(variant)
+        local success, layout = xpcall(function ()
+            return self.proxy.method.GetLayout(variant)
+        end, rej)
+
+        if not success then
+            return
+        end
 
         if not layout or not #layout or not #layout[2] then
             res({})
@@ -60,7 +72,7 @@ function canonical_menu_item:get_children()
             local child_id = child_item[1]
             local child_label = child_item[2].label
 
-            local child_icon = child_item[2]["icon-name"]
+            -- local child_icon = child_item[2]["icon-name"]
 
             ---@type string[]?
             local child_shortcut = nil
@@ -76,7 +88,13 @@ function canonical_menu_item:get_children()
             if child_label then
                 local id_variant = GVariant("(i)", { child_id })
 
-                self.proxy.method.AboutToShow(id_variant)
+                local success = xpcall(function ()
+                    self.proxy.method.AboutToShow(id_variant)                
+                end, rej)
+
+                if not success then
+                    return
+                end
 
                 local new_menu_item = canonical_menu_item(
                     self.proxy,

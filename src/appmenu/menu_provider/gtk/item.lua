@@ -54,9 +54,13 @@ function gtk_menu_item:activate()
 
         local activate_variant = GVariant("(sava{sv})", { action, {}, {} })
 
-        xpcall(function ()
+        local success = xpcall(function ()
             self.proxies.actions.method.Activate(activate_variant)        
         end, rej)
+
+        if not success then
+            return
+        end
 
         res(true)
     end)
