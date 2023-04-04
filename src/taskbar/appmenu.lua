@@ -122,7 +122,7 @@ local function create_appmenu()
                     }
                 }
 
-                -- TODO massage to transparent
+                -- TODO better transparency fix
                 wal.on_change(function(scheme)
                     widget.bg = scheme.special.background .. "66"
                 end)
