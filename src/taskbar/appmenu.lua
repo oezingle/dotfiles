@@ -19,9 +19,19 @@ local function create_appmenu()
                     layout = wibox.container.margin,
                     margins = 2,
                     {
-                        widget = wibox.widget.textbox,
-                        font = get_font(13),
-                        id = "text-role"
+                        layout = wibox.layout.align.horizontal,
+                        expand = "inside",
+                        {
+                            widget = wibox.widget.textbox,
+                            id = "text-role",
+                            font = get_font(13)
+                        },
+                        nil,
+                        {
+                            widget = wibox.widget.textbox,
+                            id = "icon-role",
+                            font = get_font(13)
+                        }
                     }
                 }
             }
@@ -49,6 +59,8 @@ local function create_appmenu()
                         },
                     }
                 }
+
+                -- TODO maybe pywal
 
                 return widget
             end

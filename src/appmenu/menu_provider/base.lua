@@ -1,4 +1,3 @@
-
 local class = require("lib.30log")
 local Promise = require("src.util.Promise")
 
@@ -9,10 +8,11 @@ local menu_provider = class("menu provider", {
 ---@alias MenuInfo { service: string, path: string }
 
 ---@class MenuItem : LogBaseFunctions
----@field activate fun(self: MenuItem): Promise<nil>
+---@field activate fun(self: MenuItem): Promise<boolean>
 ---@field get_children fun(self: MenuItem): Promise<MenuItem[]>
 ---@field has_children fun(self: MenuItem): Promise<boolean>
 ---@field label string?
+---@field shortcut string[]?
 
 ---@alias MenuSection { type: "section", items: MenuItem[] }
 
@@ -31,12 +31,12 @@ end
 --- check if this menu_provider works for a given client
 ---@param client Client
 ---@return Promise<boolean>
-function menu_provider.provides(client)    
+function menu_provider.provides(client)
     return Promise.resolve(nil)
 end
 
 function menu_provider:get_menu()
-    
+
 end
 
 return menu_provider

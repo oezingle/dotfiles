@@ -22,6 +22,8 @@ local menu_builder          = class("MenuWidgetBuilder", {})
 
 function menu_builder:init()
     self.is_hovered = false
+
+    self.children = {}
 end
 
 --- Set the layout and direction table
@@ -87,6 +89,8 @@ end
 ---@param menu_item MenuItem|nil
 ---@return self self for chaining
 function menu_builder:set_menu_item(menu_item)
+    self:leave_children()
+
     self.menu_item = menu_item
 
     self:get_children()
@@ -164,9 +168,15 @@ function menu_builder:_create_widget(layout_name)
     end)
 
     widget:connect_signal("menu_item::child::activated", function()
-        -- self:leave_children()
+        if self.parent then
+            self.parent.widget:emit_signal("menu_item::child::activated")
+        end
+    end)
 
-        self.parent.widget:emit_signal("menu_item::child::activated")
+    widget:connect_signal("menu_item::error", function(err)
+        if self.parent then
+            self.parent.widget:emit_signal("menu_item::error", err)
+        end
     end)
 
     self.widget = widget

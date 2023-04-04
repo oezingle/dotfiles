@@ -20,13 +20,13 @@
     - keep menu in memory as much as possible
         - limits DBus calls, therefore increasing speed
 ]]
-local appmenu        = require("src.appmenu.appmenu")
-local fake_menu_item = require("src.appmenu.menu_provider.fake")
+local appmenu                 = require("src.appmenu.appmenu")
+local fake_menu_item          = require("src.appmenu.menu_provider.fake")
 
 local uppercase_first_letters = require("src.util.uppercase_first_letters")
 
-local menu_builder   = require("src.appmenu.widget.menu")
-local button_builder = require("src.appmenu.widget.button")
+local menu_builder            = require("src.appmenu.widget.menu")
+local button_builder          = require("src.appmenu.widget.button")
 
 button_builder.set_menu_builder(menu_builder)
 menu_builder.set_button_builder(button_builder)
@@ -64,6 +64,8 @@ local function set_menu_client(menu, client)
                             :set_children({
                                 fake_menu_item("Minimize", function()
                                     client.minimized = true
+
+                                    return true
                                 end),
 
                                 ---@param self FakeMenuItem
@@ -71,18 +73,26 @@ local function set_menu_client(menu, client)
                                     client.maximized = not client.maximized
 
                                     self:set_label(client.maximized and "Unmaximize" or "Maximize")
+
+                                    return true
                                 end),
                                 fake_menu_item("Move to Tag")
                                     :set_children(for_every_tag(function(tag)
                                         return fake_menu_item(tag.name, function()
                                             client:move_to_tag(tag)
+
+                                            return true
                                         end)
                                     end)),
                                 fake_menu_item("Sticky", function()
                                     client.sticky = not client.sticky
+
+                                    return true
                                 end),
                                 fake_menu_item("Quit", function()
                                     client:kill()
+
+                                    return true
                                 end),
                                 -- fake_menu_item("Appmenu V2")
                             })
@@ -95,7 +105,7 @@ local function set_menu_client(menu, client)
                 menu:set_menu_item(fake)
             end)
             :catch(function(err)
-                print(debug.traceback(err))
+                print("menu error:", tostring(debug.traceback(err)))
             end)
     end
 end
@@ -127,12 +137,31 @@ local function create_appmenu(config)
     -- which calls provider.reload() if it exists
     -- TODO consider provider.on_activate()?
     menu.widget:connect_signal("menu_item::child::activated", function()
-        local client = appmenu.client
+        local client = appmenu.get_client()
 
         menu:set_menu_item(nil)
 
-        if client then
-            client:emit_signal("focus")
+        set_menu_client(menu, client)
+    end)
+
+    ---@type Client|nil
+    local last_retried_client = nil
+
+    menu.widget:connect_signal("menu_item::error", function(err)
+        print(debug.traceback(err))
+
+        local client = appmenu.get_client()
+
+        if last_retried_client ~= client then
+            print("menu reloading")
+
+            set_menu_client(menu, nil)
+
+            set_menu_client(menu, client)
+
+            last_retried_client = client
+        else
+            print("not reloading menu - already attempted")
         end
     end)
 

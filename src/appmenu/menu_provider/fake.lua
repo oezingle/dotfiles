@@ -45,7 +45,7 @@ function fake_menu_item:set_label(label)
     return self
 end
 
----@param on_activate function
+---@param on_activate fun(self: FakeMenuItem): boolean a function that returns true if activation was successful
 ---@return self self for convienience
 function fake_menu_item:set_on_activate(on_activate)
     self.on_activate = on_activate
@@ -56,6 +56,8 @@ end
 function fake_menu_item:activate()
     if self.on_activate then
         return Promise.resolve(self.on_activate(self))
+    else
+        return Promise.resolve(false)
     end
 end
 

@@ -1,16 +1,16 @@
-local class     = require("lib.30log")
+local class                 = require("lib.30log")
 local parse_widget_template = require("src.appmenu.parse_widget_template")
 
-local wibox     = require("wibox")
-local awful     = require("awful")
-local gtimer    = require("gears.timer")
+local awful                 = require("awful")
+local gtimer                = require("gears.timer")
 
-local get_font  = require("src.util.get_font")
-local no_scroll = require("src.widgets.helper.no_scroll")
-local wal       = require("src.util.wal")
-local config    = require("config")
+local no_scroll             = require("src.widgets.helper.no_scroll")
+local config                = require("config")
 
-local appmenu = require("src.appmenu.appmenu")
+local appmenu               = require("src.appmenu.appmenu")
+
+local default_button        = require("src.appmenu.widget.button.default")
+local default_divider       = require("src.appmenu.widget.button.default.divider")
 
 ---@module "widget.menu"
 local menu_builder
@@ -18,13 +18,6 @@ local menu_builder
 ---@alias MenuLayout { layout: "vertical" | "horizontal", popup_direction: Direction, click_focus: boolean?, has_focus: boolean? }
 ---@alias LayoutTable table<number|"default", MenuLayout>
 
--- TODO some sort of state table
---[[
-    {
-        mouse: boolean = false (hover to grab children, click to activate)
-        keyboard: boolean = false (arrow keys to move around buttons, enter to activate, esc to close children)
-    }
-]]
 -- TODO highlight keyboard shortcuts if using keyboard control
 -- Reformat text to bold on keyboard::activate signal?
 
@@ -51,8 +44,6 @@ function menu_button:init(menu_item)
 
     self.click_focus = false
     self.is_hovered = false
-
-    self:_create_widget()
 end
 
 ---@param parent MenuBuilder a parent widget
@@ -78,6 +69,8 @@ function menu_button:set_layout_table(table, depth)
 
     self.click_focus = self.layout_table_entry.click_focus or false
 
+    self:_create_widget()
+
     return self
 end
 
@@ -92,18 +85,22 @@ end
 function menu_button:_format_label()
     local is_keygrabbing = false
 
-    return self.menu_item.label:gsub("_(%a)", is_keygrabbing and "<b>%1</b>" or "%1")
+    return self.menu_item.label:gsub("_([%a%d])", is_keygrabbing and "<u>%1</u>" or "%1")
 end
 
 function menu_button:activate()
     self.menu_item:activate()
-        :after(function()
-            if self.parent then
+        :after(function(activated)
+            if activated and self.parent then
                 self.parent.widget:emit_signal("menu_item::child::activated")
             end
         end)
+        :catch(function(err)
+            self.parent.widget:emit_signal("menu_item::error", err)
+        end)
 end
 
+-- TODO remove predetermined colors - appmenu.get_config().hover_color?
 function menu_button:hover()
     if self.parent then
         self.parent:leave_children()
@@ -146,18 +143,17 @@ function menu_button:hover()
                         preferred_positions = { self.popup_direction },
                         preferred_anchors = { 'front' }
                     }
+
+                    self.popup:connect_signal("mouse::leave", function()
+                        self:_on_mouse_leave()
+                    end)
                 end
 
-                -- Move to mouse
-                -- TODO why so wonky
-                do
-                    local geo = mouse.current_widget_geometry
-
-                    if geo then
-                        -- move to mouse
-                        self.popup:move_next_to(geo)
-                    end
-                end
+                -- move to mouse
+                self.popup:move_next_to(mouse.current_widget_geometry)
+            end)
+            :catch(function(err)
+                self.widget:emit_signal("menu_item::error", err)
             end)
     end
 end
@@ -190,31 +186,61 @@ function menu_button:leave(force)
     self.widget.bg = nil
 end
 
-local default_widget = {
-    layout = wibox.container.background,
-    {
-        layout = wibox.container.margin,
-        margins = 2,
-        {
-            widget = wibox.widget.textbox,
-            id = "text-role"
-        }
+function menu_button:_on_mouse_leave()
+    gtimer {
+        timeout     = 0.2,
+        single_shot = true,
+        autostart   = true,
+        callback    = function()
+            self:leave()
+        end
     }
-}
+end
 
 function menu_button:_create_widget()
     local button = nil
 
     if self.menu_item.label == "" then
-        button = wibox.widget {
-            layout = wibox.container.margin,
-            margins = 5
-        }
+        button = parse_widget_template(appmenu.get_config().divider_template or default_divider)
     else
-        button = parse_widget_template(appmenu.get_config().button_template or default_widget)
+        button = parse_widget_template(appmenu.get_config().button_template or default_button)
 
         for _, child in ipairs(button:get_children_by_id("text-role")) do
-            child.markup = self:_format_label()                            
+            child.markup = self:_format_label()
+        end
+
+        if self.depth ~= 0 then
+            self.menu_item:has_children():after(function(children)
+                for _, child in ipairs(button:get_children_by_id("icon-role")) do
+                    --[[
+                        ⌘ Command (or Cmd)
+                        ⇧ Shift
+                        ⌥ Option (or Alt)
+                        ⌃ Control (or Ctrl)
+                        ▶
+                    ]]
+                    -- TODO make these configurable
+                    if children then
+                        child.text = "▶"
+                    elseif self.menu_item.shortcut then
+                        local shortcut = ""
+
+                        for _, key in ipairs(self.menu_item.shortcut) do
+                            local char = ({
+                                    ['Control'] = '⌃',
+                                    ['Shift'] = '⇧',
+                                    ['Alt'] = '⌥'
+                                })[key] or string.upper(key)
+
+                            shortcut = shortcut .. char
+                        end
+
+                        child.text = shortcut
+                    end
+
+                    -- TODO keyboard shortucts yay
+                end
+            end)
         end
 
         button:connect_signal("button::press", no_scroll(function()
@@ -231,6 +257,7 @@ function menu_button:_create_widget()
             end
         end))
 
+        --[[
         local mouse_leave_timer = gtimer {
             timeout = 0.2,
             single_shot = true,
@@ -239,17 +266,19 @@ function menu_button:_create_widget()
                 self:leave()
             end
         }
-
+        ]]
         button:connect_signal("mouse::enter", function()
             self:hover()
 
-            if mouse_leave_timer.started then
-                mouse_leave_timer:stop()
-            end
+            -- if mouse_leave_timer.started then
+            --     mouse_leave_timer:stop()
+            -- end
         end)
 
         button:connect_signal("mouse::leave", function(widget)
-            mouse_leave_timer:start()
+            -- mouse_leave_timer:start()
+
+            self:_on_mouse_leave()
 
             widget.bg = nil
         end)
@@ -258,11 +287,17 @@ function menu_button:_create_widget()
             if self.layout_table_entry.has_focus then
                 self.layout_table_entry.has_focus = false
             end
-            
+
             self:leave(true)
 
             if self.parent then
                 self.parent.widget:emit_signal("menu_item::child::activated")
+            end
+        end)
+
+        button:connect_signal("menu_item::error", function(err)
+            if self.parent then
+                self.parent.widget:emit_signal("menu_item::error", err)
             end
         end)
     end

@@ -13,6 +13,7 @@ local divider_item = require("src.appmenu.menu_provider.divider")
 ---@field proxy SmartProxy
 ---@field id number
 ---@field label string?
+---@field shortcut string[]?
 local canonical_menu_item = class("CanonicalMenuItem", {
     type = "item"
 })
@@ -20,10 +21,12 @@ local canonical_menu_item = class("CanonicalMenuItem", {
 ---@param proxy SmartProxy
 ---@param id number
 ---@param label string?
-function canonical_menu_item:init(proxy, id, label)
-    self.proxy = proxy
-    self.id    = id
-    self.label = label
+---@param shortcut string[]?
+function canonical_menu_item:init(proxy, id, label, shortcut)
+    self.proxy    = proxy
+    self.id       = id
+    self.label    = label
+    self.shortcut = shortcut
 end
 
 function canonical_menu_item:activate()
@@ -35,11 +38,10 @@ function canonical_menu_item:activate()
     return Promise(function(res)
         self.proxy.method.Event(event_variant)
 
-        res()
+        res(true)
     end)
 end
 
---- TODO where tf do the nil items come from
 function canonical_menu_item:get_children()
     return Promise(function(res)
         local variant = GVariant("(iias)", { self.id, 1, {} })
@@ -54,11 +56,20 @@ function canonical_menu_item:get_children()
 
         local menu_item_children = {}
 
-        for i, child_item in gvariant_ipairs(children) do
+        for _, child_item in gvariant_ipairs(children) do
             local child_id = child_item[1]
             local child_label = child_item[2].label
 
-            -- child_item[2].shortcut: string[]|nil
+            local child_icon = child_item[2]["icon-name"]
+
+            ---@type string[]?
+            local child_shortcut = nil
+            if child_item[2].shortcut then
+                child_shortcut = {}
+                for _, key in ipairs(child_item[2].shortcut[1]) do
+                    table.insert(child_shortcut, key)
+                end
+            end
 
             -- tell the child it's going to be visible
 
@@ -70,7 +81,8 @@ function canonical_menu_item:get_children()
                 local new_menu_item = canonical_menu_item(
                     self.proxy,
                     child_id,
-                    child_label
+                    child_label,
+                    child_shortcut
                 )
 
                 table.insert(
@@ -93,7 +105,7 @@ function canonical_menu_item:has_children()
             :after(function(children)
                 return next(children) ~= nil
             end)
-            :after(function (has_children) 
+            :after(function(has_children)
                 self._has_children = has_children
 
                 return has_children

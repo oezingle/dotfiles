@@ -45,7 +45,7 @@ function gtk_menu_item:activate()
         if not self.action then
             -- No bound action id for this menu item, so no action taken
 
-            res()
+            res(false)
 
             return
         end
@@ -55,6 +55,8 @@ function gtk_menu_item:activate()
         local activate_variant = GVariant("(sava{sv})", { action, {}, {} })
 
         self.proxies.actions.method.Activate(activate_variant)
+
+        res(true)
     end)
 end
 
@@ -187,13 +189,17 @@ function gtk_menu_item:_get_children_uncached()
 end
 
 function gtk_menu_item:get_children()
-    return Promise(function(res)
+    return Promise(function(res, rej)
         -- I used to check if the table was empty using
         -- next(self.children), but a childless menu would reload
         -- constantly even if the lack of children was already known
 
         if not self.children then
-            self:_get_children_uncached()
+            xpcall(function ()
+                self:_get_children_uncached()
+            end, function (err)
+                rej(err)
+            end)
         end
 
         res(self.children)

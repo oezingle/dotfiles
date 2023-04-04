@@ -9,7 +9,7 @@ local divider_item = class("DividerMenuItem", {
 })
 
 function divider_item.activate()
-    return Promise.resolve()
+    return Promise.resolve(false)
 end
 
 function divider_item.get_children()
