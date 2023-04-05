@@ -1,12 +1,14 @@
-local awful           = require("awful")
-local wibox           = require("wibox")
-local config          = require("config")
-local gears           = require("gears")
-local system_status   = require("src.widgets.system_status")
-local layout_selector = require("src.widgets.layout_selector")
+local awful                 = require("awful")
+local wibox                 = require("wibox")
+local config                = require("config")
+local gears                 = require("gears")
+local system_status         = require("src.widgets.system_status")
+local layout_selector       = require("src.widgets.layout_selector")
 
-local get_decoration_color = require("src.util.color.get_decoration_color")
-local shapes = require("src.util.shapes")
+local get_decoration_color  = require("src.util.color.get_decoration_color")
+local shapes                = require("src.util.shapes")
+local wal                   = require("src.util.wal")
+-- TODO i'm not sure how to feel about pywal here
 
 local create_launcher       = require("src.taskbar.launcher")
 local create_systray        = require("src.taskbar.systray")
@@ -15,10 +17,9 @@ local control_center        = require("src.widgets.control_center")
 local clock_widget          = require("src.widgets.clock")
 local create_tag_switcher   = require("src.taskbar.tag_switcher")
 local create_tasklist       = require("src.taskbar.tasklist")
+local create_appmenu        = require("src.taskbar.appmenu")
 
-local create_appmenu = require("src.taskbar.appmenu")
-
-local unpack = require("src.agnostic.version.unpack")
+local unpack                = require("src.agnostic.version.unpack")
 
 local function color_border_widget(args)
     local layout = args.layout or wibox.layout.fixed.vertical
@@ -47,12 +48,9 @@ local function color_border_widget(args)
     return wibox.widget {
         {
             widgets,
-
             widget = wibox.container.margin,
-
             left = margins.left,
             right = margins.right,
-
             top = margins.top,
             bottom = margins.bottom
         },
@@ -98,12 +96,15 @@ local function create_taskbar()
                     {
                         layout = wibox.layout.fixed.vertical,
                         spacing = 3,
-
                         create_systray(),
                         create_launcher(),
                     }
                 }
             }
+
+            wal.on_change(function (scheme)
+                s.left_bar.bg = scheme.special.background .. "66"
+            end)
         end
 
         s.top_bar = awful.wibar {
@@ -131,7 +132,6 @@ local function create_taskbar()
                 {
                     is_primary and system_status(),
                     is_primary and create_appmenu(),
-
                     layout = wibox.layout.fixed.horizontal,
                     spacing = 5
                 }
@@ -165,6 +165,10 @@ local function create_taskbar()
                 }
             },
         }
+
+        wal.on_change(function (scheme)
+            s.top_bar.bg = scheme.special.background .. "66"
+        end)
     end)
 end
 

@@ -122,6 +122,8 @@ function menu_button:_create_popup()
     end)
 end
 
+-- TODO popups don't cause leaving
+
 -- TODO remove predetermined colors - appmenu.get_config().hover_color?
 function menu_button:hover()
     if self.parent then
@@ -194,9 +196,12 @@ function menu_button:leave(force)
     self.widget.bg = nil
 end
 
+-- Fire the leaving signal with some delay so that
+-- if a child has the mouse, the popup doesn't close
 function menu_button:_on_mouse_leave()
     gtimer {
-        timeout     = 0.2,
+        -- TODO configurable timeout
+        timeout     = 0.5,
         single_shot = true,
         autostart   = true,
         callback    = function()
@@ -231,25 +236,13 @@ function menu_button:_create_widget()
         if self.depth ~= 0 then
             self.menu_item:has_children():after(function(children)
                 for _, child in ipairs(button:get_children_by_id("shortcut-role")) do
-                    --[[
-                        ⌘ Command (or Cmd)
-                        ⇧ Shift
-                        ⌥ Option (or Alt)
-                        ⌃ Control (or Ctrl)
-                        ▶
-                    ]]
-                    -- TODO make these configurable
                     if children then
-                        child.text = "▶"
+                        child.text = appmenu.get_config().shortcut_symbols.children
                     elseif self.menu_item.shortcut then
                         local shortcut = ""
 
                         for _, key in ipairs(self.menu_item.shortcut) do
-                            local char = ({
-                                    ['Control'] = '⌃',
-                                    ['Shift'] = '⇧',
-                                    ['Alt'] = '⌥'
-                                })[key] or string.upper(key)
+                            local char = appmenu.get_config().shortcut_symbols[key] or string.upper(key)
 
                             shortcut = shortcut .. char
                         end
@@ -295,6 +288,8 @@ function menu_button:_create_widget()
         end)
 
         button:connect_signal("mouse::leave", function(widget)
+            self.is_hovered = false
+
             -- mouse_leave_timer:start()
 
             self:_on_mouse_leave()

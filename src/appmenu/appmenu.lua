@@ -8,12 +8,16 @@ local traceback = debug.traceback
 
 -- TODO icons - kde specialty?
 
--- TODO re-add canonical registrar server
-
 -- visual for if a menu item has children
 -- - MenuItem:has_children() - saves system from doing constant reloads to check for child items under canonical
 
----@alias AppmenuConfig { menu_template: { vertical: WidgetTemplate, horizontal: WidgetTemplate }?, button_template: WidgetTemplate|{ vertical: WidgetTemplate, horizontal: WidgetTemplate }|nil, divider_template: WidgetTemplate?, popup_shape: GearsShape? }
+---@class AppmenuConfig 
+---@field menu_template { vertical: WidgetTemplate, horizontal: WidgetTemplate }?
+---@field button_template WidgetTemplate|{ vertical: WidgetTemplate, horizontal: WidgetTemplate }|nil
+---@field divider_template WidgetTemplate?
+---@field popup_shape GearsShape?
+-- TODO super is just a guess
+---@field shortcut_symbols table<"Control"|"Alt"|"Shift"|"Super"|"children", string>?
 
 ---@class Appmenu
 ---@field client Client|nil
@@ -27,7 +31,15 @@ local appmenu = {
         canonical_menu
     },
     config = {
-        menu_template = {}
+        menu_template = {},
+
+        shortcut_symbols = {
+            ['Control'] = '⌃',
+            ['Shift'] = '⇧',
+            ['Alt'] = '⎇',
+            ['Super'] = '❖',
+            ['children'] = '▶',
+        }
     }
 }
 

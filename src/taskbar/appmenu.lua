@@ -129,6 +129,13 @@ local function create_appmenu()
 
                 return widget
             end
+        },
+        shortcut_symbols = {
+            ['Control'] = '⌃',
+            ['Shift'] = '⇧',
+            ['Alt'] = '⌥',
+            ['Super'] = '⌘',
+            ['children'] = '▶',
         }
     })
 end
