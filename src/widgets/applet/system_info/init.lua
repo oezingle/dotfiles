@@ -9,7 +9,7 @@ local config              = require("config")
 
 local wibox = require("wibox")
 
-local print = require("src.agnostic.print")
+-- TODO stop timers when widget invisible - disabled until then
 
 -- TODO page_indicator.visible = false -> property::visible 
 

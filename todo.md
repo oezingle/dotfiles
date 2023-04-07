@@ -51,6 +51,8 @@
 	- [disable TearFree, TripleBuffer, SwapbuffersWait](https://wiki.archlinux.org/title/Intel_graphics#Disabling_TearFree,_TripleBuffer,_SwapbuffersWait)
 
 - Optimize
+	- No seriously, CPU usage is supposed to be around 1%
+		- https://github.com/awesomeWM/awesome/issues/2733
 	- https://www.lua.org/gems/sample.pdf
 	- http://lua-users.org/wiki/OptimisationTips
 	- http://lua-users.org/wiki/OptimisationCodingTips

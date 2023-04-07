@@ -12,8 +12,9 @@ local function start_server()
 
         local spawn = require("awful.spawn")
 
-        local pid = spawn.once(dir .. cmd)
+        local pid = spawn(dir .. cmd)
 
+        -- TODO calls every restart too - fix this somehow?
         awesome.connect_signal("exit", function ()
             awesome.kill(-pid, awesome.unix_signal.SIGTERM)
         end)

@@ -10,6 +10,30 @@ math.random()
 math.random()
 math.random()
 
+-- find timers
+--[[
+do
+    local timer = require("gears.timer")
+    local start, stop = timer.start, timer.stop
+    local timers = {}
+    function timer:start()
+        timers[self] = debug.traceback()
+        return start(self)
+    end
+    function timer:stop()
+        timers[self] = nil
+        return stop(self)
+    end
+    timer.start_new(1, function()
+        print("Active timers:")
+        for timer, traceback in pairs(timers) do
+            print(timer, timer.timeout, traceback)
+        end
+        print("End of timers")
+    end)
+end
+]]
+
 local error_log = require("src.error_log")
 
 local unpack = require("src.agnostic.version.unpack")
@@ -38,8 +62,7 @@ local naughty = require("naughty")
 
 local config = require("config")
 
--- TODO why the fuck
-local hotkeys_popup = require("awful.hotkeys_popup")
+-- local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
@@ -494,7 +517,7 @@ end
 gears.timer.start_new(10, function() collectgarbage("step", 20000) return true end)
 
 --[[
-if false then
+do
     local profiler = require("lib.profiler")
     local directories = require("src.util.fs.directories")
 

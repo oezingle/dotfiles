@@ -4,6 +4,9 @@ local pack = require("src.agnostic.version.pack")
 local unpack = require("src.agnostic.version.unpack")
 local native_error = require("src.util.lgi.native_error")
 
+local class = require("lib.30log")
+local Promise = require("src.util.Promise")
+
 -- TODO SmartTable.method_async - abusing the AwesomeWM mainloop does not fly!
 
 -- TODO signals seem to not work
@@ -132,29 +135,24 @@ function dbus.smart_proxy(proxy)
                 end
             end
         }),
-
         property = {
             get = function(name)
                 return proxy:get_cached_property(name)
             end,
-
             ---@param name string name of the property
             ---@param value GVariant gvariant value for the property
             set = function(name, value)
                 return proxy:set(name, value)
             end,
         },
-
         prop = setmetatable({}, {
-            __index = function (_, name)
+            __index = function(_, name)
                 return proxy:get_cached_property(name)
             end,
-
-            __newindex = function (_, name, value)
+            __newindex = function(_, name, value)
                 return proxy:set(name, value)
             end
         }),
-
         ---@param name string signal name
         ---@param fn fun(parameters: GVariant, sender_name: string): nil signal recieved callback
         connect_signal = function(name, fn)
@@ -164,7 +162,6 @@ function dbus.smart_proxy(proxy)
 
             table.insert(signal_handlers[name], fn)
         end,
-
         ---@param name string signal name
         ---@param fn fun(parameters: GVariant, sender_name: string): nil signal recieved callback
         disconnect_signal = function(name, fn)
@@ -180,6 +177,57 @@ function dbus.smart_proxy(proxy)
             end
         end
     }
+end
+
+dbus.smart_proxy_2 = class("SmartProxy", {
+    ---@type table<string, fun(variant: GVariant): GVariant>
+    method = setmetatable({}, {
+        __call = function (self, name, variant)
+            return self:call_method(name, variant)
+        end,
+        __index = function(self, key)
+            return function (variant)
+                return self:call_method(key, variant)
+            end
+        end
+    })
+})
+
+function dbus.smart_proxy_2:init(proxy)
+    self.proxy = proxy
+end
+
+---@param name string
+---@param variant GVariant gvariant argument value
+---@return GVariant
+function dbus.smart_proxy_2:call_method(name, variant)
+    return native_error(
+        self.proxy.call_sync,
+        self.proxy,
+        name,
+        variant,
+        {},
+        -1,
+        nil,
+        nil
+    )
+end
+
+
+-- TODO untested
+---@param name string
+---@param variant GVariant gvariant argument value
+---@return Promise<GVariant>
+function dbus.smart_proxy_2:call_method_async(name, variant)
+    return Promise(function (res, rej)
+        local _, err = self.proxy:call(
+            name, variant, {}, -1, nil, res
+        )
+
+        if err then
+            rej(err)
+        end
+    end)
 end
 
 return dbus
