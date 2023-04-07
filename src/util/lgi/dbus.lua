@@ -29,7 +29,6 @@ local dbus = {}
 
 --------------------------------------------------------------------------------
 
-
 --- Get the Gio.BusType.SESSION or Gio.BusType.SYSTEM DBus
 ---@param bus_type string?
 ---@return GDBusConnection GDBusConnection
@@ -120,23 +119,6 @@ function dbus.smart_proxy(proxy)
             __index = function(_, key)
                 ---@param variant GVariant gvariant argument value
                 return function(variant)
-                    --[[
-                    local res, err = proxy:call_sync(
-                        key,
-                        variant,
-                        {},
-                        -1,
-                        nil,
-                        nil
-                    )
-
-                    if err then
-                        error(err)
-                    end
-
-                    return res
-                    ]]
-
                     return native_error(
                         proxy.call_sync,
                         proxy,
@@ -151,7 +133,6 @@ function dbus.smart_proxy(proxy)
             end
         }),
 
-        -- TODO switch to __newindex and __index metatable events you fucking cunt
         property = {
             get = function(name)
                 return proxy:get_cached_property(name)
@@ -163,6 +144,16 @@ function dbus.smart_proxy(proxy)
                 return proxy:set(name, value)
             end,
         },
+
+        prop = setmetatable({}, {
+            __index = function (_, name)
+                return proxy:get_cached_property(name)
+            end,
+
+            __newindex = function (_, name, value)
+                return proxy:set(name, value)
+            end
+        }),
 
         ---@param name string signal name
         ---@param fn fun(parameters: GVariant, sender_name: string): nil signal recieved callback

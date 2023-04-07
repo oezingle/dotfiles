@@ -20,7 +20,6 @@
     - keep menu in memory as much as possible
         - limits DBus calls, therefore increasing speed
 ]]
-local gtimer                  = require("gears.timer")
 
 local appmenu                 = require("src.appmenu.appmenu")
 local fake_menu_item          = require("src.appmenu.menu_provider.fake")
