@@ -54,8 +54,8 @@ function gtk_menu_item:activate()
 
         local activate_variant = GVariant("(sava{sv})", { action, {}, {} })
 
-        local success = xpcall(function ()
-            self.proxies.actions.method.Activate(activate_variant)        
+        local success = xpcall(function()
+            self.proxies.actions.method.Activate(activate_variant)
         end, rej)
 
         if not success then
@@ -201,7 +201,7 @@ function gtk_menu_item:get_children()
         -- constantly even if the lack of children was already known
 
         if not self.children then
-            xpcall(function ()
+            xpcall(function()
                 self:_get_children_uncached()
             end, rej)
         end

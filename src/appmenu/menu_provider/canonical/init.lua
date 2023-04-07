@@ -1,4 +1,3 @@
-
 local base = require("src.appmenu.menu_provider.base")
 local Promise = require("src.util.Promise")
 local dbus = require("src.util.lgi.dbus")
@@ -12,6 +11,8 @@ local registrar = dbus.new_smart_proxy(
     "com.canonical.AppMenu.Registrar"
 )
 
+---@class CanonicalMenuProvider : MenuProvider
+---@field info_cache table<number, MenuInfo>
 local canonical_menu = base:extend("CanonicalMenu", {
     MENU_TYPE = "Canonical",
     ---@type table<number, {service: string, path: string}>
@@ -88,6 +89,10 @@ end
 
 function canonical_menu:get_children()
     return self:get_menu():get_children()
+end
+
+function canonical_menu:on_activate()
+    return "reload"
 end
 
 function canonical_menu.provides(client)

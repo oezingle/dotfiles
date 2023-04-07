@@ -8,10 +8,7 @@ local traceback = debug.traceback
 
 -- TODO icons - kde specialty?
 
--- visual for if a menu item has children
--- - MenuItem:has_children() - saves system from doing constant reloads to check for child items under canonical
-
----@class AppmenuConfig 
+---@class AppmenuConfig
 ---@field menu_template { vertical: WidgetTemplate, horizontal: WidgetTemplate }?
 ---@field button_template WidgetTemplate|{ vertical: WidgetTemplate, horizontal: WidgetTemplate }|nil
 ---@field divider_template WidgetTemplate?
@@ -23,6 +20,7 @@ local traceback = debug.traceback
 ---@field client Client|nil
 ---@field has_retried boolean
 ---@field providers MenuProvider[]
+---@field current_provider MenuProvider|nil
 ---@field config AppmenuConfig
 local appmenu = {
     client = nil,
@@ -32,7 +30,6 @@ local appmenu = {
     },
     config = {
         menu_template = {},
-
         shortcut_symbols = {
             ['Control'] = '⌃',
             ['Shift'] = '⇧',
@@ -120,6 +117,17 @@ function appmenu._find_provider()
     return test_next_provider()
 end
 
+---@return Promise<nil|"reload">
+function appmenu.on_activate ()
+    local provider = appmenu.current_provider
+
+    if provider and provider.on_activate then
+        return Promise.resolve(provider:on_activate())
+    else
+        return Promise.resolve()
+    end
+end
+
 -- TODO cache provider, changing only if client changes or appmenu.reload()
 
 ---@return Promise<MenuProvider|nil>
@@ -133,6 +141,7 @@ function appmenu.load_provider()
 
             return nil
         end)
+        ---@param provider MenuProvider|nil
         :after(function(provider)
             -- Call the provider's setup function, if it exists
 
@@ -147,6 +156,12 @@ function appmenu.load_provider()
                     end)
                 end
             end
+
+            return provider
+        end)
+        ---@param provider MenuProvider|nil
+        :after(function(provider)
+            appmenu.current_provider = provider
 
             return provider
         end)

@@ -20,6 +20,8 @@
     - keep menu in memory as much as possible
         - limits DBus calls, therefore increasing speed
 ]]
+local gtimer                  = require("gears.timer")
+
 local appmenu                 = require("src.appmenu.appmenu")
 local fake_menu_item          = require("src.appmenu.menu_provider.fake")
 
@@ -47,6 +49,8 @@ end
 
 ---@type Client|nil
 local last_retried_client = nil
+
+-- TODO activating a GTK item hides the menu
 
 ---@param client Client|nil
 ---@param menu MenuBuilder
@@ -136,17 +140,16 @@ local function create_appmenu(config)
         :set_popup_direction("bottom")
         :set_layout("horizontal")
 
-    -- Shit fix for canonical reloads.
-    -- appmenu should store its chosen provider and
-    -- then be able to call appmenu.reload_provider()
-    -- which calls provider.reload() if it exists
-    -- TODO consider provider.on_activate()?
     menu.widget:connect_signal("menu_item::child::activated", function()
-        local client = appmenu.get_client()
+        appmenu.on_activate():after(function(result)
+            if result == "reload" then
+                local client = appmenu.get_client()
 
-        menu:set_menu_item(nil)
+                set_menu_client(menu, nil)
 
-        set_menu_client(menu, client)
+                set_menu_client(menu, client)
+            end
+        end)
     end)
 
     -- TODO if the menu loads properly, the last_retried_client lock should be reset to nil

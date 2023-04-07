@@ -19,8 +19,9 @@ local menu_provider = class("menu provider", {
 ---@class MenuProvider : LogBaseFunctions
 ---@field client Client
 ---@field provides fun(client: Client): Promise<boolean>
----@field setup fun(): Promise|nil
+---@field setup fun(): Promise|any|nil
 ---@field get_menu fun(): MenuItem
+---@field on_activate nil|fun(): any
 ---@field MENU_TYPE string
 
 ---@param client Client
