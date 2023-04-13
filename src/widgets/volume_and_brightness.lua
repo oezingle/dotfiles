@@ -92,7 +92,7 @@ local popup = awful.popup {
 }
 
 local timer = gears.timer({
-    timeout     = 2,
+    timeout     = 3,
     single_shot = true,
     callback    = function()
         popup.visible = false

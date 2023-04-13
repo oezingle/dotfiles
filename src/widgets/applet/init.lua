@@ -14,7 +14,7 @@ end
 
 require_applet("choose_wallpaper")
 require_applet("emoji_selector")
--- require_applet("system_info")
+require_applet("system_info")
 require_applet("calculator")
 require_applet("screenshot")
 

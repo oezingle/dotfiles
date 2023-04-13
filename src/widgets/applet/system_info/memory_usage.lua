@@ -1,8 +1,9 @@
-local awful    = require("awful")
-local wibox    = require("wibox")
-local shapes   = require("src.util.shapes")
-local config   = require("config")
-local get_font = require("src.util.get_font")
+local awful        = require("awful")
+local wibox        = require("wibox")
+local shapes       = require("src.util.shapes")
+local config       = require("config")
+local get_font     = require("src.util.get_font")
+local watch_widget = require("src.widgets.util.watch_widget")
 
 ---@param string string
 ---@return string[] words
@@ -54,9 +55,9 @@ local function memory_usage(swap)
         text = "000%",
     }
 
-    local progress = awful.widget.watch(
+    local progress, timer = watch_widget(
         cmd,
-        1,
+        5,
         function(widget, stdout)
             local words = split(stdout)
 
@@ -91,7 +92,6 @@ local function memory_usage(swap)
                 widget = wibox.widget.textbox,
                 font = get_font(10),
                 text = "0?B",
-
                 id = "memory-zero-text"
             },
             {
@@ -108,13 +108,11 @@ local function memory_usage(swap)
                     widget = wibox.widget.textbox,
                     font = get_font(10),
                     text = "0?B",
-
                     id = "memory-total-text",
                 },
                 layout = wibox.container.place,
                 halign = "right"
             },
-
             layout = wibox.layout.align.horizontal,
         },
         nil,
@@ -139,7 +137,7 @@ local function memory_usage(swap)
         total_text.text = tostring(total_divided) .. suffix
     end)
 
-    return progress_and_text
+    return progress_and_text, timer
 end
 
 return memory_usage

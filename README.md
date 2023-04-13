@@ -46,6 +46,7 @@ echo $(cd src/appmenu/server; make)
  - `picom` (compositor)
  - `playerctl` (media info)
  - `upower` (battery stats)
+ - `mpstats` (cpu stats)
 
 ## Stolen Code
  - `widgets/exit_menu.lua` is lifted from [manilarome/the-glorious-dotfiles](https://github.com/manilarome/the-glorious-dotfiles)

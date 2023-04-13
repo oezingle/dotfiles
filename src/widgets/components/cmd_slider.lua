@@ -37,9 +37,7 @@ local function create_slider_bg(w)
     }
 end
 
----@alias PromiseYieldingFunction fun(): Promise
-
----@param args { on_value_change: function?, image: string, id: string?, on_right_click: function?, update: PromiseYieldingFunction }
+---@param args { on_value_change: function?, image: string, id: string?, on_right_click: function?, update: fun(): Promise<number> }
 local function cmd_slider(args)
     args = args or {}
 
@@ -122,8 +120,8 @@ local function cmd_slider(args)
     }
 
     -- timer to update the visual
-    gtimer {
-        timeout = 0.5,
+    local timer = gtimer {
+        timeout = 0.2,
         autostart = true,
         callback = function()
             if not stack.visible then
@@ -144,6 +142,8 @@ local function cmd_slider(args)
             end)
         end
     }
+
+    stack.timer = timer
 
     return stack
 end

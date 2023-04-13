@@ -1,13 +1,13 @@
-local no_scroll = require("src.widgets.helper.no_scroll")
-local wibox     = require("wibox")
-local get_font  = require("src.util.get_font")
-local shapes    = require("src.util.shapes")
-local config    = require("config")
+local no_scroll       = require("src.widgets.helper.no_scroll")
+local wibox           = require("wibox")
+local get_font        = require("src.util.get_font")
+local shapes          = require("src.util.shapes")
+local config          = require("config")
 
-local toolkit = {}
+local toolkit         = {}
 
 ---@enum ToolkitFontSize
-toolkit.font_size = {
+toolkit.font_size     = {
     TITLE    = 18,
     SUBTITLE = 14,
     BODY     = 12,
@@ -62,13 +62,12 @@ end
 ---@param callback function?
 ---@param style { hover: Color?, normal: Color?, radius: number? }?
 ---@return table widget
-toolkit.button = function(content, callback, style)
+toolkit.button        = function(content, callback, style)
     return toolkit.widget_button(
         {
             widget = wibox.widget.textbox,
             font = get_font(toolkit.font_size.BODY),
             text = content,
-
             id = "button-text"
         },
         callback,
@@ -78,34 +77,40 @@ end
 
 ---@param text string
 ---@param font_size FontSize?
-function toolkit.text(text, font_size)
+---@param id string?
+function toolkit.text(text, font_size, id)
     font_size = font_size or toolkit.font_size.BODY
 
-    return wibox.widget {
+    return {
         widget = wibox.widget.textbox,
         font   = get_font(font_size),
         text   = text,
+        id     = id
     }
 end
 
 ---@param text string
-function toolkit.title(text)
-    return toolkit.text(text, toolkit.font_size.TITLE)
+---@param id string?
+function toolkit.title(text, id)
+    return toolkit.text(text, toolkit.font_size.TITLE, id)
 end
 
 ---@param text string
-function toolkit.subtitle(text)
-    return toolkit.text(text, toolkit.font_size.SUBTITLE)
+---@param id string?
+function toolkit.subtitle(text, id)
+    return toolkit.text(text, toolkit.font_size.SUBTITLE, id)
 end
 
 ---@param text string
-function toolkit.body(text)
-    return toolkit.text(text, toolkit.font_size.BODY)
+---@param id string?
+function toolkit.body(text, id)
+    return toolkit.text(text, toolkit.font_size.BODY, id)
 end
 
 ---@param text string
-function toolkit.tiny(text)
-    return toolkit.text(text, toolkit.font_size.TINY)
+---@param id string?
+function toolkit.tiny(text, id)
+    return toolkit.text(text, toolkit.font_size.TINY, id)
 end
 
 ---@param id string

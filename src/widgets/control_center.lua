@@ -209,6 +209,14 @@ local function create_control_center()
             music_widget:emit_signal("property::visible")
         end
 
+        if visible then
+            brightness_control.timer:again()
+            volume_control.timer:again()
+        else
+            brightness_control.timer:stop()
+            volume_control.timer:stop()
+        end
+
         brightness_control.visible = visible
         volume_control.visible = visible
     end)

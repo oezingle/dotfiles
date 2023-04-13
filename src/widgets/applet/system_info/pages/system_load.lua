@@ -1,27 +1,30 @@
-local cpu_arc      = require("src.widgets.applet.system_info.cpu_arc")
-local memory_usage = require("src.widgets.applet.system_info.memory_usage")
-local awful        = require("awful")
-local wibox        = require("wibox")
-local atk          = require("src.widgets.helper.applet.toolkit")
+local cpu_arc            = require("src.widgets.applet.system_info.cpu_arc")
+local memory_usage       = require("src.widgets.applet.system_info.memory_usage")
+local awful              = require("awful")
+local wibox              = require("wibox")
+local atk                = require("src.widgets.helper.applet.toolkit")
 local check_dependencies = require("src.util.check_dependencies")
 
 local function create_system_load()
+    local mem_usage, mem_timer = memory_usage(false)
+    local swap_usage, swap_timer = memory_usage(true)
+
+    local timers = { mem_timer, swap_timer }
+
     local system_load = wibox.widget {
         atk.title("System Load"),
         atk.subtitle("CPU Load"),
         {
             -- CPU arccharts: generated later because we need to grep the cpu count
             id = "cpu-core-charts",
-
             layout = wibox.layout.flex.horizontal,
             spacing = 15,
         },
 
         atk.subtitle("Memory"),
-        memory_usage(false),
+        mem_usage,
         atk.subtitle("Swap"),
-        memory_usage(true),
-
+        swap_usage,
         --[[
             atk.subtitle("Disk Usage")
             {
@@ -37,28 +40,20 @@ local function create_system_load()
     }
 
     do
-        check_dependencies({ "mpstat"}, function ()
+        check_dependencies({ "mpstat" }, function()
             awful.spawn.easy_async("grep -c ^processor /proc/cpuinfo", function(result)
                 local layout = system_load:get_children_by_id("cpu-core-charts")[1]
-    
+
                 local core_count = tonumber(result) - 1
-    
+
                 for core = 0, core_count do
                     local arc, timer = cpu_arc(core)
-    
-                    system_load:connect_signal("property::visible", function (w)
-                        -- TODO i think this doesn't work properly
 
-                        if w.visible then
-                            timer:again()
-                        else
-                            timer:stop()
-                        end
-                    end)
-    
+                    table.insert(timers, timer)
+
                     layout:add(arc)
                 end
-            end)            
+            end)
         end)
 
         --[[
@@ -73,6 +68,24 @@ local function create_system_load()
             end)
         ]]
     end
+
+    system_load:connect_signal("property::visible", function(w)
+        local visible = w.visible
+
+        for _, timer in ipairs(timers) do
+            if visible then
+                timer:again()
+            else
+                if timer.started then
+                    timer:stop()
+                end
+            end
+        end
+    end)
+
+    -- TODO could cause a bug if someone configures their system to open the applet on startup for some reason
+    system_load.visible = false
+    system_load:emit_signal("property::visible", system_load)
 
     return system_load
 end

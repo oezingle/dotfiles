@@ -11,7 +11,7 @@ local function cpu_arc(core_number)
 
     return watch_widget(
         cmd,
-        1,
+        5,
         function(widget, stdout)
             widget.value = 100 - (tonumber(stdout) or 0)
         end,
