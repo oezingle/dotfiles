@@ -51,7 +51,14 @@ local function create_awesome_info()
                     atk.subtitle("Font"),
                     atk.body(config.font),
 
-                    layout = wibox.layout.fixed.vertical,
+                    layout = wibox.layout.flex.horizontal,
+                },
+
+                {
+                    atk.subtitle("Compositor"),
+                    atk.body(tostring(awesome.composite_manager_running)),
+
+                    layout = wibox.layout.flex.horizontal,
                 },
 
                 {
@@ -116,6 +123,10 @@ local function create_awesome_info()
             layout = wibox.layout.fixed.horizontal,
             spacing = 5,
         },
+
+        atk.button("Launch Logger", function ()
+            awful.spawn.with_shell(string.format("%s -e \"tail -f /proc/$(pidof awesome)/fd/2\"", config.apps.terminal))
+        end),
 
         layout = wibox.layout.fixed.vertical,
         spacing = 5,
