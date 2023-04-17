@@ -19,6 +19,8 @@ local create_tag_switcher   = require("src.taskbar.tag_switcher")
 local create_tasklist       = require("src.taskbar.tasklist")
 local create_appmenu        = require("src.taskbar.appmenu")
 
+local layoutbox             = require("src.mod.awful.widgets.layoutbox")
+
 local unpack                = require("src.agnostic.version.unpack")
 
 local function color_border_widget(args)
@@ -102,7 +104,7 @@ local function create_taskbar()
                 }
             }
 
-            wal.on_change(function (scheme)
+            wal.on_change(function(scheme)
                 s.left_bar.bg = scheme.special.background .. "66"
             end)
         end
@@ -114,7 +116,9 @@ local function create_taskbar()
             height = config.taskbar.top
         }
 
-        s.layout_indicator = awful.widget.layoutbox(s)
+        s.layout_indicator = layoutbox { 
+            screen = s,
+        }
         s.layout_indicator:buttons(gears.table.join(
             awful.button({}, 1, function() awful.layout.inc(1) end),
             awful.button({}, 3, function() awful.layout.inc(-1) end),
@@ -166,7 +170,7 @@ local function create_taskbar()
             },
         }
 
-        wal.on_change(function (scheme)
+        wal.on_change(function(scheme)
             s.top_bar.bg = scheme.special.background .. "66"
         end)
     end)

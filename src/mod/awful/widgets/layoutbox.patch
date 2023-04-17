@@ -1,0 +1,68 @@
+--- src/mod/awful/widgets/layoutbox.lua.original	2023-04-16 20:59:31.041859296 -0700
++++ src/mod/awful/widgets/layoutbox.lua	2023-04-16 20:47:47.414687435 -0700
+@@ -1,3 +1,5 @@
++-- Modified from https://github.com/awesomeWM/awesome/blob/master/lib/awful/widget/layoutbox.lua in order to support pywal
++
+ ---------------------------------------------------------------------------
+ --- Display the current client layout (`awful.layout`) icon or name.
+ --
+@@ -18,6 +20,8 @@
+ local surface = require("gears.surface")
+ local gdebug = require("gears.debug")
+ local gtable = require("gears.table")
++local gcolor = require("gears.color")
++local wal = require("src.util.wal")
+ 
+ local function get_screen(s)
+     return s and capi.screen[s]
+@@ -32,9 +36,18 @@
+     local name = layout.getname(layout.get(screen))
+     w._layoutbox_tooltip:set_text(name or "[no name]")
+ 
+-    local img = surface.load_silently(beautiful["layout_" .. name], false)
+-    w.imagebox.image = img
+-    w.textbox.text   = img and "" or name
++    local img        = surface.load_silently(beautiful["layout_" .. name], false)
++
++    local scheme = wal()
++
++    if not scheme then
++        return
++    end
++
++    local new_img = img and gcolor.recolor_image(img, scheme.special.foreground)
++
++    w.imagebox.image = new_img
++    w.textbox.text   = new_img and "" or name
+ end
+ 
+ local function update_from_tag(t)
+@@ -61,7 +74,7 @@
+ 
+         gdebug.deprecate(
+             "Use awful.widget.layoutbox{screen=s} instead of awful.widget.layoutbox(screen)",
+-            {deprecated_in=5}
++            { deprecated_in = 5 }
+         )
+     end
+ 
+@@ -99,13 +112,18 @@
+             layout = wibox.layout.fixed.horizontal
+         }
+ 
+-        w._layoutbox_tooltip = tooltip {objects = {w}, delay_show = 1}
++        w._layoutbox_tooltip = tooltip { objects = { w }, delay_show = 1 }
+ 
+         -- Apply the buttons, visible, forced_width and so on
+         gtable.crush(w, args)
+ 
+         update(w, screen)
+         boxes[screen] = w
++
++        -- Update with pywal
++        wal.on_change(function ()
++            update(w, screen)
++        end)
+     end
+ 
+     return w

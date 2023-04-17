@@ -106,6 +106,7 @@ end
 function gtk_menu:get_children()
     return self:get_menu():get_children()
 end
+
 function gtk_menu.provides(client)
     return get_appmenu_information(client)
         :after(function(information)

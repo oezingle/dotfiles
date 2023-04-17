@@ -103,6 +103,14 @@ local function list(dir)
     return files
 end
 
+---@param src string
+---@param dest string
+local function cp(src, dest) 
+    local content = read_file(src) or ""
+
+    write_file(dest, content)
+end
+
 return {
     exists = exists,
     mkdir  = mkdir,

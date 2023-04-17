@@ -128,8 +128,6 @@ function appmenu.on_activate ()
     end
 end
 
--- TODO cache provider, changing only if client changes or appmenu.reload()
-
 ---@return Promise<MenuProvider|nil>
 function appmenu.load_provider()
     return appmenu._find_provider()

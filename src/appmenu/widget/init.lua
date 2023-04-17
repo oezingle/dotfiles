@@ -20,7 +20,6 @@
     - keep menu in memory as much as possible
         - limits DBus calls, therefore increasing speed
 ]]
-
 local appmenu                 = require("src.appmenu.appmenu")
 local fake_menu_item          = require("src.appmenu.menu_provider.fake")
 
@@ -118,6 +117,8 @@ local function set_menu_client(menu, client)
     end
 end
 
+-- TODO error if a canonical window is focused on restart
+
 ---@param config AppmenuConfig?
 local function create_appmenu(config)
     if config then
@@ -195,7 +196,7 @@ local function create_appmenu(config)
             set_menu_client(menu, client)
         end
     end)
-
+    
     return menu:get_widget()
 end
 

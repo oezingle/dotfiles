@@ -13,6 +13,7 @@ local config = require("config")
 local class = require("lib.30log")
 
 local get_decoration_color = require("src.util.color.get_decoration_color")
+local wal_svg = require("src.widgets.components.wal_svg")
 
 local dropdown = class("Dropdown Widget")
 
@@ -52,7 +53,8 @@ end
 function dropdown:get_button()
     local button = wibox.widget {
         image = self.icon_closed,
-        widget = wibox.widget.imagebox
+        widget = wal_svg,
+        replace = "white"
     }
 
     -- propogate visibility down so that a user-defined widget can detect being hidden

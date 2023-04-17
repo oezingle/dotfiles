@@ -9,10 +9,6 @@ local config              = require("config")
 
 local wibox = require("wibox")
 
--- TODO stop timers when widget invisible - disabled until then
-
--- TODO page_indicator.visible = false -> property::visible 
-
 local function create_system_info()
     local pages = pagination {
         create_system_load(),

@@ -14,6 +14,7 @@ end
 
 local UPowerGlib             = lgi.require("UPowerGlib")
 local awesome_battery_widget = require("lib.awesome-battery_widget")
+local wal_svg                = require("src.widgets.components.wal_svg")
 local wibox                  = require("wibox")
 local awful                  = require('awful')
 local config                 = require("config")
@@ -73,7 +74,8 @@ local function create_battery_widget(s)
                 }
             },
             {
-                widget = wibox.widget.imagebox,
+                widget = wal_svg,
+                replace = "white",
                 image = get_icon("battery/battery-dead-outline.svg"),
                 id = "battery-icon"
             },
@@ -117,20 +119,20 @@ local function create_battery_widget(s)
         end
 
         local state_string = ({
-                    [UPowerGlib.DeviceState.UNKNOWN]       = translations.battery.state.unknown,
-                    [UPowerGlib.DeviceState.CHARGING]      = translations.battery.state.charging,
-                    [UPowerGlib.DeviceState.DISCHARGING]   = translations.battery.state.discharging,
-                    [UPowerGlib.DeviceState.EMPTY]         = translations.battery.state.empty,
-                    [UPowerGlib.DeviceState.FULLY_CHARGED] = translations.battery.state.fully_charged,
-                    [UPowerGlib.DeviceState.PENDING_CHARGE] = translations.battery.state.pending_charge,
-                    [UPowerGlib.DeviceState.PENDING_DISCHARGE] = translations.battery.state.pending_discharge,
-                    [UPowerGlib.DeviceState.LAST]          = translations.battery.state.last
-            })[device.state]
+            [UPowerGlib.DeviceState.UNKNOWN]           = translations.battery.state.unknown,
+            [UPowerGlib.DeviceState.CHARGING]          = translations.battery.state.charging,
+            [UPowerGlib.DeviceState.DISCHARGING]       = translations.battery.state.discharging,
+            [UPowerGlib.DeviceState.EMPTY]             = translations.battery.state.empty,
+            [UPowerGlib.DeviceState.FULLY_CHARGED]     = translations.battery.state.fully_charged,
+            [UPowerGlib.DeviceState.PENDING_CHARGE]    = translations.battery.state.pending_charge,
+            [UPowerGlib.DeviceState.PENDING_DISCHARGE] = translations.battery.state.pending_discharge,
+            [UPowerGlib.DeviceState.LAST]              = translations.battery.state.last
+        })[device.state]
 
         local warning_string = ({
-                    [UPowerGlib.DeviceLevel.ACTION] = translations.battery.warning.action,
-                    [UPowerGlib.DeviceLevel.CRITICAL] = translations.battery.warning.critical
-            })[device.warning_level]
+            [UPowerGlib.DeviceLevel.ACTION] = translations.battery.warning.action,
+            [UPowerGlib.DeviceLevel.CRITICAL] = translations.battery.warning.critical
+        })[device.warning_level]
 
         battery_tooltip.textbox.text = state_string ..
             " - " .. tostring(math.floor(device.percentage)) .. "%" .. "\n" ..

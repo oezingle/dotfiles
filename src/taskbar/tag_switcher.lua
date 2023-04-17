@@ -1,10 +1,10 @@
-local awful = require("awful")
-local gears = require("gears")
-local wibox = require("wibox")
-local no_scroll = require("src.widgets.helper.no_scroll")
-local wal       = require("src.util.wal")
+local awful           = require("awful")
+local gears           = require("gears")
+local wibox           = require("wibox")
+local no_scroll       = require("src.widgets.helper.no_scroll")
+local wal             = require("src.util.wal")
 
-local config = require("config")
+local config          = require("config")
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -35,11 +35,11 @@ local function create_tag_switcher(screen)
     }
 
     screen.tag_switcher = awful.widget.taglist {
-        screen  = screen,
-        filter  = awful.widget.taglist.filter.all,
-        buttons = taglist_buttons,
+        screen          = screen,
+        filter          = awful.widget.taglist.filter.all,
+        buttons         = taglist_buttons,
 
-        style = style,
+        style           = style,
 
         widget_template = {
             {
@@ -86,8 +86,11 @@ local function create_tag_switcher(screen)
         },
     }
 
-    wal.on_change(function (scheme)
+    wal.on_change(function(scheme)
         style.bg_occupied = scheme.special.foreground
+        
+        -- TODO maybe
+        -- style.bg_focus    = scheme.special.background
 
         screen.tag_switcher:_do_taglist_update()
     end)

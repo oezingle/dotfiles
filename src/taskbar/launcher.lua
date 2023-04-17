@@ -4,11 +4,14 @@ local no_scroll = require("src.widgets.helper.no_scroll")
 
 local get_icon = require("src.util.fs.get_icon")
 
+local wal_svg = require("src.widgets.components.wal_svg")
+
 local function create_launcher()
     local button = wibox.widget {
         image = get_icon("apps.svg"),
         resize = true,
-        widget = wibox.widget.imagebox
+        widget = wal_svg,
+        replace = "white",
     }
 
     button:connect_signal("button::press", no_scroll(function()
