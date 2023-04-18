@@ -103,7 +103,8 @@ local config = {
     lock_time = 10,
     
 
-    -- string[] or table<string, string> where the key is of the form "h:mm".
+    -- string|{ list: string[]|table<string of type "h:mm", string>, time: number|string|nil }
+    -- list: array or table indexed by hour and minute
     -- time: string (parsed to number) or number (number of hours per wallpaper change) or nil
     wallpaper = "~/Pictures/wallpaper.jpg",
 }

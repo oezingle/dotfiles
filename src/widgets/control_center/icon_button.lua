@@ -1,9 +1,9 @@
 local wibox = require("wibox")
 
-local button_widget = require("src.widgets.util.button")
+local button = require("src.widgets.util.button")
 
-local function icon_button(icon, callback, tooltip)
-    local widget = button_widget(
+local function icon_button(icon, callback)
+    return button.centered(
         {
             widget = wibox.widget.imagebox,
             resize = true,
@@ -11,11 +11,8 @@ local function icon_button(icon, callback, tooltip)
             forced_height = 32,
             image = icon,
         },
-        callback,
-        tooltip
+        callback
     )
-
-    return widget
 end
 
 return icon_button

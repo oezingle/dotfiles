@@ -2,16 +2,8 @@
 - task bar
 	- calendar (click clock)
 
-- rename src.widgets.util.color_bg - src.widgets.util.box?
-
 - improve notification center
 	- add date/time
-
-- use 30log for widgets. somehow
-
-- wallpapers
-	- partially looks like shit with light wallpaper
-		- wal for svg's
 
 - more unit tests
 
@@ -31,33 +23,21 @@
 
 - thunar has an error under luajit: attempt to index field 'layout' (a userdata value)
 
-- there sometimes still are ghost appmenu menus
-	- seems to happen when you leave and re-enter the same item too quickly
-	- clicking an appmenu item doesn't close the menu
-
-- diagnostic / debug features in system menu?
-
 - time doesn't localize
 
 - default app selector (through rofi?)
 
 - configuration interface
 
-- remove dropdown widget
-
 - translations everywhere
 
 - Xorg intel config
 	- [disable TearFree, TripleBuffer, SwapbuffersWait](https://wiki.archlinux.org/title/Intel_graphics#Disabling_TearFree,_TripleBuffer,_SwapbuffersWait)
 
-- Optimize
-	- No seriously, CPU usage is supposed to be around 1%
-		- https://github.com/awesomeWM/awesome/issues/2733
-	- https://www.lua.org/gems/sample.pdf
-	- http://lua-users.org/wiki/OptimisationTips
-	- http://lua-users.org/wiki/OptimisationCodingTips
-	- http://lua-users.org/wiki/OptimisingUsingLocalVariables
-	- http://lua-users.org/wiki/MinimisingClosures
+- rebuild screen preview
 
-- cool button library
-	- https://github.com/streetturtle/awesome-buttons
+- refactor widgets
+	- widgets/components -> anything completed (music, control_center, etc)
+	- widgets/helper -> utilities, bobbins, applet toolkit
+
+- Use pre-built buttons

@@ -1,3 +1,5 @@
+-- TODO refactor to applet
+
 local wibox = require("wibox")
 local awful = require("awful")
 local no_scroll = require("src.widgets.helper.no_scroll")

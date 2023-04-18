@@ -2,40 +2,34 @@ local wibox = require("wibox")
 
 local no_scroll = require("src.widgets.helper.no_scroll")
 
-local color_bg_widget = require('src.widgets.util.color_bg')
+local config = require("config")
+local shapes = require("src.util.shapes")
 
-local config = require('config')
+local button = {}
 
---- Wrap a widget with a clickable background
----@param widget table the child widget
----@param callback function? the callback function
----@param tooltip string? a tooltip 
----@param center boolean? whether or not to center the child widget (default true)
----@return table
-local function button_widget(widget, callback, tooltip, center)
-    if type(center) == "nil" then
-        center = true
-    end
+--- Place a widget in a background with hover effects, and call a callback when clicked.
+--- No styling.
+---@param widget Widget
+---@param callback function
+---@return Widget
+function button.button(widget, callback)
+    local button = wibox.widget {
+        widget,
 
-    local child = center and wibox.widget { widget, layout = wibox.container.place } or widget
-
-    local widget = color_bg_widget {
-        child,
         bg = config.button.normal,
-        fill_space = true
+
+        layout = wibox.container.background,
+
+        shape = shapes.rounded_rect()
     }
 
-    if callback then
-        widget:connect_signal("button::press", no_scroll(callback))
-    end
-
-    widget:connect_signal("mouse::enter", function()
+    button:connect_signal("mouse::enter", function()
         widget.old_bg = widget.bg
 
         widget.bg = config.button.hover
     end)
 
-    widget:connect_signal("mouse::leave", function()
+    button:connect_signal("mouse::leave", function()
         if widget.old_bg then
             widget.bg = widget.old_bg
 
@@ -43,18 +37,23 @@ local function button_widget(widget, callback, tooltip, center)
         end
     end)
 
-    -- TODO a nice tooltip
-    --[[
-    if tooltip then
-        local tooltip_w = awful.tooltip {
-            objects        = { widget },
-            text = tooltip,
-            mode = "outside"
-        }        
-    end
-    ]]
+    button:connect_signal("button::press", no_scroll(callback))
 
-    return widget
+    return button
 end
 
-return button_widget
+---@param widget Widget
+---@param callback function
+function button.centered (widget, callback)
+    return button.button({
+        widget,
+
+        layout = wibox.container.place
+    }, callback)
+end
+
+return setmetatable(button, {
+    __call = function(_, ...)
+        button.button(...)
+    end
+})

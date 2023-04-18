@@ -1,7 +1,8 @@
 local wibox = require("wibox")
 local wal   = require("src.util.wal")
 
---- Wrap a widget in pywal colors
+--- Set the foreground and background of a widget based on pywal updates. 
+--- Useful for text etc 
 ---@param child table child widget
 ---@param fg? boolean defaults to true
 ---@param bg? boolean defaults to false

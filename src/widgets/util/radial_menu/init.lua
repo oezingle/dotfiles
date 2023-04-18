@@ -1,48 +1,15 @@
 local awful              = require("awful")
 local wibox              = require("wibox")
-local Class              = require("src.util.Class")
-local gtable             = require("gears.table")
-local base               = require("wibox.widget.base")
 local no_scroll          = require("src.widgets.helper.no_scroll")
 local shapes             = require("src.util.shapes")
 local config             = require("config")
 local get_icon           = require("src.util.fs.get_icon")
 local get_preferred_size = require("src.widgets.helper.get_preferred_size")
-
-local pack               = require("src.agnostic.version.pack")
+local center_badly       = require("src.widgets.util.radial_menu.center_badly")
 
 -- TODO rewrite with 30log class for RadialMenu
-
--- small layout that fits a widget very badly so that it's centered
-local center_badly       = Class({})
-
-function center_badly:fit(context, width, height)
-    return base.fit_widget(self, context, self._private.widget, width, height);
-end
-
-function center_badly:layout(_, width, height)
-    return { base.place_widget_at(self._private.widget, -width / 2, -height / 2, width, height) }
-end
-
-function center_badly:set_children(...)
-    local children = pack(...)
-
-    assert(#children == 1)
-
-    self._private.widget = children[1]
-end
-
-function center_badly:init(widget)
-    local ret = base.make_widget(nil, nil, { enable_properties = true })
-
-    gtable.crush(ret, center_badly, true)
-
-    if widget then
-        ret:set_children(widget)
-    end
-
-    return ret
-end
+-- singleton for the widget
+-- consider a native wibox layout? like radial_menu is designed to distribute children equally
 
 --------------------------------------------------
 
@@ -80,14 +47,13 @@ local radial_menu_wibox, radial_menu = create_radial_menu()
 ---@param children { widget: table, callback: function }[] the list of items in the menu
 ---@param use_mouse boolean? if the mouse coordinates should be the menu's center
 local function radial_menu_contents(children, use_mouse)
-    children                 = children or {}
+    children  = children or {}
+    use_mouse = use_mouse or false
 
-    use_mouse                = use_mouse or false
+    local s   = awful.screen.focused()
 
-    local s                  = awful.screen.focused()
 
     radial_menu_wibox.screen = s
-
     radial_menu_wibox.width  = s.geometry.width
     radial_menu_wibox.height = s.geometry.height
 
@@ -181,7 +147,6 @@ local function radial_menu_contents(children, use_mouse)
         local wrapped_child = wibox.widget {
             {
                 child.widget,
-
                 layout = wibox.container.margin,
                 margins = 0,
             },
@@ -233,16 +198,13 @@ local function radial_menu_contents(children, use_mouse)
                     {
                         widget = wibox.widget.imagebox,
                         image = get_icon("close-outline.svg"),
-
                         forced_height = 32,
                         forced_width = 32,
                     },
                     layout = wibox.container.place,
-
                     forced_width = 64,
                     forced_height = 64,
                 },
-
                 layout = wibox.container.margin,
                 margins = 0
             },
@@ -290,14 +252,14 @@ local function radial_menu_contents(children, use_mouse)
 
                 for _, geometry in ipairs(mouse.current_widget_geometries) do
                     local is_symbolic_child = (function()
-                            for _, symbolic_child in ipairs(symbolic_children) do
-                                if geometry.widget == symbolic_child then
-                                    return true
-                                end
+                        for _, symbolic_child in ipairs(symbolic_children) do
+                            if geometry.widget == symbolic_child then
+                                return true
                             end
+                        end
 
-                            return false
-                        end)()
+                        return false
+                    end)()
 
                     if is_symbolic_child then
                         local center_x = geometry.x + (geometry.width / 2)

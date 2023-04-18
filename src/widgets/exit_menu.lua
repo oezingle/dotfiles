@@ -1,24 +1,24 @@
 -- modified from
 -- https://github.com/manilarome/the-glorious-dotfiles/blob/master/config/awesome/gnawesome/module/exit-screen.lua
 
-local awful = require('awful')
-local gears = require('gears')
-local wibox = require('wibox')
-local beautiful = require('beautiful')
-local dpi = beautiful.xresources.apply_dpi
+local awful                = require('awful')
+local gears                = require('gears')
+local wibox                = require('wibox')
+local dpi                  = require('beautiful').xresources.apply_dpi
 
-local config = require("config")
+local config               = require("config")
+local shapes               = require("src.util.shapes")
 
-local get_icon = require("src.util.fs.get_icon")
+local get_icon             = require("src.util.fs.get_icon")
 
-local button_widget = require("src.widgets.util.button")
-local color_bg_widget = require("src.widgets.util.color_bg")
+local button               = require("src.widgets.util.button")
+local get_decoration_color = require("src.util.color.get_decoration_color")
 
-local msg_table = {
+local msg_table            = {
 	'See you never',
 }
 
-local greeter_message = wibox.widget {
+local greeter_message      = wibox.widget {
 	markup = 'Choose wisely!',
 	font = 'Inter UltraLight 24',
 	align = 'center',
@@ -26,7 +26,7 @@ local greeter_message = wibox.widget {
 	widget = wibox.widget.textbox
 }
 
-local profile_name = wibox.widget {
+local profile_name         = wibox.widget {
 	markup = 'user@hostname',
 	font = 'Inter Bold 12',
 	align = 'center',
@@ -34,7 +34,7 @@ local profile_name = wibox.widget {
 	widget = wibox.widget.textbox
 }
 
-local update_user_name = function()
+local update_user_name     = function()
 	awful.spawn.easy_async_with_shell(
 		[[
 		fullname="$(getent passwd `whoami` | cut -d ':' -f 5 | cut -d ',' -f 1 | tr -d "\n")"
@@ -65,8 +65,8 @@ end
 update_greeter_msg()
 
 local build_power_button = function(name, icon, callback)
-	return button_widget(
-		wibox.widget {
+	return button.centered(
+		{
 			nil,
 			{
 				{
@@ -87,7 +87,6 @@ local build_power_button = function(name, icon, callback)
 			},
 			layout = wibox.layout.align.vertical,
 			expand = "inside",
-
 			forced_width = 96,
 			forced_height = 96,
 		},
@@ -128,18 +127,18 @@ local lock = build_power_button('Lock', get_icon("exit-menu/lock-closed-outline.
 
 local create_exit_screen = function(s)
 	s.exit_screen = wibox
-	{
-		screen = s,
-		type = 'splash',
-		visible = false,
-		ontop = true,
-		bg = "#00000066",
-		fg = "#fff",
-		height = s.geometry.height,
-		width = s.geometry.width,
-		x = s.geometry.x,
-		y = s.geometry.y
-	}
+		{
+			screen = s,
+			type = 'splash',
+			visible = false,
+			ontop = true,
+			bg = "#00000066",
+			fg = "#fff",
+			height = s.geometry.height,
+			width = s.geometry.width,
+			x = s.geometry.x,
+			y = s.geometry.y
+		}
 
 	s.exit_screen:buttons(
 		gears.table.join(
@@ -162,29 +161,38 @@ local create_exit_screen = function(s)
 
 	s.exit_screen:setup {
 		wibox.widget {
-			color_bg_widget {
-				layout = wibox.layout.align.vertical,
-				profile_name,
-				{
-					widget = wibox.container.margin,
-					margins = dpi(15),
-					greeter_message
-				},
+			{
 				{
 					{
-						poweroff,
-						reboot,
-						suspend,
-						logout,
-						lock,
-						layout = wibox.layout.fixed.horizontal,
-						spacing = 10,
+						layout = wibox.layout.align.vertical,
+						profile_name,
+						{
+							widget = wibox.container.margin,
+							margins = dpi(15),
+							greeter_message
+						},
+						{
+							{
+								poweroff,
+								reboot,
+								suspend,
+								logout,
+								lock,
+								layout = wibox.layout.fixed.horizontal,
+								spacing = 10,
+							},
+							spacing = dpi(30),
+							layout = wibox.layout.fixed.vertical
+						},
 					},
-					spacing = dpi(30),
-					layout = wibox.layout.fixed.vertical
+					layout = wibox.container.margin,
+					margins = 10,
 				},
-				margins = 10,
+				layout = wibox.container.background,
+				shape = shapes.rounded_rect(),
 				bg = config.popup.bg,
+				shape_border_width = config.border.floating_width,
+				shape_border_color = get_decoration_color()
 			},
 			layout = wibox.container.place
 		},
@@ -212,19 +220,14 @@ local exit_screen_grabber = awful.keygrabber {
 	keypressed_callback = function(self, mod, key, command)
 		if key == 's' then
 			suspend_command()
-
 		elseif key == 'e' then
 			logout_command()
-
 		elseif key == 'l' then
 			lock_command()
-
 		elseif key == 'p' then
 			poweroff_command()
-
 		elseif key == 'r' then
 			reboot_command()
-
 		elseif key == 'Escape' or key == 'q' or key == 'x' then
 			awesome.emit_signal('module::exit_screen:hide')
 		end

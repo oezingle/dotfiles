@@ -1,23 +1,20 @@
-local wibox               = require("wibox")
-local awful               = require("awful")
-local config              = require("config")
-local no_scroll           = require("src.widgets.helper.no_scroll")
-local check_dependencies  = require("src.util.check_dependencies")
-local spawn               = require("src.agnostic.spawn")
+local wibox                = require("wibox")
+local awful                = require("awful")
+local config               = require("config")
+local no_scroll            = require("src.widgets.helper.no_scroll")
+local check_dependencies   = require("src.util.check_dependencies")
+local spawn                = require("src.agnostic.spawn")
 
-local shapes              = require("src.util.shapes")
-local redshift            = require("src.util.redshift")
+local shapes               = require("src.util.shapes")
+local redshift             = require("src.util.redshift")
 
-local create_music_widget = require("src.widgets.music")
--- local network_manager_widget = require("src.widgets.network_manager")
-local dropdown            = require("src.widgets.util.dropdown")
-local cmd_slider          = require("src.widgets.components.cmd_slider")
-local icon_button         = require("src.widgets.components.icon_button")
+local create_music_widget  = require("src.widgets.music")
+local cmd_slider           = require("src.widgets.components.cmd_slider")
+local icon_button          = require("src.widgets.components.icon_button")
 
-local get_icon            = require("src.util.fs.get_icon")
-local scratch             = require("src.util.scratch")
+local get_icon             = require("src.util.fs.get_icon")
 
-local Promise             = require("src.util.Promise")
+local Promise              = require("src.util.Promise")
 
 local function toggle_icon_button(icon, callback, tooltip, initial)
     local state = initial or false
@@ -78,14 +75,6 @@ local function create_control_center()
         },
         widget = wibox.container.margin,
         margins = 10
-    }
-
-    local dropdown = dropdown {
-        widget = widget,
-        shape = shapes.rounded_rect(),
-
-        icon_closed = get_icon("options-outline.svg"),
-        icon_open = get_icon("options-outline.svg"),
     }
 
     local grid = widget:get_children_by_id("layout-grid")[1]
@@ -221,7 +210,7 @@ local function create_control_center()
         volume_control.visible = visible
     end)
 
-    return dropdown:get_button()
+    return widget
 end
 
 return create_control_center

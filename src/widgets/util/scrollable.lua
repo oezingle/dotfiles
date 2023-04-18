@@ -63,6 +63,7 @@ local function generate_background(bar, content, scroll)
 end
 
 -- TODO set scrollbar if child content changes height, but don't query child height. is there some signal for this perhaps?
+-- connect signal widget::layout_changed (is that the signal?) -> query size
 
 local function scrollable(child)
     local scroll_px = 0

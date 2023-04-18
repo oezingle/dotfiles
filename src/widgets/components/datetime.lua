@@ -1,3 +1,5 @@
+-- TODO did i ever use this properly
+
 local wibox       = require("wibox")
 local gtable      = require("gears.table")
 local base        = require("wibox.widget.base")
