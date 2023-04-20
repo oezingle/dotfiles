@@ -228,8 +228,6 @@ function menu_button:_on_mouse_leave()
     }
 end
 
-local print = require("src.agnostic.print")
-
 -- TODO icons - esp for KDE apps
 function menu_button:_create_widget()
     local button = nil
@@ -311,8 +309,6 @@ function menu_button:_create_widget()
             self.is_hovered = false
 
             -- mouse_leave_timer:start()
-
-            print("mouse left", self.depth)
 
             self:_on_mouse_leave()
 
