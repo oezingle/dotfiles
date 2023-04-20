@@ -139,10 +139,7 @@ local function create_appmenu()
             ['children'] = '▶',
         },
         
-        -- TODO this shit broken - menus get smaller, and disappear a bunch??
-        -- Might have to do with the menu itself not having a hover state
-        -- It should also have an invisible hover area if possible
-        -- popup_shape = shapes.rounded_rect()
+        popup_shape = shapes.rounded_rect()
     })
 end
 

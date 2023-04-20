@@ -101,6 +101,9 @@ function menu_button:activate()
 end
 
 function menu_button:_create_popup()
+    ---@type Geometry | nil
+    local mgeo = mouse.current_widget_geometry or {}
+
     self.popup = awful.popup {
         widget = self.child
             :get_widget(),
@@ -113,6 +116,9 @@ function menu_button:_create_popup()
 
         preferred_positions = { self.popup_direction },
         preferred_anchors = { 'front' },
+
+        x = mgeo and mgeo.x,
+        y = mgeo and mgeo.y + mgeo.height,
 
         shape = appmenu.get_config().popup_shape
     }
@@ -157,8 +163,20 @@ function menu_button:hover()
                     self:_create_popup()
                 end
 
+                --[[
+                local mgeo = mouse.current_widget_geometry
+
+                ---@type Geometry | nil
+                local geo = mgeo and {
+                    x = mgeo.x,
+                    y = mgeo.y + mgeo.height,
+                    width = mgeo.width,
+                    height = 0
+                } or nil
+
                 -- move to mouse
-                self.popup:move_next_to(mouse.current_widget_geometry)
+                self.popup:move_next_to(geo)
+                ]]
 
                 self.popup.visible = true
             end)
@@ -209,6 +227,8 @@ function menu_button:_on_mouse_leave()
         end
     }
 end
+
+local print = require("src.agnostic.print")
 
 -- TODO icons - esp for KDE apps
 function menu_button:_create_widget()
@@ -291,6 +311,8 @@ function menu_button:_create_widget()
             self.is_hovered = false
 
             -- mouse_leave_timer:start()
+
+            print("mouse left", self.depth)
 
             self:_on_mouse_leave()
 

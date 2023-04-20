@@ -7,7 +7,7 @@
 
 - more unit tests
 
-- improve powertop 
+- improve powertop
 	- https://askubuntu.com/questions/678779/powertop-auto-tune-without-messing-with-usb-and-touchpad
 
 - limit hovered clients to 1 while using screen preview
@@ -35,12 +35,6 @@
 	- [disable TearFree, TripleBuffer, SwapbuffersWait](https://wiki.archlinux.org/title/Intel_graphics#Disabling_TearFree,_TripleBuffer,_SwapbuffersWait)
 
 - rebuild screen preview
-
-- refactor widgets
-	- widgets/components -> anything completed (music, control_center, etc)
-	- widgets/helper -> utilities, bobbins, applet toolkit
-
-- FINISH WIDGET REFACTOR
 
 - Use pre-built buttons
 
