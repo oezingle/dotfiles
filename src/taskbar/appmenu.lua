@@ -48,7 +48,6 @@ local function create_appmenu()
                 return widget
             end,
             vertical = function()
-
                 -- TODO remove icon widget if not needed
                 local widget = wibox.widget {
                     layout = wibox.container.background,
@@ -63,22 +62,19 @@ local function create_appmenu()
                             expand = "inside",
                             {
                                 widget = wibox.widget.imagebox,
-                                id = "icon-role"
+                                id = "icon-role",
+                                visible = false
                             },
                             {
-                                layout = wibox.container.margin,
-                                id = "text-margin",
-                                margins = 0,
-                                {
-                                    widget = wibox.widget.textbox,
-                                    id = "text-role",
-                                    font = get_font(13)
-                                },
+                                widget = wibox.widget.textbox,
+                                id = "text-role",
+                                font = get_font(13)
                             },
                             {
                                 widget = wibox.widget.textbox,
                                 id = "shortcut-role",
-                                font = get_font(13)
+                                font = get_font(13),
+                                visible = false
                             }
                         }
                     }
@@ -87,16 +83,15 @@ local function create_appmenu()
                 -- Append extra space after the text if the menu item has a shortcut
                 local shortcut = widget:get_children_by_id("shortcut-role")[1]
 
-                shortcut:connect_signal("widget::redraw_needed", function()
-                    local shortcut = widget:get_children_by_id("shortcut-role")[1]
+                shortcut:connect_signal("widget::redraw_needed", function(w)
+                    w.visible = w.text ~= ""
+                end)
 
-                    local margin = widget:get_children_by_id("text-margin")[1]
-                    if shortcut.text ~= "" then
-                        -- add extra right spacing around widget
-                        margin.right = 15
-                    else
-                        margin.right = 0
-                    end
+                -- Append extra space after the text if the menu item has a shortcut
+                local icon = widget:get_children_by_id("shortcut-role")[1]
+
+                icon:connect_signal("widget::redraw_needed", function(w)                    
+                    w.visible = w.image ~= ""
                 end)
 
                 wal.on_change(function(scheme)
@@ -126,7 +121,6 @@ local function create_appmenu()
                                 spacing = 2,
                                 id = "menu-role"
                             },
-    
                         },
                     }
                 }
@@ -146,7 +140,6 @@ local function create_appmenu()
             ['Super'] = '⌘',
             ['children'] = '▶',
         },
-        
         popup_shape = shapes.rounded_rect()
     })
 end
