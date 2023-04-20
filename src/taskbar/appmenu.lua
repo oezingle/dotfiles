@@ -1,5 +1,6 @@
 local config         = require("config")
 local wal            = require("src.util.wal")
+local shapes         = require("src.util.shapes")
 
 local appmenu_widget = require("src.appmenu.widget")
 local get_font       = require("src.util.get_font")
@@ -136,7 +137,12 @@ local function create_appmenu()
             ['Alt'] = '⌥',
             ['Super'] = '⌘',
             ['children'] = '▶',
-        }
+        },
+        
+        -- TODO this shit broken - menus get smaller, and disappear a bunch??
+        -- Might have to do with the menu itself not having a hover state
+        -- It should also have an invisible hover area if possible
+        -- popup_shape = shapes.rounded_rect()
     })
 end
 

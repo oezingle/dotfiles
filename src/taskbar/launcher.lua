@@ -1,10 +1,10 @@
 local rofi = require("src.sh").rofi
 local wibox = require("wibox")
-local no_scroll = require("src.widgets.helper.no_scroll")
+local no_scroll = require("src.widgets.helper.function.no_scroll")
 
 local get_icon = require("src.util.fs.get_icon")
 
-local wal_svg = require("src.widgets.components.wal_svg")
+local wal_svg = require("src.widgets.element.wal_svg")
 
 local function create_launcher()
     local button = wibox.widget {

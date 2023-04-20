@@ -1,7 +1,7 @@
 local awful           = require("awful")
 local gears           = require("gears")
 local wibox           = require("wibox")
-local no_scroll       = require("src.widgets.helper.no_scroll")
+local no_scroll       = require("src.widgets.helper.function.no_scroll")
 local wal             = require("src.util.wal")
 
 local config          = require("config")

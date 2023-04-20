@@ -4,7 +4,7 @@ local parse_widget_template = require("src.appmenu.parse_widget_template")
 local awful                 = require("awful")
 local gtimer                = require("gears.timer")
 
-local no_scroll             = require("src.widgets.helper.no_scroll")
+local no_scroll             = require("src.widgets.helper.function.no_scroll")
 local config                = require("config")
 
 local appmenu               = require("src.appmenu.appmenu")

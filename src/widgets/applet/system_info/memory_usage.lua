@@ -3,7 +3,7 @@ local wibox        = require("wibox")
 local shapes       = require("src.util.shapes")
 local config       = require("config")
 local get_font     = require("src.util.get_font")
-local watch_widget = require("src.widgets.util.watch_widget")
+local watch_widget = require("src.widgets.helper.watch_widget")
 
 ---@param string string
 ---@return string[] words

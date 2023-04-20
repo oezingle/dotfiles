@@ -1,6 +1,6 @@
 local applet = require("src.widgets.helper.applet")
 local atk = require("src.widgets.helper.applet.toolkit")
-local textinput = require("src.widgets.components.textinput")
+local textinput = require("src.widgets.element.textinput")
 local get_font  = require("src.util.get_font")
 
 local awful = require("awful")

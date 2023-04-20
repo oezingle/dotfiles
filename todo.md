@@ -40,4 +40,24 @@
 	- widgets/components -> anything completed (music, control_center, etc)
 	- widgets/helper -> utilities, bobbins, applet toolkit
 
+- FINISH WIDGET REFACTOR
+
 - Use pre-built buttons
+
+- find a way to change GTK theme on the fly
+	- Materia-light vs dark
+	- xfsettingsd + xconf
+		- https://docs.xfce.org/xfce/xfce4-settings/xfsettingsd
+		- `xfconf-query -c xsettings -p /Net/ThemeName`
+		- change icon theme too
+		- i had another idea that had something to do with macOs but i forget it
+		- on startup:
+			- start xfsettingsd ( requires `xfce4-settings` )
+			- query active GTK/icon themes
+			- exit hook to restore themes
+			- search dir of active GTK theme for a dark variant (generally name-dark or namedark)
+			- if light wallpaper (for the love of god, cache the 1x1 or the is_light state or something), then set to light. If dark, set to dark.
+		- applet hook for `settings` to open xfce4-settings-manager
+		- make sure these dependencies are optional
+
+- a way to disable light wallpaper checks

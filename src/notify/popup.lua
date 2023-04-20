@@ -1,13 +1,13 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
-local no_scroll = require("src.widgets.helper.no_scroll")
+local no_scroll = require("src.widgets.helper.function.no_scroll")
 
 local config = require("config")
 
 local notif_constants = require("src.notify.constants")
 
-local notification = require("src.widgets.notify.notification")
+local notification = require("src.widgets.components.notify.notification")
 
 -- TODO a truly transparent background
 

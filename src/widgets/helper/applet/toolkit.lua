@@ -1,4 +1,4 @@
-local no_scroll       = require("src.widgets.helper.no_scroll")
+local no_scroll       = require("src.widgets.helper.function.no_scroll")
 local wibox           = require("wibox")
 local get_font        = require("src.util.get_font")
 local shapes          = require("src.util.shapes")

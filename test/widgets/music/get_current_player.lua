@@ -1,5 +1,5 @@
 
-local get_current_player = require("src.widgets.music.get_current_player")
+local get_current_player = require("src.widgets.components.music.get_current_player")
 
 local test = require("lib.test")
 

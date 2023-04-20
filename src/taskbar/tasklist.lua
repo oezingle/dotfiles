@@ -1,7 +1,7 @@
 local awful              = require("awful")
 local wibox              = require("wibox")
 local gears              = require("gears")
-local clienticon_or_xorg = require("src.widgets.components.clienticon_or_xorg")
+local clienticon_or_xorg = require("src.widgets.element.clienticon_or_xorg")
 
 local tasklist_buttons = gears.table.join(
     awful.button({}, 1, function(c)

@@ -2,9 +2,9 @@ local wibox  = require("wibox")
 local gtable = require("gears.table")
 local awful  = require("awful")
 
-local switch    = require("src.widgets.components.switch")
-local select    = require("src.widgets.components.select")
-local textinput = require("src.widgets.components.textinput")
+local switch    = require("src.widgets.element.switch")
+local select    = require("src.widgets.element.select")
+local textinput = require("src.widgets.element.textinput")
 local get_font  = require("src.util.get_font")
 
 local applet = require("src.widgets.helper.applet")

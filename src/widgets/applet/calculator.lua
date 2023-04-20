@@ -3,9 +3,9 @@ local awful         = require("awful")
 local shapes        = require("src.util.shapes")
 local config        = require("config")
 local lighten_color = require("src.util.color.lighten")
-local no_scroll     = require("src.widgets.helper.no_scroll")
+local no_scroll     = require("src.widgets.helper.function.no_scroll")
 
-local textinput = require("src.widgets.components.textinput")
+local textinput = require("src.widgets.element.textinput")
 
 local get_font = require("src.util.get_font")
 local get_decoration_color = require("src.util.color.get_decoration_color")

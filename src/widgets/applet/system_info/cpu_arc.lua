@@ -1,7 +1,7 @@
 local wibox    = require("wibox")
 local get_font = require("src.util.get_font")
 local config   = require("config")
-local watch_widget = require("src.widgets.util.watch_widget")
+local watch_widget = require("src.widgets.helper.watch_widget")
 
 ---@param core_number number
 local function cpu_arc(core_number)

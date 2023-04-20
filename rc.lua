@@ -67,8 +67,8 @@ local config = require("config")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
-local create_exit_screen = require("src.widgets.exit_menu")
-local scratch_terminal = require("src.widgets.scratch_terminal")
+local create_exit_screen = require("src.widgets.components.exit_menu")
+local scratch_terminal = require("src.widgets.components.scratch_terminal")
 
 -- Include event handlers
 require("src.on_layout_change")
@@ -84,15 +84,15 @@ require("src.notify")
 local create_taskbar = require("src.taskbar")
 create_taskbar()
 
-local layout_selector = require("src.widgets.layout_selector")
+local layout_selector = require("src.widgets.components.layout_selector")
 
 -- allow screen preview
 if config.gimmicks.screen_preview then
-    require("src.widgets.screen_preview")
+    require("src.widgets.components.screen_preview")
 end
 
 -- allow client switcher
-require("src.widgets.client_switcher")()
+require("src.widgets.components.client_switcher")()
 
 -- Get applets
 require("src.widgets.applet")
@@ -349,7 +349,7 @@ end
 -- append volume keys
 globalkeys = gears.table.join(
     globalkeys,
-    unpack(require("src.widgets.volume_and_brightness").keys)
+    unpack(require("src.widgets.components.volume_and_brightness").keys)
 )
 
 -- append screen preview keys

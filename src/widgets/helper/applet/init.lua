@@ -1,7 +1,7 @@
 -- TODO refactor to util.applet? widget.helper?
 
 local class = require("lib.30log")
-local exitable_dialog = require("src.widgets.util.exitable_dialog")
+local exitable_dialog = require("src.widgets.helper.exitable_dialog")
 local check_dependencies = require("src.util.check_dependencies")
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")

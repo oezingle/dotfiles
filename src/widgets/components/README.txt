@@ -1,1 +1,0 @@
-I've decided that components are widgets i've made that don't have any child widgets

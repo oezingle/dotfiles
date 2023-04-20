@@ -14,12 +14,12 @@ end
 
 local UPowerGlib             = lgi.require("UPowerGlib")
 local awesome_battery_widget = require("lib.awesome-battery_widget")
-local wal_svg                = require("src.widgets.components.wal_svg")
+local wal_svg                = require("src.widgets.element.wal_svg")
 local wibox                  = require("wibox")
 local awful                  = require('awful')
 local config                 = require("config")
 local get_icon               = require("src.util.fs.get_icon")
-local no_scroll              = require("src.widgets.helper.no_scroll")
+local no_scroll              = require("src.widgets.helper.function.no_scroll")
 local scratch                = require("src.util.scratch")
 local dpi                    = require("beautiful").xresources.apply_dpi
 local get_font               = require("src.util.get_font")
