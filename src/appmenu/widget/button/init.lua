@@ -101,8 +101,7 @@ function menu_button:activate()
 end
 
 function menu_button:_create_popup()
-    ---@type Geometry | nil
-    local mgeo = mouse.current_widget_geometry or {}
+    local appmenu_config = appmenu.get_config()
 
     self.popup = awful.popup {
         widget = self.child
@@ -114,18 +113,27 @@ function menu_button:_create_popup()
         bg = config.taskbar.bg,
         fg = config.popup.fg,
 
-        preferred_positions = { self.popup_direction },
-        preferred_anchors = { 'front' },
-
-        x = mgeo and mgeo.x,
-        y = mgeo and mgeo.y + mgeo.height,
-
-        shape = appmenu.get_config().popup_shape
+        shape = appmenu_config.popup.shape
     }
 
     self.popup:connect_signal("mouse::leave", function()
         self:_on_mouse_leave()
     end)
+
+    awful.placement.next_to(self.popup, {
+        geometry = mouse.current_widget_geometry,
+        preferred_positions = { self.popup_direction },
+        preferred_anchors = { 'front' },
+    })
+
+    -- TODO implement on a per-depth basis too - offset[1].x should be a little negative to move the text right under the menu?
+    if appmenu_config.popup.offset.x then
+        self.popup.x = self.popup.x + appmenu_config.popup.offset.x
+    end
+
+    if appmenu_config.popup.offset.y then
+        self.popup.y = self.popup.y + appmenu_config.popup.offset.y
+    end
 end
 
 -- TODO popups don't cause leaving
@@ -175,9 +183,7 @@ function menu_button:hover()
                 } or nil
 
                 -- move to mouse
-                self.popup:move_next_to(geo)
                 ]]
-
                 self.popup.visible = true
             end)
             :catch(function(err)

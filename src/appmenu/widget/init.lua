@@ -154,7 +154,7 @@ local function create_appmenu(config)
 
     -- TODO if the menu loads properly, the last_retried_client lock should be reset to nil
     menu.widget:connect_signal("menu_item::error", function(err)
-        -- print(debug.traceback(err))
+        print(debug.traceback(err))
 
         local client = appmenu.get_client()
 

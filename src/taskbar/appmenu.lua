@@ -48,6 +48,8 @@ local function create_appmenu()
                 return widget
             end,
             vertical = function()
+
+                -- TODO remove icon widget if not needed
                 local widget = wibox.widget {
                     layout = wibox.container.background,
                     {
@@ -104,21 +106,27 @@ local function create_appmenu()
                 return widget
             end
         },
+        -- TODO divider_template separator
         menu_template = {
             vertical = function()
                 local widget = wibox.widget {
                     layout = wibox.container.background,
                     {
-                        layout = wibox.layout.fixed.vertical,
-                        {
-                            -- forces the menu to be a certain width
-                            widget = wibox.widget.textbox,
-                            forced_width = 64
-                        },
+                        layout = wibox.container.margin,
+                        margins = 5,
                         {
                             layout = wibox.layout.fixed.vertical,
-                            spacing = 2,
-                            id = "menu-role"
+                            {
+                                -- forces the menu to be a certain width
+                                widget = wibox.widget.textbox,
+                                forced_width = 64
+                            },
+                            {
+                                layout = wibox.layout.fixed.vertical,
+                                spacing = 2,
+                                id = "menu-role"
+                            },
+    
                         },
                     }
                 }

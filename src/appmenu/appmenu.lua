@@ -12,7 +12,7 @@ local traceback = debug.traceback
 ---@field menu_template { vertical: WidgetTemplate, horizontal: WidgetTemplate }?
 ---@field button_template WidgetTemplate|{ vertical: WidgetTemplate, horizontal: WidgetTemplate }|nil
 ---@field divider_template WidgetTemplate?
----@field popup_shape GearsShape?
+---@field popup { shape: GearsShape?, offset: { x: integer?, y: integer? }|nil }
 -- TODO super is just a guess
 ---@field shortcut_symbols table<"Control"|"Alt"|"Shift"|"Super"|"children", string>?
 
@@ -36,6 +36,9 @@ local appmenu = {
             ['Alt'] = '⎇',
             ['Super'] = '❖',
             ['children'] = '▶',
+        },
+        popup = {
+            offset = {}
         }
     }
 }
