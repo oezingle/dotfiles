@@ -101,7 +101,7 @@ require("src.widgets.applet")
 local get_wallpaper = require("src.util.wallpaper.get_wallpaper")
 
 -- Rofi popup
-local rofi = require('src.sh').rofi
+local rofi = require('src.sh.rofi')
 
 local dirs = require("src.util.fs.directories")
 

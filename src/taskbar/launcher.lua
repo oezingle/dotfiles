@@ -1,4 +1,4 @@
-local rofi = require("src.sh").rofi
+local rofi = require("src.sh.rofi")
 local wibox = require("wibox")
 local no_scroll = require("src.widgets.helper.function.no_scroll")
 

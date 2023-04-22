@@ -1,29 +1,15 @@
 local awful              = require('awful')
 local config             = require('config')
 local check_dependencies = require('src.util.check_dependencies')
-local directories        = require('src.util.fs.directories')
 
--- TODO use awful.spawn.single_instance
+local rofi = require("src.sh.rofi")
+local pidwatch = require("src.sh.pidwatch")
 
--- keep a process around so long as awesome is active
----@param command string
----@param silent boolean?
-local function pidwatch(command, silent)
-    silent = silent or false
-
-    -- local pid = awful.spawn.with_shell(config_dir .. "sh/pidwatch.sh awesome " .. command)
-
-    -- only drawback of this method is that it doesn't handle w mcrashes
-    local pid = awful.spawn.with_shell(command .. (silent and " > /dev/null 2>&1" or ""))
-
-    awesome.connect_signal("exit", function()
-        -- -pid = kill group
-        awesome.kill(-pid, awesome.unix_signal.SIGTERM)
-    end)
-end
+-- TODO i kinda hate this file
 
 -- Two finger right click
 check_dependencies({ "xinput" }, function()
+    -- TODO this is painfully system specific
     awful.spawn("xinput set-prop \"Synaptics TM3289-021\" \"libinput Click Method Enabled\" 0, 1")
 end, "Two finger right click")
 
@@ -33,6 +19,7 @@ if config.apps.compositor and #config.apps.compositor then
 end
 
 -- xfce4 power manager
+-- TODO why no dependency check
 --check_dependencies({ 'xfce4-power-manager ' }, function()
 pidwatch("xfce4-power-manager")
 --end, "xfce4 power manager - autosleep, battery management")
@@ -64,7 +51,7 @@ wal.create_hook()
 -- pulse audio
 check_dependencies({ "start-pulseaudio-x11" }, function()
     awful.spawn("start-pulseaudio-x11")
-end, "pulseaudio audio")
+end, "pulseaudio")
 
 -- screen locking
 if config.lock_time then
@@ -81,13 +68,8 @@ awful.spawn("xinput set-prop 10 325 0")
 -- TODO run this every time unlocked
 awful.spawn("xinput set-prop 10 333 1")
 
+-- TODO make this optional u fucker
 pidwatch("nm-applet", true)
-
-local rofi_cmd = string.format("PATH=$PATH:%s %s > /dev/null 2>&1", directories.config .. "applets", config.apps.rofi)
-
-local function rofi()
-    awful.spawn.with_shell(rofi_cmd)
-end
 
 return {
     pidwatch = pidwatch,

@@ -39,7 +39,7 @@
 - Use pre-built buttons
 
 - find a way to change GTK theme on the fly
-	- Materia-light vs dark
+	- Materia seems to have no difference (this is an L)
 	- xfsettingsd + xconf
 		- https://docs.xfce.org/xfce/xfce4-settings/xfsettingsd
 		- `xfconf-query -c xsettings -p /Net/ThemeName`
