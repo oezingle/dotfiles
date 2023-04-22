@@ -48,7 +48,6 @@ local function create_appmenu()
                 return widget
             end,
             vertical = function()
-                -- TODO remove icon widget if not needed
                 local widget = wibox.widget {
                     layout = wibox.container.background,
                     {
@@ -87,12 +86,12 @@ local function create_appmenu()
                     w.visible = w.text ~= ""
                 end)
 
-                -- Append extra space after the text if the menu item has a shortcut
                 local icon = widget:get_children_by_id("shortcut-role")[1]
 
-                icon:connect_signal("widget::redraw_needed", function(w)                    
+                icon:connect_signal("widget::redraw_needed", function(w)
                     w.visible = w.image ~= ""
                 end)
+
 
                 wal.on_change(function(scheme)
                     widget.fg = scheme.special.foreground
@@ -140,7 +139,9 @@ local function create_appmenu()
             ['Super'] = '⌘',
             ['children'] = '▶',
         },
-        popup_shape = shapes.rounded_rect()
+        popup = {
+            shape = shapes.rounded_rect()
+        }
     })
 end
 

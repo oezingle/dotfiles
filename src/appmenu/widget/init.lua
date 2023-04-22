@@ -127,7 +127,7 @@ local function create_appmenu(config)
 
     local menu = menu_builder()
         :set_layout_table({
-            [0] = {
+            [1] = {
                 layout = "horizontal",
                 popup_direction = "bottom",
                 click_focus = true

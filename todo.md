@@ -55,3 +55,7 @@
 		- make sure these dependencies are optional
 
 - a way to disable light wallpaper checks
+
+- antialiased corners? https://github.com/elenapan/dotfiles/wiki/Rounded-corners
+
+- border for appmenu popups

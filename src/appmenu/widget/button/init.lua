@@ -58,7 +58,7 @@ end
 ---@param table LayoutTable
 ---@param depth number?
 function menu_button:set_layout_table(table, depth)
-    depth = depth or 0
+    depth = depth or 1
     self.depth = depth
 
     self.layout_table = table
@@ -126,13 +126,30 @@ function menu_button:_create_popup()
         preferred_anchors = { 'front' },
     })
 
-    -- TODO implement on a per-depth basis too - offset[1].x should be a little negative to move the text right under the menu?
-    if appmenu_config.popup.offset.x then
-        self.popup.x = self.popup.x + appmenu_config.popup.offset.x
-    end
+    do
+        local offset = appmenu_config.popup.offset
+        if offset then
+            if type(offset.x) == "number" then
+                self.popup.x = self.popup.x + offset.x
+            elseif type(offset.x) == "table" then
+                -- Get the entry for this depth
+                local xoffset = offset.x[self.depth]
 
-    if appmenu_config.popup.offset.y then
-        self.popup.y = self.popup.y + appmenu_config.popup.offset.y
+                if xoffset then
+                    self.popup.x = self.popup.x + xoffset
+                end
+            end
+
+            if type(offset.y) == "number" then
+                self.popup.y = self.popup.y + offset.y
+            elseif type(offset.y) == "table" then
+                local yoffset = offset.y[self.depth]
+
+                if yoffset then
+                    self.popup.y = self.popup.y + yoffset
+                end
+            end
+        end
     end
 end
 
@@ -244,7 +261,7 @@ function menu_button:_create_widget()
         local template = appmenu.get_config().button_template
 
         if type(template) == "table" and (template.vertical or template.horizontal) then
-            if self.depth == 0 then
+            if self.depth == 1 then
                 button = parse_widget_template(template.horizontal or default_button)
             else
                 button = parse_widget_template(template.vertical or default_button)
@@ -257,7 +274,7 @@ function menu_button:_create_widget()
             child.markup = self:_format_label()
         end
 
-        if self.depth ~= 0 then
+        if self.depth ~= 1 then
             self.menu_item:has_children():after(function(children)
                 for _, child in ipairs(button:get_children_by_id("shortcut-role")) do
                     if children then

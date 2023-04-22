@@ -23,7 +23,7 @@ local Promise              = require("src.util.Promise")
 local function toggle_icon_button(icon, callback, _, initial)
     local state = initial or false
 
-    local button = icon_button(icon, nil)
+    local button = icon_button(icon, function () end)
 
     local function update_color()
         if state then
@@ -148,14 +148,14 @@ local function create_control_center()
 
     -- bluetooth
     grid:add_widget_at(
-        icon_button(get_icon("control-center/bluetooth-outline.svg"), function(state)
+        icon_button(get_icon("control-center/bluetooth-outline.svg"), function()
             -- TODO bluetooth applet
         end, "Bluetooth Configuration"),
         2, 3, 1, 1
     )
 
     grid:add_widget_at(
-        toggle_icon_button(get_icon("control-center/moon.svg"), function(state)
+        toggle_icon_button(get_icon("control-center/moon.svg"), function()
             redshift.toggle()
         end, "Toggle Night Colors", redshift.get_state() == 1),
         3, 3, 1, 1

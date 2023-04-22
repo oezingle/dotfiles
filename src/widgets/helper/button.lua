@@ -7,6 +7,23 @@ local shapes = require("src.util.shapes")
 
 local button = {}
 
+
+---@param w Widget
+local function _set_widget_hovered(w)
+    w.old_bg = w.bg
+
+    w.bg = config.button.hover
+end
+
+---@param w Widget
+local function _set_widget_unhovered(w)
+    if w.old_bg then
+        w.bg = w.old_bg
+
+        w.old_bg = nil
+    end
+end
+
 --- Place a widget in a background with hover effects, and call a callback when clicked.
 --- No styling.
 ---@param widget Widget
@@ -23,19 +40,9 @@ function button.button(widget, callback)
         shape = shapes.rounded_rect()
     }
 
-    button:connect_signal("mouse::enter", function()
-        widget.old_bg = widget.bg
+    button:connect_signal("mouse::enter", _set_widget_hovered)
 
-        widget.bg = config.button.hover
-    end)
-
-    button:connect_signal("mouse::leave", function()
-        if widget.old_bg then
-            widget.bg = widget.old_bg
-
-            widget.old_bg = nil
-        end
-    end)
+    button:connect_signal("mouse::leave", _set_widget_unhovered)
 
     button:connect_signal("button::press", no_scroll(callback))
 
@@ -44,10 +51,9 @@ end
 
 ---@param widget Widget
 ---@param callback function
-function button.centered (widget, callback)
+function button.centered(widget, callback)
     return button.button({
         widget,
-
         layout = wibox.container.place
     }, callback)
 end

@@ -30,7 +30,7 @@ end
 ---@param table LayoutTable
 ---@param depth number?
 function menu_builder:set_layout_table(table, depth)
-    depth = depth or 0
+    depth = depth or 1
     self.depth = depth
 
     self.layout_table = table
