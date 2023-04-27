@@ -29,6 +29,7 @@ local dbus = {}
 ---@field property { get: fun(name: string): GVariant, set: fun(name: string, value: GVariant): nil } get or set properties
 ---@field connect_signal fun(name: string, fn: fun(parameters: GVariant, sender_name: string): nil): nil connect dbus signals
 ---@field disconnect_signal fun(name: string, fn: fun(parameters: GVariant, sender_name: string): nil): nil disconnect dbus signals
+---@field raw fun(): unknown get the raw GDBusProxy
 
 --------------------------------------------------------------------------------
 
@@ -103,7 +104,11 @@ function dbus.smart_proxy(proxy)
     -- untested signal handler
     -- https://docs.gtk.org/gio/signal.DBusProxy.g-signal.html
     -- https://github.com/lgi-devs/lgi/blob/master/docs/guide.md#34-signals
-    proxy.on_g_signal = function(self, sender_name, signal_name, parameters)
+    
+    --[[
+        proxy['on_g-signal'] = function(self, sender_name, signal_name, parameters)
+        print("signal recieved")
+        
         -- should always be true but checking is good
         if self == proxy then
             local handlers = signal_handlers[signal_name]
@@ -116,6 +121,7 @@ function dbus.smart_proxy(proxy)
             end
         end
     end
+    ]]
 
     return {
         method = setmetatable({}, {
@@ -155,31 +161,19 @@ function dbus.smart_proxy(proxy)
         }),
         ---@param name string signal name
         ---@param fn fun(parameters: GVariant, sender_name: string): nil signal recieved callback
-        connect_signal = function(name, fn)
-            if not signal_handlers[name] then
-                signal_handlers[name] = {}
-            end
-
-            table.insert(signal_handlers[name], fn)
+        connect_signal = function(name, fn)            
+            proxy["on_g-signal"].connect(name, fn)
         end,
-        ---@param name string signal name
-        ---@param fn fun(parameters: GVariant, sender_name: string): nil signal recieved callback
-        disconnect_signal = function(name, fn)
-            for i, match_fn in ipairs(signal_handlers[name]) do
-                if match_fn == fn then
-                    table.remove(signal_handlers[name], i)
-                end
-            end
 
-            -- remove key if no signal handlers for that signal
-            if #signal_handlers[name] == 0 then
-                signal_handlers[name] = nil
-            end
+        raw = function ()
+            return proxy
         end
     }
 end
 
-dbus.smart_proxy_2 = class("SmartProxy", {
+--[[
+---@class DBus.SmartProxy2 : LogBaseFunctions
+local smart_proxy_2 = class("SmartProxy", {
     ---@type table<string, fun(variant: GVariant): GVariant>
     method = setmetatable({}, {
         __call = function (self, name, variant)
@@ -190,17 +184,31 @@ dbus.smart_proxy_2 = class("SmartProxy", {
                 return self:call_method(key, variant)
             end
         end
-    })
+    }),
+    property = setmetatable({}, {
+        __index = function(self, name)
+            return self:get_cached_property(name)
+        end,
+        __newindex = function(self, name, value)
+            return self:set(name, value)
+        end
+    }),
 })
 
-function dbus.smart_proxy_2:init(proxy)
+function smart_proxy_2:init(proxy)
     self.proxy = proxy
 end
+
+-- ---@param arg { service: string, interface: string, path: string }
+-- function smart_proxy_2:create(arg)
+-- 
+-- end
+
 
 ---@param name string
 ---@param variant GVariant gvariant argument value
 ---@return GVariant
-function dbus.smart_proxy_2:call_method(name, variant)
+function smart_proxy_2:call_method(name, variant)
     return native_error(
         self.proxy.call_sync,
         self.proxy,
@@ -218,7 +226,7 @@ end
 ---@param name string
 ---@param variant GVariant gvariant argument value
 ---@return Promise<GVariant>
-function dbus.smart_proxy_2:call_method_async(name, variant)
+function smart_proxy_2:call_method_async(name, variant)
     return Promise(function (res, rej)
         local _, err = self.proxy:call(
             name, variant, {}, -1, nil, res
@@ -229,5 +237,8 @@ function dbus.smart_proxy_2:call_method_async(name, variant)
         end
     end)
 end
+
+dbus.smart_proxy_2 = smart_proxy_2
+]]
 
 return dbus

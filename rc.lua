@@ -10,6 +10,9 @@ math.random()
 math.random()
 math.random()
 
+-- include CLI controls
+require("src.cli.server.awesome")
+
 -- find timers
 --[[
 do

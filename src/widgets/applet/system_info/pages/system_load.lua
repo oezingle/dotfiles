@@ -3,7 +3,7 @@ local memory_usage       = require("src.widgets.applet.system_info.memory_usage"
 local awful              = require("awful")
 local wibox              = require("wibox")
 local atk                = require("src.widgets.helper.applet.toolkit")
-local check_dependencies = require("src.util.check_dependencies")
+local check_dependencies = require("src.sh.check_dependencies")
 
 local function create_system_load()
     local mem_usage, mem_timer = memory_usage(false)

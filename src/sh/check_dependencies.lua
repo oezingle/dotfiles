@@ -3,6 +3,8 @@ local print = require("src.agnostic.print")
 
 local spawn = require("src.agnostic.spawn")
 
+-- TODO replace with ({ dependencies }, silent: boolean?) -> Promise<met: boolean>
+
 --- Run a callback if the required commands/dependencies are installed.
 -- 
 --- Uses which, meaning you need to provide a command name or exact path

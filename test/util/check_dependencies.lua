@@ -1,7 +1,7 @@
 
 local test = require("lib.test")
 
-local check_dependencies = require("src.util.check_dependencies")
+local check_dependencies = require("src.sh.check_dependencies")
 
 test.suite(
     "check_dependencies",

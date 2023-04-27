@@ -59,3 +59,13 @@
 - antialiased corners? https://github.com/elenapan/dotfiles/wiki/Rounded-corners
 
 - border for appmenu popups
+
+- some sort of service for features to register their /sh/ hooks so that the sh file doesn't have to do as much heavy lifting
+
+- write utils to turn signals into async CLIs
+	- require('cli')() -> keyboard-prompted utils CLI
+	- cli:: signal namespace
+	- rebuild sh as an almost `systemctl` util - restart, stop, start services for features
+
+- battery widget does not react to pywal changes
+- battery charging icon does not set

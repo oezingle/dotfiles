@@ -1,6 +1,6 @@
 local awful              = require('awful')
 local config             = require('config')
-local check_dependencies = require('src.util.check_dependencies')
+local check_dependencies = require('src.sh.check_dependencies')
 
 local rofi = require("src.sh.rofi")
 local pidwatch = require("src.sh.pidwatch")

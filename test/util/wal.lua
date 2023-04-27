@@ -1,6 +1,6 @@
 
 -- TODO test.require(name, { }, callback) that functions similarly
-local check_dependencies = require("src.util.check_dependencies")
+local check_dependencies = require("src.sh.check_dependencies")
 
 check_dependencies({ "wal" }, function()
     local test = require("lib.test")
