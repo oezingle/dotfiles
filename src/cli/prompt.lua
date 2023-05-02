@@ -4,9 +4,7 @@ local dbus     = require("src.util.lgi.dbus")
 local GVariant = require("src.util.lgi.GVariant")
 
 local lgi      = require("lgi")
-local Gio      = lgi.Gio
 local GLib     = lgi.GLib
-local GObject  = lgi.GObject
 
 local GThread  = GLib.Thread
 
@@ -37,10 +35,6 @@ local function loop()
         "org.awesomewm.cli"
     )
 
-    proxy.connect_signal("Print", function (params)
-        print(params[1])
-    end)
-
     local function call_command(command)
         if #command == 0 then
             return
@@ -51,32 +45,31 @@ local function loop()
         proxy.method.SendCommand(variant)
     end
 
-    local thread = GThread("keyboard", function()
+    local main_loop
+
+    local thread = GThread("signal", function()
+        proxy.connect_signal("Print", function(params)
+            print(params)
+        end)
+
+        main_loop = GLib.MainLoop(nil, false)
+
+        main_loop:run()
+    end)
+
+    local ok, err = pcall(function ()
         keyboard.prompt(call_command)
     end)
 
-    local main_loop = GLib.MainLoop(nil, false)
+    if not ok then
+        print(err)
+    end
 
-    main_loop:run()
-
-    thread:exit()
+    thread:join()
 end
 
 local function main()
-    -- "-echo", "cbreak"
-
-    local tty = stty("cbreak")
-
-    local ok, err = pcall(loop)
-
-    if not ok then
-        -- restore tty state and then re-throw the error
-        stty(tty)
-
-        error(err)
-    end
-
-    stty(tty)
+    loop()
 end
 
 main()
