@@ -3,73 +3,61 @@ local keyboard = require("src.cli.keyboard")
 local dbus     = require("src.util.lgi.dbus")
 local GVariant = require("src.util.lgi.GVariant")
 
-local lgi      = require("lgi")
-local GLib     = lgi.GLib
+local GLib     = require("lgi").GLib
 
-local GThread  = GLib.Thread
+local proxy    = dbus.smart_proxy_2.create(
+    "org.awesomewm.cli",
+    "/org/awesomewm/cli",
+    "org.awesomewm.cli"
+)
 
--- http://lua-users.org/lists/lua-l/2012-09/msg00360.html
----@param ... string
-local function stty(...)
-    local ok, p = pcall(io.popen, "stty -g")
+local mainloop
 
-    if not ok or not p then return nil end
+local function prompt()
+    local ok, err = pcall(function()
+        keyboard.readline(function(command)
+            if #command == 0 then
+                return prompt()
+            end
 
-    local state = p:read()
-    p:close()
+            local variant = GVariant("(s)", { command })
 
+            return proxy.method.SendCommand(variant)
+                :after(function()
+                    return prompt()
+                end)
+                :catch(function(err)
+                    print("Error", err)
 
-    if state and #... then
-        os.execute(table.concat({ "stty", ... }, " "))
-    end
-
-    return state
-end
-
--- TODO none of this shit works - use a lua binding for ncurses or Readline
--- TODO switch to C++? getch works in nodelay mode with ncurses, readline is native if able to use, GLib is native C
-local function loop()
-    local proxy = dbus.new_smart_proxy(
-        "org.awesomewm.cli",
-        "/org/awesomewm/cli",
-        "org.awesomewm.cli"
-    )
-
-    local function call_command(command)
-        if #command == 0 then
-            return
-        end
-
-        local variant = GVariant("(s)", { command })
-
-        proxy.method.SendCommand(variant)
-    end
-
-    local main_loop
-
-    local thread = GThread("signal", function()
-        proxy.connect_signal("Print", function(params)
-            print(params)
+                    return prompt()
+                end)
         end)
-
-        main_loop = GLib.MainLoop(nil, false)
-
-        main_loop:run()
-    end)
-
-    local ok, err = pcall(function ()
-        keyboard.prompt(call_command)
     end)
 
     if not ok then
-        print(err)
-    end
+        if tostring(err):match("interrupted!") then
+            mainloop:quit()
 
-    thread:join()
+            print("\nGoodbye!")
+        else
+            error(err)
+        end            
+    end
 end
 
 local function main()
-    loop()
+    mainloop = GLib.MainLoop(nil, false)
+
+    proxy:connect_signal("Print", function(params)
+        print(params[1])
+    end)
+
+    -- This runs once, once the loop is running
+    GLib.idle_add(GLib.PRIORITY_DEFAULT, function ()
+        prompt()    
+    end)
+
+    mainloop:run()
 end
 
 main()

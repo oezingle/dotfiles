@@ -1,38 +1,34 @@
--- setenv and getenv are depreciated, so here's hacks to bring them back
+-- http://lua-users.org/lists/lua-l/2010-06/msg00313.html
 
-local envhacks = {
-    _oldenv = nil
-}
+local envhacks = {}
 
---- TODO stack of environments
----@param environment table|nil
-function envhacks.setenv(environment)
-    if environment then
-        envhacks._oldenv = _ENV
-        
-        _ENV = environment
-    else
-        _ENV = envhacks._oldenv
+---@param f unknown
+---@param t table
+envhacks.setfenv = setfenv or function(f, t)
+    f = (type(f) == 'function' and f or debug.getinfo(f + 1, 'f').func)
+    local name
+    local up = 0
+    repeat
+        up = up + 1
+        name = debug.getupvalue(f, up)
+    until name == '_ENV' or name == nil
+    if name then
+        debug.upvaluejoin(f, up, function() return name end, 1) -- use unique upvalue
+
+        debug.setupvalue(f, up, t)
     end
 end
 
-function envhacks.getenv()
-    return _ENV
-end
-
---- Create an environment that overrides only the keys provided
----@param environment table<string, any>
----@return table<string, any> environment for convenience.
-function envhacks.overwrite_globals(environment)
-    return setmetatable(environment, _G)
-end
-
-function envhacks.in_env(environment, callback)
-    envhacks.setenv(environment)
-
-    callback()
-
-    envhacks.setenv()
+---@param f unknown
+envhacks.getfenv = getfenv or function(f)
+    f = (type(f) == 'function' and f or debug.getinfo(f + 1, 'f').func)
+    local name, val
+    local up = 0
+    repeat
+        up = up + 1
+        name, val = debug.getupvalue(f, up)
+    until name == '_ENV' or name == nil
+    return val
 end
 
 return envhacks

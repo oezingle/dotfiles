@@ -1,12 +1,14 @@
+
+local pack = require("src.agnostic.version.pack")
+local envhacks = require("src.cli.server.envhacks")
+
 local interpret = require("src.cli.server.interpret")
-local envhacks  = require("src.cli.server.envhacks")
 
 local lgi       = require("lgi")
 local Gio       = lgi.Gio
 local GObject   = lgi.GObject
-local GLib      = lgi.GLib
 
-local GVariant = require("src.util.lgi.GVariant")
+local GVariant  = require("src.util.lgi.GVariant")
 
 local function on_bus_acquired(connection, name, user_data)
     local node_info = Gio.DBusNodeInfo.new_for_xml(
@@ -25,16 +27,38 @@ local function on_bus_acquired(connection, name, user_data)
         ]]
     )
 
+    local function connection_print(...)
+        local TAB = string.char(9)
+
+        local msg = table.concat(pack(...), TAB)
+
+        connection:emit_signal(
+            nil,
+            "/org/awesomewm/cli",
+            "org.awesomewm.cli",
+            "Print",
+            GVariant("(s)", { msg })
+        )
+    end
+
+    -- remap print() to work over D-Bus
+    local env  = setmetatable({
+        print = connection_print
+    }, { index = _G })
+
+    envhacks.setfenv(interpret, env)
+
+    -- TODO throw errors man
     connection:register_object(
         "/org/awesomewm/cli",
         node_info.interfaces[1],
         --[[
-            connection: GDBusConnection, 
-            client: string, 
-            path: string, 
+            connection: GDBusConnection,
+            client: string,
+            path: string,
             interface: string,
-            method: string, 
-            args: GVariant, 
+            method: string,
+            args: GVariant,
             invocation: GDBusMethodInvocation
         ]]
         GObject.Closure(function(connection, client, _, _, method, args, invocation)
@@ -43,29 +67,6 @@ local function on_bus_acquired(connection, name, user_data)
             end
 
             local command = args[1]
-
-            connection:emit_signal(
-                nil,
-                "/org/awesomewm/cli",
-                "org.awesomewm.cli",
-                "Print",
-                GVariant("(s)", { "recv " .. command })
-            )
-
-            --[[
-            -- Literally the tab character
-            local TAB = string.char(9)
-
-            local env = envhacks.overwrite_globals({
-                print = function(...)
-                    io.write(table.concat(..., TAB), "\n")
-                end
-            })
-
-            envhacks.in_env(env, function()
-                interpret(command)
-            end)
-            ]]
 
             interpret(command)
 

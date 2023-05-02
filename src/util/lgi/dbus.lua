@@ -34,11 +34,15 @@ local dbus = {}
 --------------------------------------------------------------------------------
 
 --- Get the Gio.BusType.SESSION or Gio.BusType.SYSTEM DBus
----@param bus_type string?
+---@param bus_type "SESSION"|"SYSTEM"|number|nil
 ---@return GDBusConnection GDBusConnection
 function dbus.get_bus(bus_type)
     if type(bus_type) == "nil" then
         bus_type = Gio.BusType.SESSION
+    elseif bus_type == "SESSION" then
+        bus_type = Gio.BusType.SESSION
+    elseif bus_type == "SYSTEM" then
+        bus_type = Gio.BusType.SYSTEM
     end
 
     return Gio.bus_get_sync(
@@ -179,44 +183,63 @@ function dbus.smart_proxy(proxy)
     }
 end
 
---[[
 ---@class DBus.SmartProxy2 : LogBaseFunctions
-local smart_proxy_2 = class("SmartProxy", {
-    ---@type table<string, fun(variant: GVariant): GVariant>
-    method = setmetatable({}, {
-        __call = function (self, name, variant)
+---@field method table<string, fun(variant: GVariant): Promise<GVariant>>
+---@field method_sync table<string, fun(variant: GVariant): Promise<GVariant>>
+local smart_proxy_2 = class("SmartProxy")
+
+function smart_proxy_2:init(proxy)
+    self.proxy = proxy
+
+    ---@type table<string, fun(variant: GVariant): Promise<GVariant>>
+    self.method = setmetatable({}, {
+        __call = function (_, name, variant)
             return self:call_method(name, variant)
         end,
-        __index = function(self, key)
+        __index = function(_, key)
             return function (variant)
                 return self:call_method(key, variant)
             end
         end
-    }),
-    property = setmetatable({}, {
-        __index = function(self, name)
-            return self:get_cached_property(name)
+    })
+    ---@type table<string, fun(variant: GVariant): GVariant>
+    self.method_sync = setmetatable({}, {
+        __call = function (_, name, variant)
+            return self:call_method_sync(name, variant)
         end,
-        __newindex = function(self, name, value)
-            return self:set(name, value)
+        __index = function(_, key)
+            return function (variant)
+                return self:call_method_sync(key, variant)
+            end
         end
-    }),
-})
-
-function smart_proxy_2:init(proxy)
-    self.proxy = proxy
+    })
+    
+    self.property = setmetatable({}, {
+        __index = function(_, name)
+            return self:get_property(name)
+        end,
+        __newindex = function(_, name, value)
+            return self:set_property(name, value)
+        end
+    })
 end
 
--- ---@param arg { service: string, interface: string, path: string }
--- function smart_proxy_2:create(arg)
--- 
--- end
+---@param name string
+---@return GVariant
+function smart_proxy_2:get_property(name)
+    return self.proxy:get_cached_property(name)
+end
 
+---@param name string
+---@param value GVariant
+function smart_proxy_2:set_property(name, value)
+    return self.proxy:set(name, value)
+end
 
 ---@param name string
 ---@param variant GVariant gvariant argument value
 ---@return GVariant
-function smart_proxy_2:call_method(name, variant)
+function smart_proxy_2:call_method_sync(name, variant)
     return native_error(
         self.proxy.call_sync,
         self.proxy,
@@ -234,7 +257,7 @@ end
 ---@param name string
 ---@param variant GVariant gvariant argument value
 ---@return Promise<GVariant>
-function smart_proxy_2:call_method_async(name, variant)
+function smart_proxy_2:call_method(name, variant)
     return Promise(function (res, rej)
         local _, err = self.proxy:call(
             name, variant, {}, -1, nil, res
@@ -246,7 +269,32 @@ function smart_proxy_2:call_method_async(name, variant)
     end)
 end
 
+---@param name string signal name
+---@param fn fun(parameters: GVariant, sender: string): nil signal recieved callback
+function smart_proxy_2:connect_signal(name, fn)
+    self.proxy["on_g-signal"].connect(name, function (_, sender, _, parameters)
+        fn(parameters, sender)
+    end)
+end
+
+---@param service string
+---@param path string
+---@param interface string
+---@param connection string|GDBusConnection|nil
+---@return DBus.SmartProxy2
+function smart_proxy_2.create(service, path, interface, connection)
+    if type(connection) == "string" then
+        connection = dbus.get_bus(connection)
+    end
+
+    connection = connection or dbus.get_bus()
+
+    local proxy = dbus.new_proxy_with_connection(connection, service, path, interface)
+
+    return smart_proxy_2(proxy)
+end 
+
 dbus.smart_proxy_2 = smart_proxy_2
-]]
+
 
 return dbus

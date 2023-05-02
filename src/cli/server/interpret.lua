@@ -1,4 +1,3 @@
-
 -- TODO file that turns arguments into called functions or loaded files what have you
 
 -- every command should be a:
@@ -8,8 +7,10 @@
 
 -- basically it is my goal that CLIs i have already written could just exist within the awesome shell
 
+local get_commands = require("src.cli.get_commands")
+
 ---@param command string
-local function interpret(command)    
+local function interpret(command)
     print(command)
 end
 

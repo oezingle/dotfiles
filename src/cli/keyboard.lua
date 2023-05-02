@@ -1,4 +1,3 @@
-
 ---@class CLI.Keyboard
 ---@field tty string|nil
 local keyboard = {
@@ -13,7 +12,7 @@ local keyboard = {
 
 -- http://lua-users.org/lists/lua-l/2012-09/msg00360.html
 ---@param ... string
-local function stty(...)
+function keyboard.stty(...)
     local ok, p = pcall(io.popen, "stty -g")
 
     if not ok or not p then return nil end
@@ -29,6 +28,8 @@ local function stty(...)
     return state
 end
 
+local stty = keyboard.stty
+
 function keyboard._reset()
     keyboard.history_pos = 0
 
@@ -37,11 +38,11 @@ end
 
 -- TODO commands should not be commands but rather a callback function taking a line as an argument
 --- Run the CLI prompt.
----@param callback fun(command: string)
+---@param callback fun(command: string): any
 function keyboard.prompt(callback)
     keyboard.tty = stty("-echo", "cbreak")
 
-    local ok, err = pcall(keyboard._read_lines, callback)
+    local ok, err = pcall(keyboard._readlines, callback)
 
     if not ok then
         -- restore tty state and then re-throw the error
@@ -53,18 +54,42 @@ function keyboard.prompt(callback)
     stty(keyboard.tty)
 end
 
----@param callback fun(command: string)
-function keyboard._read_lines(callback)
-    while true do
-        keyboard._reset()
+---@param callback fun(command: string): any
+function keyboard.readline(callback)
+    keyboard.tty = stty("-echo", "cbreak")
 
-        keyboard._print_prompt()
+    local ok, err = pcall(keyboard._readline, callback)
 
-        local line = keyboard._read()
+    if not ok then
+        -- restore tty state and then re-throw the error
+        stty(keyboard.tty)
 
-        callback(line)
+        error(err)
+    end
 
+    stty(keyboard.tty)
+end
+
+---@param callback fun(command: string): any
+function keyboard._readline(callback)
+    keyboard._reset()
+
+    keyboard._print_prompt()
+
+    local line = keyboard._read()
+
+    callback(line)
+
+    -- Disallow the same command over and over from cluttering history
+    if keyboard.history[1] ~= line then
         table.insert(keyboard.history, 1, line)
+    end
+end
+
+---@param callback fun(command: string)
+function keyboard._readlines(callback)
+    while true do
+        keyboard._readline(callback)
     end
 end
 
