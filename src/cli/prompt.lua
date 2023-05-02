@@ -8,6 +8,8 @@ local Gio      = lgi.Gio
 local GLib     = lgi.GLib
 local GObject  = lgi.GObject
 
+local GThread  = GLib.Thread
+
 -- http://lua-users.org/lists/lua-l/2012-09/msg00360.html
 ---@param ... string
 local function stty(...)
@@ -26,6 +28,8 @@ local function stty(...)
     return state
 end
 
+-- TODO none of this shit works - use a lua binding for ncurses or Readline
+-- TODO switch to C++? getch works in nodelay mode with ncurses, readline is native if able to use, GLib is native C
 local function loop()
     local proxy = dbus.new_smart_proxy(
         "org.awesomewm.cli",
@@ -33,77 +37,29 @@ local function loop()
         "org.awesomewm.cli"
     )
 
-    local conn = dbus.get_bus()
+    proxy.connect_signal("Print", function (params)
+        print(params[1])
+    end)
 
-    conn:signal_subscribe(
-        nil,
-        nil,
-        nil,
-        nil,
-        nil,
-        Gio.DBusSignalFlags.NONE,
-        function(...)
-            print(...)
+    local function call_command(command)
+        if #command == 0 then
+            return
         end
-    )
+
+        local variant = GVariant("(s)", { command })
+
+        proxy.method.SendCommand(variant)
+    end
+
+    local thread = GThread("keyboard", function()
+        keyboard.prompt(call_command)
+    end)
 
     local main_loop = GLib.MainLoop(nil, false)
 
-
-    --[[
-    -- this isn't portable if you port awesome to Windows
-    local stdin = GLib.IOChannel.unix_new(0)
-    stdin:set_encoding(nil)
-
-    -- TODO per-character
-    GLib.io_add_watch(stdin, GLib.PRIORITY_DEFAULT, GLib.IOCondition.IN, function(channel)
-        local string_return = GLib.String("")
-
-        channel:read_line_string(string_return, 0)
-
-        ---@type string
-        local cmd = string_return.str
-
-        print(cmd)
-
-        GLib.free(string_return)
-
-        -- TODO io.write is borked
-        io.stdout:write(" > ")
-
-        return true
-    end, nil)
-    ]]
-    --[[
-    GLib.idle_add(GLib.PRIORITY_DEFAULT, function ()
-        keyboard.prompt(function (command)
-            local variant = GVariant("(s)", { command })
-
-            proxy.method.SendCommand(variant)
-        end)
-
-        return true
-    end)
-    ]]
-    --[[
-    GLib.idle_add(GLib.PRIORITY_DEFAULT, function()
-        print("hola")
-
-        return true
-    end)
-    ]]
-
-    -- TODO non blocking iput
-    GLib.idle_add(GLib.PRIORITY_DEFAULT, function()
-        -- local char, other = io.stdin:read(1)
-
-        -- stdin:close()
-        -- stdin = io.popen(stdin_cat, "r")
-
-        return true
-    end)
-
     main_loop:run()
+
+    thread:exit()
 end
 
 local function main()

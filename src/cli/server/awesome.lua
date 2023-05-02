@@ -49,7 +49,7 @@ local function on_bus_acquired(connection, name, user_data)
                 "/org/awesomewm/cli",
                 "org.awesomewm.cli",
                 "Print",
-                GVariant("(s)", { "recv" })
+                GVariant("(s)", { "recv " .. command })
             )
 
             --[[
@@ -85,11 +85,6 @@ local function create_cli_hooks()
         nil,
         nil
     )
-
-    --[[
-    local main_loop = GLib.MainLoop(nil, false)
-    main_loop:run()
-    ]]
 end
 
 create_cli_hooks()

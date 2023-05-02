@@ -160,9 +160,17 @@ function dbus.smart_proxy(proxy)
             end
         }),
         ---@param name string signal name
-        ---@param fn fun(parameters: GVariant, sender_name: string): nil signal recieved callback
+        ---@param fn fun(parameters: GVariant, sender: string): nil signal recieved callback
         connect_signal = function(name, fn)            
-            proxy["on_g-signal"].connect(name, fn)
+            --[[
+                self: GDBusProxy
+                sender: string
+                name: string
+                parameters: GVariant
+            ]]
+            proxy["on_g-signal"].connect(name, function (_, sender, _, parameters)
+                fn(parameters, sender)
+            end)
         end,
 
         raw = function ()
