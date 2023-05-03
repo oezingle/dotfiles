@@ -1,0 +1,9 @@
+{
+    "exec": [
+        "xinput set-prop \"Synaptics TM3289-021\" \"libinput Click Method Enabled\" 0, 1",
+        "xinput set-prop 10 325 0",
+        "xinput set-prop 10 333 1"
+    ],
+    "dependencies": "xinput",
+    "description": "Two finger right click, Enable trackpad while typing, Enable middle click"
+}

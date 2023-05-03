@@ -1,0 +1,6 @@
+{
+    "exec": "nm-applet",
+    "dependencies": "nm-applet",
+    "description": "NetworkManager applet",
+    "kill": true
+}

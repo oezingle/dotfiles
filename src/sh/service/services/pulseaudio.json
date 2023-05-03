@@ -1,0 +1,5 @@
+{
+    "exec": "start-pulseaudio-x11",
+    "dependencies": "start-pulseaudio-x11",
+    "description": "Pulse audio"
+}

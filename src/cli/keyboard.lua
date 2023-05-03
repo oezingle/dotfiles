@@ -54,6 +54,10 @@ function keyboard.prompt(callback)
     stty(keyboard.tty)
 end
 
+function keyboard.restore_tty()
+    stty(keyboard.tty)
+end
+
 ---@param callback fun(command: string): any
 function keyboard.readline(callback)
     keyboard.tty = stty("-echo", "cbreak")

@@ -2,7 +2,7 @@ local wibox                = require("wibox")
 local awful                = require("awful")
 local config               = require("config")
 local no_scroll            = require("src.widgets.helper.function.no_scroll")
-local check_dependencies   = require("src.sh.check_dependencies")
+local check_dependencies   = require("src.sh.check_dependencies_old")
 local spawn                = require("src.agnostic.spawn")
 
 local shapes               = require("src.util.shapes")

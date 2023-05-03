@@ -1,5 +1,5 @@
 local fs                 = require("src.util.fs")
-local check_dependencies = require("src.sh.check_dependencies")
+local check_dependencies = require("src.sh.check_dependencies_old")
 local has_awesome        = require("lib.test").has_awesome
 local spawn              = require("src.agnostic.spawn")
 local get_wallpaper      = require("src.util.wallpaper.get_wallpaper")

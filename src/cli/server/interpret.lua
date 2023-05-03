@@ -8,10 +8,62 @@
 -- basically it is my goal that CLIs i have already written could just exist within the awesome shell
 
 local get_commands = require("src.cli.get_commands")
+local envhacks     = require("src.cli.server.envhacks")
+
+local unpack = require("src.agnostic.version.unpack")
+
+local string = string
+local loadfile = loadfile
+local type = type
+local os = os
+
+--- Split a string into its non-empty strings
+---@param s string
+---@return string[] words
+local function split_args(s)
+    local words = {
+        [-1] = "awesome"
+    }
+
+    local index = 0
+    for word in s:gmatch("[^%s]+") do 
+        words[index] = word
+
+        index = index + 1
+    end
+
+    return words
+end
 
 ---@param command string
 local function interpret(command)
-    print(command)
+    local args = split_args(command)
+
+    -- TODO a way to do ...
+
+    local file = get_commands()[args[0]]
+
+    if not file then
+        print(string.format("%s: command not found", args[0]))
+
+        return
+    end
+
+    local run_command = loadfile(file)
+
+    if not run_command then
+        error("File doesn't load")
+    end
+
+    envhacks.setfenv(run_command, setmetatable({
+        arg = args
+    }, { __index = _ENV }))
+
+    local res = run_command()
+
+    if type(res) == "function" then
+        res(unpack(args))
+    end
 end
 
 return interpret

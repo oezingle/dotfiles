@@ -68,4 +68,3 @@
 	- rebuild sh as an almost `systemctl` util - restart, stop, start services for features
 
 - battery widget does not react to pywal changes
-- battery charging icon does not set

@@ -1,0 +1,6 @@
+{
+    "exec": "xfce4-power-manager",
+    "dependencies": "xfce4-power-manager",
+    "description": "Sleep, display dimming, etc",
+    "kill": true
+}

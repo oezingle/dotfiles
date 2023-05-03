@@ -8,16 +8,14 @@ local args = pack(...)
 local function get_commands()
     local commands_folder = args[2]:gsub("/[%a_]+%.lua", "/commands")
 
-    local commands_lua_path = args[1]:gsub("%.[%a_]+$", ".commands")
-
     local commands_table = {}
 
-    for i, file in ipairs(fs.list(commands_folder)) do
+    for _, file in ipairs(fs.list(commands_folder)) do
         local command = file:gsub("%.lua", "")
 
-        local luapath = commands_lua_path .. "." .. command
+        local path = commands_folder .. "/" .. file
 
-        commands_table[command] = luapath
+        commands_table[command] = path
     end
 
     return commands_table

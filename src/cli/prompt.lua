@@ -1,5 +1,7 @@
 local keyboard = require("src.cli.keyboard")
 
+local get_commands = require("src.cli.get_commands")
+
 local dbus     = require("src.util.lgi.dbus")
 local GVariant = require("src.util.lgi.GVariant")
 
@@ -13,10 +15,40 @@ local proxy    = dbus.smart_proxy_2.create(
 
 local mainloop
 
+local function exit()
+    mainloop:quit()
+
+    print("Goodbye!")
+end
+
 local function prompt()
     local ok, err = pcall(function()
         keyboard.readline(function(command)
             if #command == 0 then
+                keyboard.restore_tty()
+
+                return prompt()
+            end
+
+            if command == "exit" then
+                exit()
+
+                return
+            elseif command == "help" then
+                print("This utility exists to interface with AwesomeWM over DBus\n\nCommands:")
+
+                local commands = {}
+
+                for k, _ in pairs(get_commands()) do
+                    table.insert(commands, k)
+                end
+
+                print("", table.concat(commands, " "))
+
+                print()
+
+                keyboard.restore_tty()
+
                 return prompt()
             end
 
@@ -36,12 +68,11 @@ local function prompt()
 
     if not ok then
         if tostring(err):match("interrupted!") then
-            mainloop:quit()
-
-            print("\nGoodbye!")
+            print()
+            exit()
         else
             error(err)
-        end            
+        end
     end
 end
 
@@ -53,8 +84,8 @@ local function main()
     end)
 
     -- This runs once, once the loop is running
-    GLib.idle_add(GLib.PRIORITY_DEFAULT, function ()
-        prompt()    
+    GLib.idle_add(GLib.PRIORITY_DEFAULT, function()
+        prompt()
     end)
 
     mainloop:run()

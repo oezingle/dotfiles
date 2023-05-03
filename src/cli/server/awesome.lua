@@ -1,14 +1,15 @@
+local pack         = require("src.agnostic.version.pack")
 
-local pack = require("src.agnostic.version.pack")
-local envhacks = require("src.cli.server.envhacks")
+local envhacks     = require("src.cli.server.envhacks")
+local interpret    = require("src.cli.server.interpret")
 
-local interpret = require("src.cli.server.interpret")
+local bad_argparse = require("src.cli.bad_argparse")
 
-local lgi       = require("lgi")
-local Gio       = lgi.Gio
-local GObject   = lgi.GObject
+local lgi          = require("lgi")
+local Gio          = lgi.Gio
+local GObject      = lgi.GObject
 
-local GVariant  = require("src.util.lgi.GVariant")
+local GVariant     = require("src.util.lgi.GVariant")
 
 local function on_bus_acquired(connection, name, user_data)
     local node_info = Gio.DBusNodeInfo.new_for_xml(
@@ -30,7 +31,19 @@ local function on_bus_acquired(connection, name, user_data)
     local function connection_print(...)
         local TAB = string.char(9)
 
-        local msg = table.concat(pack(...), TAB)
+        local args = pack(...)
+
+        for i, arg in ipairs(args) do
+            if type(arg) == "nil" then
+                args[i] = ""
+            end
+
+            if type(arg) ~= "string" then
+                args[i] = tostring(arg)
+            end
+        end
+
+        local msg = table.concat(args, TAB)
 
         connection:emit_signal(
             nil,
@@ -41,12 +54,14 @@ local function on_bus_acquired(connection, name, user_data)
         )
     end
 
-    -- remap print() to work over D-Bus
-    local env  = setmetatable({
+    -- remap print() to work over D-Bus (this feels so fancy)
+    local env = setmetatable({
         print = connection_print
-    }, { index = _G })
+    }, { __index = _G })
 
     envhacks.setfenv(interpret, env)
+
+    bad_argparse.print = connection_print
 
     -- TODO throw errors man
     connection:register_object(
@@ -62,13 +77,20 @@ local function on_bus_acquired(connection, name, user_data)
             invocation: GDBusMethodInvocation
         ]]
         GObject.Closure(function(connection, client, _, _, method, args, invocation)
-            if not method == "SendCommand" then
-                return
-            end
+            xpcall(
+                function()
+                    if not method == "SendCommand" then
+                        return
+                    end
 
-            local command = args[1]
+                    local command = args[1]
 
-            interpret(command)
+                    interpret(command)
+                end,
+                function(err)
+                    connection_print("Server Error:", debug.traceback(err))
+                end
+            )
 
             invocation:return_value(nil)
         end)

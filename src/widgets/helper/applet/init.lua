@@ -2,7 +2,7 @@
 
 local class = require("lib.30log")
 local exitable_dialog = require("src.widgets.helper.exitable_dialog")
-local check_dependencies = require("src.sh.check_dependencies")
+local check_dependencies = require("src.sh.check_dependencies_old")
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
