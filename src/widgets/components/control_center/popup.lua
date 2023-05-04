@@ -4,6 +4,7 @@ local config               = require("config")
 local no_scroll            = require("src.widgets.helper.function.no_scroll")
 local check_dependencies   = require("src.sh.check_dependencies_old")
 local spawn                = require("src.agnostic.spawn")
+local open_manager         = require("src.util.xfsettings.open_manager")
 
 local shapes               = require("src.util.shapes")
 local redshift             = require("src.util.redshift")
@@ -98,7 +99,7 @@ local function create_control_center()
             end)
         end,
         on_right_click = function()
-            spawn("arandr")
+            open_manager("display")
         end
     }
 
