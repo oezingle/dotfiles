@@ -19,7 +19,7 @@ local function translate_status(status)
     elseif status == services.status.ERROR then
         return "ERROR"
     elseif status == services.status.EXITED then
-        return "EXITED"
+        return "EXITED (ok)"
     elseif status == nil then
         return "unknown"
     else

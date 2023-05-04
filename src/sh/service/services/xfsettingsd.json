@@ -1,0 +1,6 @@
+{
+    "exec": "xfsettingsd",
+    "dependencies": "xfsettingsd",
+    "description": "Sleep, display dimming, etc",
+    "kill": true
+}

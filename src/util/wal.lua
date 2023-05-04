@@ -1,5 +1,5 @@
 local fs                 = require("src.util.fs")
-local check_dependencies = require("src.sh.check_dependencies_old")
+local check_dependencies = require("src.sh.check_dependencies")
 local has_awesome        = require("lib.test").has_awesome
 local spawn              = require("src.agnostic.spawn")
 local get_wallpaper      = require("src.util.wallpaper.get_wallpaper")
@@ -59,11 +59,12 @@ end
 local has_pywal_installed = false
 
 if config and config.gimmicks.pywal then
-    check_dependencies({ "wal" }, function()
-        has_pywal_installed = true
+    check_dependencies({ "wal" })
+        :after(function()
+            has_pywal_installed = true
 
-        awesome.emit_signal("wal::init")
-    end)
+            awesome.emit_signal("wal::init")
+        end)
 end
 
 ---@class WalReturn
@@ -117,11 +118,12 @@ ret.create_hook = function()
         return
     end
 
-    check_dependencies({ 'wal' }, function()
-        ret.update()
+    check_dependencies({ 'wal' })
+        :after(function()
+            ret.update()
 
-        awesome.connect_signal("wallpaper_should_change", ret.update)
-    end, 'pywal color scheme generation')
+            awesome.connect_signal("wallpaper_should_change", ret.update)
+        end)
 end
 
 
