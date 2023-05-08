@@ -1,8 +1,7 @@
--- TODO refactor to util.applet? widget.helper?
 
 local class = require("lib.30log")
 local exitable_dialog = require("src.widgets.helper.exitable_dialog")
-local check_dependencies = require("src.sh.check_dependencies_old")
+local check_dependencies = require("src.sh.check_dependencies")
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
@@ -80,9 +79,14 @@ function applet:create_bindings()
             toggle = function() end
         }
 
-        check_dependencies(self.dependencies, function()
-            self:create_internal_widget()
-        end)
+        check_dependencies(self.dependencies)
+            :after(function(met)
+                if not met then
+                    return
+                end
+
+                self:create_internal_widget()
+            end)
     end
 end
 

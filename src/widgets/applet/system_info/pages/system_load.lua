@@ -3,7 +3,7 @@ local memory_usage       = require("src.widgets.applet.system_info.memory_usage"
 local awful              = require("awful")
 local wibox              = require("wibox")
 local atk                = require("src.widgets.helper.applet.toolkit")
-local check_dependencies = require("src.sh.check_dependencies_old")
+local check_dependencies = require("src.sh.check_dependencies")
 
 local function create_system_load()
     local mem_usage, mem_timer = memory_usage(false)
@@ -40,21 +40,26 @@ local function create_system_load()
     }
 
     do
-        check_dependencies({ "mpstat" }, function()
-            awful.spawn.easy_async("grep -c ^processor /proc/cpuinfo", function(result)
-                local layout = system_load:get_children_by_id("cpu-core-charts")[1]
-
-                local core_count = tonumber(result) - 1
-
-                for core = 0, core_count do
-                    local arc, timer = cpu_arc(core)
-
-                    table.insert(timers, timer)
-
-                    layout:add(arc)
+        check_dependencies({ "mpstat" })
+            :after(function(met)
+                if not met then
+                    return
                 end
+
+                awful.spawn.easy_async("grep -c ^processor /proc/cpuinfo", function(result)
+                    local layout = system_load:get_children_by_id("cpu-core-charts")[1]
+
+                    local core_count = tonumber(result) - 1
+
+                    for core = 0, core_count do
+                        local arc, timer = cpu_arc(core)
+
+                        table.insert(timers, timer)
+
+                        layout:add(arc)
+                    end
+                end)
             end)
-        end)
 
         --[[
             awful.spawn.easy_async_with_shell("lsblk -n -b | awk 'match($0, /^[a-z]+/) {print $1 }'", function(stdout)

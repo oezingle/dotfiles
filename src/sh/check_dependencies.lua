@@ -1,8 +1,6 @@
 
 local spawn = require("src.agnostic.spawn.promise")
 
--- TODO replace with ({ dependencies }, silent: boolean?) -> Promise<met: boolean>
-
 --- Check if dependencies are installed, returning a promise of if they are
 ---@param dependencies string|string[]
 ---@return Promise<boolean>

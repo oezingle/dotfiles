@@ -42,9 +42,10 @@ local function audit()
         "test",
         "rc.lua",
         "audit.lua",
-        "config.example.lua",
+        "config_rm example.lua",
         "src/widgets/applet",
-        ".git"
+        "src/sh/service/services",
+        "src/cli/commands"
     }
 
     spawn("find -name '*.lua'", function(res)

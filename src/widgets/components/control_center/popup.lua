@@ -2,7 +2,7 @@ local wibox                = require("wibox")
 local awful                = require("awful")
 local config               = require("config")
 local no_scroll            = require("src.widgets.helper.function.no_scroll")
-local check_dependencies   = require("src.sh.check_dependencies_old")
+local check_dependencies   = require("src.sh.check_dependencies")
 local spawn                = require("src.agnostic.spawn")
 local open_manager         = require("src.util.xfsettings.open_manager")
 
@@ -192,9 +192,15 @@ local function create_control_center()
     volume_control.visible = false
 
     -- show music widget if playerctl is installed
-    check_dependencies({ "playerctl" }, function()
-        widget:get_children_by_id("music-container")[1].visible = true
-    end)
+    check_dependencies({ "playerctl" })
+        :after(function(met)
+            if not met then
+                return
+            end
+
+            -- TODO create the music widget if playerctl installed
+            widget:get_children_by_id("music-container")[1].visible = true
+        end)
 
     widget:connect_signal("property::visible", function(w)
         local visible = w.visible
