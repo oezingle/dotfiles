@@ -70,3 +70,6 @@
 - battery widget does not react to pywal changes
 
 - Use dbus.smart_proxy_2
+
+- sort out weird fucking bugs with xfsettingsd setting gtk theme to Materia-transparent-light
+	- pywal related?

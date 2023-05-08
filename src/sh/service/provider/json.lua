@@ -101,10 +101,13 @@ function json_service_provider:start()
 
         -- https://awesomewm.org/doc/api/libraries/awful.spawn.html#easy_async_with_shell
         self.service.pid = awful.spawn.easy_async_with_shell(self.service.exec, function(stdout, stderr, _, code)
-            if code == 0 then
-                self.service.status = service_status.EXITED
-            else
-                self.service.status = service_status.ERROR
+            if not self.service.kill then
+                if code == 0 then
+                    self.service.status = service_status.EXITED
+                else
+                    self.service.status = service_status.ERROR
+                end
+                    
             end
         end)
 

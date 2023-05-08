@@ -99,6 +99,7 @@ local function create_control_center()
             end)
         end,
         on_right_click = function()
+            -- TODO fallback to arandr
             open_manager("display")
         end
     }
