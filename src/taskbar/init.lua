@@ -8,7 +8,6 @@ local layout_selector       = require("src.widgets.components.layout_selector")
 local get_decoration_color  = require("src.util.color.get_decoration_color")
 local shapes                = require("src.util.shapes")
 local wal                   = require("src.util.wal")
--- TODO i'm not sure how to feel about pywal here
 
 local create_launcher       = require("src.taskbar.launcher")
 local create_systray        = require("src.taskbar.systray")

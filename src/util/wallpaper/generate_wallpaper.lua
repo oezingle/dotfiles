@@ -8,6 +8,8 @@ local wallpaper = require(folder_of_this_file .. "init")
 
 local wallpaper_dir = fs.directories.wallpaper
 
+-- https://shoonia.github.io/1x1/#000000ff
+
 --- Generate a wallpaper for a given iterator
 ---@param identifier any
 ---@param width number
@@ -15,8 +17,6 @@ local wallpaper_dir = fs.directories.wallpaper
 ---@param blur boolean
 ---@param async_cb function?
 local function generate_wallpaper(identifier, width, height, blur, async_cb)
-    async_cb = async_cb or nil
-
     local dir = wallpaper_dir .. tostring(identifier) .. "/"
 
     if not fs.isdir(dir) then
@@ -27,10 +27,10 @@ local function generate_wallpaper(identifier, width, height, blur, async_cb)
 
     if not fs.exists(filename) then
         ---@type string
-        local resize_string = " -resize " .. tostring(width) .. "x" .. tostring(height) .. "^ "
+        local resize_string = string.format(" -resize %dx%d^ ", width, height)
 
         ---@type string
-        local crop_string = " -gravity Center -extent " .. tostring(width) .. "x" .. tostring(height) .. " "
+        local crop_string = string.format(" -gravity Center -extent %dx%d ", width, height)
 
         ---@type string
         local blur_string = blur and " -blur 20x20 " or ""

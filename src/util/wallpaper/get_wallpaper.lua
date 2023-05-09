@@ -13,6 +13,9 @@ local generate_wallpaper = generate_lib.generate_wallpaper
 local generate_wallpaper_iter = generate_lib.generate_wallpaper_iter
 local list_iter = generate_lib.list_iter
 
+-- TODO don't block thread if the requested wallpaper doesn't exist 
+-- TODO just return a black pixel and then later emit wallpaper_changed 
+
 --- get the wallpaper at a specific resolution, and with optional blur.
 --- saves crazy amounts of time when dealing with widgets (low res images load way faster)
 ---@param width number?

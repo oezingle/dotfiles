@@ -23,7 +23,7 @@ do
 end
 
 -- check that there is at least 1 wallpaper
-assert(next(config.wallpaper.list))
+assert(next(config.wallpaper.list), "No wallpapers found")
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 

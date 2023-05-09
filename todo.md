@@ -73,3 +73,6 @@
 
 - sort out weird fucking bugs with xfsettingsd setting gtk theme to Materia-transparent-light
 	- pywal related?
+
+- https://github.com/Drauthius/awesome-sharedtags
+	- optional?
