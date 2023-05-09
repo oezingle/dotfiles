@@ -52,12 +52,10 @@ local function toggle_icon_button(icon, callback, _, initial)
 end
 
 local function create_control_center()
-    local music_widget = create_music_widget()
-
     local widget = wibox.widget {
         {
             {
-                music_widget,
+                nil,
                 bg = config.button.normal,
                 widget = wibox.container.background,
                 shape = shapes.rounded_rect(),
@@ -191,6 +189,8 @@ local function create_control_center()
     brightness_control.visible = false
     volume_control.visible = false
 
+    local music_widget
+
     -- show music widget if playerctl is installed
     check_dependencies({ "playerctl" })
         :after(function(met)
@@ -198,8 +198,12 @@ local function create_control_center()
                 return
             end
 
-            -- TODO create the music widget if playerctl installed
-            widget:get_children_by_id("music-container")[1].visible = true
+            local music_container = widget:get_children_by_id("music-container")[1]
+
+            music_widget = create_music_widget()
+
+            music_container.widget = music_widget
+            music_container.visible = true
         end)
 
     widget:connect_signal("property::visible", function(w)
