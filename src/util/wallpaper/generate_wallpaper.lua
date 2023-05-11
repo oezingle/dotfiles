@@ -7,7 +7,7 @@ local wallpaper = require("src.util.wallpaper.core")
 local string    = string
 
 --- Generate a wallpaper for a given iterator
----@param identifier string|number|nil
+---@param identifier string|integer|nil
 ---@param width number
 ---@param height number
 ---@param blur boolean

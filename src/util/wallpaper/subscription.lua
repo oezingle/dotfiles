@@ -17,7 +17,7 @@ local WallpaperSubscription = class("WallpaperSubscription")
 ---@param width number?
 ---@param height number?
 ---@param blur boolean?
----@param identifier string|number|nil
+---@param identifier string|integer|nil
 function WallpaperSubscription:init(callback, width, height, blur, identifier)
     self.in_init = true
 

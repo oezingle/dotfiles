@@ -12,7 +12,7 @@ local math = math
 ---@field width number
 ---@field height number
 ---@field blur boolean
----@field identifier string|number|nil
+---@field identifier string|integer|nil
 ---@field callback fun(string)
 
 ---@return Wallpaper.Config
