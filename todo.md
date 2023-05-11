@@ -82,3 +82,10 @@
 	- optional?
 
 - fix wal_svg for battery widget
+
+- use new wallpaper API for 
+	- screen_preview
+		- /tag_preview
+		- /init
+	- ChooseWallpaper
+	- wallpaper widget

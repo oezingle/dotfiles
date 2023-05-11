@@ -1,9 +1,9 @@
 local fs                 = require("src.util.fs")
 local check_dependencies = require("src.sh.check_dependencies")
 local has_awesome        = require("lib.test").has_awesome
-local spawn              = require("src.agnostic.spawn")
-local get_wallpaper      = require("src.util.wallpaper_old.get_wallpaper")
-local is_light           = require("src.util.wallpaper_old.is_light")
+local spawn              = require("src.agnostic.spawn.promise")
+local wallpaper          = require("src.util.wallpaper")
+local is_light           = require("src.util.wallpaper.is_light")
 
 local config             = nil
 if has_awesome() then
@@ -100,14 +100,16 @@ local ret = setmetatable({
             return
         end
 
-        is_light(function(is_light)
-            -- l for light mode
-            -- n skips wallpaper
-            -- t skips tty
-            spawn(string.format("wal %s -n -t -i '%s'", is_light and "-l" or "", get_wallpaper()), function()
-                awesome.emit_signal("wal::changed")
+        is_light()
+            :after(function(is_light)
+                -- l for light mode
+                -- n skips wallpaper
+                -- t skips tty
+                spawn(string.format("wal %s -n -t -i '%s'", is_light and "-l" or "", wallpaper.get_current()))
+                    :after(function()
+                        awesome.emit_signal("wal::changed")
+                    end)
             end)
-        end)
     end,
 }, {
     __call = wal

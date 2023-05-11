@@ -136,6 +136,8 @@ gears.timer.delayed_call(function()
 end)
 
 do
+    -- TODO used to load 0x0 images and i have no idea what i changed to fix it
+
     -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
     screen.connect_signal("property::geometry", function (s)
         ---@type Wallpaper.Subscription.Class | nil

@@ -64,6 +64,11 @@ function wallpaper._set_time_current()
     wallpaper.current = best_identifier
 end
 
+--- Get the path of the current wallpaper
+function wallpaper.get_current()
+    return wallpaper.config.table[wallpaper.current]
+end
+
 ---@param identifier any?
 function wallpaper.set_current(identifier)
     if identifier then
