@@ -10,7 +10,8 @@ local GLib = lgi.GLib
 
 ---@alias PromiseChainFunction<T> (fun(arg: T): any)|nil
 
----@class Promise<T> : LogBaseFunctions, { after: fun(self: Promise, callback: (fun(arg: T): any)|nil): Promise<T|nil>|Promise, catch: fun(self: Promise, callback: (fun(arg: T): any)|nil): Promise<T|nil>|Promise, chain: fun(self: Promise, after: (fun(arg: T): any)|nil, catch: (fun(arg: any): any)|nil): Promise<T|nil>|Promise } Similar to JavaScript promises
+-- yo what the fuck lua-language-server
+---@class Promise<T> : LogBaseFunctions, { after: fun(self: Promise, callback: (fun(arg: T): any)|nil): Promise<T|nil>|Promise }, { catch: fun(self: Promise, callback: (fun(arg: T): any)|nil): Promise<T|nil>|Promise }, { chain: fun(self: Promise, after: (fun(arg: T): any)|nil, catch: (fun(arg: any): any)|nil): Promise<T|nil>|Promise }, { fulfilled: boolean }, { _private: { callback: PromiseCallback, value: any, was_resolved: boolean } } Similar to JavaScript promises
 ---@field _private { callback: PromiseCallback, value: any, was_resolved: boolean }
 ---@field fulfilled boolean
 ---@field triggered boolean
