@@ -1,7 +1,6 @@
 local spawn = require("src.agnostic.spawn")
-local directories = require("src.util.fs.directories")
-local cache_dir = directories.cache
-local config_dir = directories.config
+local get_icon = require("src.util.fs.get_icon")
+local cache_dir = require("src.util.fs.directories").cache
 
 local gsurface = require("gears.surface")
 
@@ -15,7 +14,7 @@ local last_art_path = ""
 ---@param metadata PlayerctlMetadataQueryResult
 local function update_album_art(widget, metadata)
     if not metadata or not next(metadata) or not metadata.art_url or #metadata.art_url == 0 then
-        widget.image = config_dir .. "icon/music/musical-notes.svg"
+        widget.image = get_icon("music/musical-notes.svg")
     else
         local art_url = metadata.art_url
 

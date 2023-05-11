@@ -1,7 +1,6 @@
 local class = require("lib.30log")
 local fs = require("src.util.fs")
 local Promise = require("src.util.Promise")
-local unpack = require("src.agnostic.version.unpack")
 
 local generate_wallpaper = require("src.util.wallpaper.generate_wallpaper")
 local wallpaper = require("src.util.wallpaper.core")
@@ -33,6 +32,12 @@ function WallpaperSubscription:init(callback, width, height, blur, identifier)
 
     if self.callback then
         self.callback(self.path)
+    end
+
+    if awesome then
+        awesome.connect_signal("wallpaper_should_change", function ()
+            self:generate()
+        end)
     end
 
     self.in_init = false

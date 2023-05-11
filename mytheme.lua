@@ -9,7 +9,9 @@ local dpi = xresources.apply_dpi
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
 
-local config_dir = gfs.get_configuration_dir()
+local config_dir = require("src.util.fs.directories").config
+
+local get_icon = require("src.util.fs.get_icon")
 
 local config = require("config")
 
@@ -77,21 +79,21 @@ theme.menu_width  = dpi(100)
 --theme.bg_widget = "#cc0000"
 
 -- Define the image to load
-theme.titlebar_close_button_normal = config_dir.."icon/titlebar/unfocus/close.svg"
-theme.titlebar_close_button_focus  = config_dir.."icon/titlebar/unfocus/close.svg"
+theme.titlebar_close_button_normal = get_icon("titlebar/unfocus/close.svg")
+theme.titlebar_close_button_focus  = get_icon("titlebar/unfocus/close.svg")
 
-theme.titlebar_minimize_button_normal = config_dir.."icon/titlebar/unfocus/min.svg"
-theme.titlebar_minimize_button_focus  = config_dir.."icon/titlebar/unfocus/min.svg"
+theme.titlebar_minimize_button_normal = get_icon("titlebar/unfocus/min.svg")
+theme.titlebar_minimize_button_focus  = get_icon("titlebar/unfocus/min.svg")
 
--- theme.titlebar_ontop_button_normal_inactive = config_dir.."icon/titlebar/unfocus/ontop.svg"
--- theme.titlebar_ontop_button_focus_inactive  = config_dir.."icon/titlebar/focus/ontop.svg"
--- theme.titlebar_ontop_button_normal_active = config_dir.."icon/titlebar/unfocus/ontop.svg"
--- theme.titlebar_ontop_button_focus_active  = config_dir.."icon/titlebar/focus/ontop.svg"
+-- theme.titlebar_ontop_button_normal_inactive = get_icon("titlebar/unfocus/ontop.svg")
+-- theme.titlebar_ontop_button_focus_inactive  = get_icon("titlebar/focus/ontop.svg")
+-- theme.titlebar_ontop_button_normal_active = get_icon("titlebar/unfocus/ontop.svg")
+-- theme.titlebar_ontop_button_focus_active  = get_icon("titlebar/focus/ontop.svg")
 
--- theme.titlebar_sticky_button_normal_inactive = config_dir.."icon/titlebar/unfocus/sticky.svg"
--- theme.titlebar_sticky_button_focus_inactive  = config_dir.."icon/titlebar/focus/sticky.svg"
--- theme.titlebar_sticky_button_normal_active = config_dir.."icon/titlebar/unfocus/sticky.svg"
--- theme.titlebar_sticky_button_focus_active  = config_dir.."icon/titlebar/focus/sticky.svg"
+-- theme.titlebar_sticky_button_normal_inactive = get_icon("titlebar/unfocus/sticky.svg")
+-- theme.titlebar_sticky_button_focus_inactive  = get_icon("titlebar/focus/sticky.svg")
+-- theme.titlebar_sticky_button_normal_active = get_icon("titlebar/unfocus/sticky.svg")
+-- theme.titlebar_sticky_button_focus_active  = get_icon("titlebar/focus/sticky.svg")
 
 --[[
 theme.titlebar_floating_button_normal_inactive = themes_path.."default/titlebar/unfocus/floating_normal_inactive.png"
@@ -100,10 +102,10 @@ theme.titlebar_floating_button_normal_active = themes_path.."default/titlebar/un
 theme.titlebar_floating_button_focus_active  = themes_path.."default/titlebar/focus/floating_focus_active.png"
 ]]
 
-theme.titlebar_maximized_button_normal_inactive = config_dir.."icon/titlebar/unfocus/max.svg"
-theme.titlebar_maximized_button_focus_inactive  = config_dir.."icon/titlebar/unfocus/max.svg"
-theme.titlebar_maximized_button_normal_active = config_dir.."icon/titlebar/unfocus/max.svg"
-theme.titlebar_maximized_button_focus_active  = config_dir.."icon/titlebar/unfocus/max.svg"
+theme.titlebar_maximized_button_normal_inactive = get_icon("titlebar/unfocus/max.svg")
+theme.titlebar_maximized_button_focus_inactive  = get_icon("titlebar/unfocus/max.svg")
+theme.titlebar_maximized_button_normal_active = get_icon("titlebar/unfocus/max.svg")
+theme.titlebar_maximized_button_focus_active  = get_icon("titlebar/unfocus/max.svg")
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = themes_path.."default/layouts/fairhw.png"

@@ -77,7 +77,7 @@ function wallpaper.set_current(identifier)
     end
 
     if awesome then
-        -- TODO emit signal
+        awesome.emit_signal("wallpaper_should_change")
     end
 end
 

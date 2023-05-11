@@ -36,7 +36,6 @@ do
     end)
 end
 ]]
-
 local error_log = require("src.error_log")
 
 local unpack = require("src.agnostic.version.unpack")
@@ -101,7 +100,7 @@ require("src.widgets.components.client_switcher")()
 require("src.widgets.applet")
 
 -- set wallpaper
-local get_wallpaper = require("src.util.wallpaper_old.get_wallpaper")
+local wallpaper_subscription = require("src.util.wallpaper.subscription")
 
 -- Rofi popup
 local rofi = require('src.sh.rofi')
@@ -136,31 +135,34 @@ gears.timer.delayed_call(function()
     require("src.save_state.wm").restore_tags()
 end)
 
-local function set_wallpaper(s)
-    gears.wallpaper.maximized(get_wallpaper(s.geometry.width, s.geometry.height), s, true)
+do
+    -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
+    screen.connect_signal("property::geometry", function (s)
+        ---@type Wallpaper.Subscription.Class | nil
+        local subscription = s.wallpaper_subscription
+
+        if not subscription then
+            return
+        end
+
+        subscription:set_dimensions(s.geometry.width, s.geometry.height)
+    end)
+
+    awful.screen.connect_for_each_screen(function(s)
+        -- Wallpaper
+        s.wallpaper_subscription = wallpaper_subscription()
+            :init(function (path)
+                gears.wallpaper.maximized(path, s, true)
+            end, s.geometry.width, s.geometry.height)
+
+        -- Create Exit menu
+        create_exit_screen(s)
+
+        -- create tags
+        awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.suit.floating)
+    end)
 end
 
--- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-screen.connect_signal("property::geometry", set_wallpaper)
-
-awesome.connect_signal("wallpaper_should_change", function()
-    gears.timer.delayed_call(function ()
-        for s in screen do
-            set_wallpaper(s)
-        end        
-    end)
-end)
-
-awful.screen.connect_for_each_screen(function(s)
-    -- Wallpaper
-    set_wallpaper(s)
-
-    -- Create Exit menu
-    create_exit_screen(s)
-
-    -- create tags
-    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.suit.floating)
-end)
 
 -- {{{ Key bindings
 local globalkeys = gears.table.join(
@@ -210,7 +212,6 @@ local globalkeys = gears.table.join(
         { description = "open a terminal", group = "launcher" }),
     awful.key({ modkey }, "e", function() awful.spawn(config.apps.file_manager) end,
         { description = "open a file manager", group = "launcher" }),
-
     awful.key({ modkey, "Control" }, "r", awesome.restart,
         { description = "reload awesome", group = "awesome" }),
     awful.key({ modkey, "Shift" }, "q", awesome.quit,
@@ -272,12 +273,10 @@ local clientkeys = gears.table.join(
     -- Toggle floating / tiling
     awful.key({ modkey }, "r", awful.client.floating.toggle,
         { description = "toggle floating", group = "client" }),
-
     awful.key({ modkey, }, "q", function(c) c:swap(awful.client.getmaster()) end,
         { description = "move to master", group = "client" }),
     awful.key({ modkey, }, "o", function(c) c:move_to_screen() end,
         { description = "move to screen", group = "client" }),
-
     awful.key({ modkey, }, "t", function(c) c.ontop = not c.ontop end,
         { description = "toggle keep on top", group = "client" }),
 
@@ -399,8 +398,10 @@ root.keys(globalkeys)
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
     -- All clients will match this rule.
-    { rule = {},
-        properties = { border_width = beautiful.border_width,
+    {
+        rule = {},
+        properties = {
+            border_width = beautiful.border_width,
             border_color = beautiful.border_normal,
             focus = awful.client.focus.filter,
             raise = true,
@@ -413,48 +414,53 @@ awful.rules.rules = {
     },
 
     -- Floating clients.
-    { rule_any = {
-        instance = {
-            "DTA", -- Firefox addon DownThemAll.
-            "copyq", -- Includes session name in class.
-            "pinentry",
-        },
-        class = {
-            "Arandr",
-            "Blueman-manager",
-            "Gpick",
-            "KColorChooser",
-            "Kruler",
-            "MessageWin", -- kalarm.
-            "Pavucontrol",
-            "Sxiv",
-            "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
-            "Wpa_gui",
-            "veromix",
-            "xtightvncviewer",
-        },
+    {
+        rule_any = {
+            instance = {
+                "DTA", -- Firefox addon DownThemAll.
+                "copyq", -- Includes session name in class.
+                "pinentry",
+            },
+            class = {
+                "Arandr",
+                "Blueman-manager",
+                "Gpick",
+                "KColorChooser",
+                "Kruler",
+                "MessageWin", -- kalarm.
+                "Pavucontrol",
+                "Sxiv",
+                "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
+                "Wpa_gui",
+                "veromix",
+                "xtightvncviewer",
+            },
 
-        -- Note that the name property shown in xprop might be set slightly after creation of the client
-        -- and the name shown there might not match defined rules here.
-        name = {
-            "Event Tester", -- xev.
+            -- Note that the name property shown in xprop might be set slightly after creation of the client
+            -- and the name shown there might not match defined rules here.
+            name = {
+                "Event Tester", -- xev.
+            },
+            role = {
+                "AlarmWindow", -- Thunderbird's calendar.
+                "ConfigManager", -- Thunderbird's about:config.
+                "pop-up",    -- e.g. Google Chrome's (detached) Developer Tools.
+            }
         },
-        role = {
-            "AlarmWindow", -- Thunderbird's calendar.
-            "ConfigManager", -- Thunderbird's about:config.
-            "pop-up", -- e.g. Google Chrome's (detached) Developer Tools.
-        }
-    }, properties = { floating = true } },
+        properties = { floating = true }
+    },
 
     -- Add titlebars to normal clients and dialogs
-    { rule_any = { type = { "normal", "dialog" } },
+    {
+        rule_any = { type = { "normal", "dialog" } },
         properties = {
             titlebars_enabled = true
         }
     },
 
     -- make firefox PiP sticky
-    { rule = { name = "Picture-in-Picture", },
+    {
+        rule = { name = "Picture-in-Picture", },
         properties = {
             sticky = true
         }
@@ -489,9 +495,11 @@ require("test.init")
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
-    naughty.notify({ preset = naughty.config.presets.critical,
+    naughty.notify({
+        preset = naughty.config.presets.critical,
         title = "Oops, there were errors during startup!",
-        text = awesome.startup_errors })
+        text = awesome.startup_errors
+    })
 
     if error_log then
         error_log(awesome.startup_errors, true)
@@ -506,9 +514,11 @@ do
         if in_error then return end
         in_error = true
 
-        naughty.notify({ preset = naughty.config.presets.critical,
+        naughty.notify({
+            preset = naughty.config.presets.critical,
             title = "Oops, an error happened!",
-            text = tostring(err) })
+            text = tostring(err)
+        })
 
         error_log(debug.traceback(tostring(err)))
 
@@ -517,7 +527,10 @@ do
 end
 
 -- Garbage collection
-gears.timer.start_new(10, function() collectgarbage("step", 20000) return true end)
+gears.timer.start_new(10, function()
+    collectgarbage("step", 20000)
+    return true
+end)
 
 --[[
 do
