@@ -125,6 +125,8 @@ function WallpaperSubscription:generate()
     -- Generate all identifiers
     if not identifier then
         for identifier, _ in pairs(wallpaper.config.table) do
+            -- TODO this shit should be a job queue i wanna die
+
             local gen = generate_wallpaper(identifier, width, height, blur)
 
             table.insert(promises, gen)

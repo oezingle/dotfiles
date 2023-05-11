@@ -72,9 +72,11 @@ end
 
 --- Remove a file or directory
 ---@param path string the file/directory path
----@param recursive boolean whether or not to use the rm -r flag
+---@param recursive boolean? whether or not to use the rm -r flag
 local function remove(path, recursive)
-    os.execute("rm " .. (recursive and "-r " or "") .. path)
+    recursive = recursive or false
+
+    os.execute(    string.format("rm %s %s", recursive and "-r" or "", path))
 end
 
 --- Write content to a file
@@ -105,10 +107,8 @@ end
 
 ---@param src string
 ---@param dest string
-local function cp(src, dest) 
-    local content = read_file(src) or ""
-
-    write_file(dest, content)
+local function mv(src, dest)
+    os.execute(string.format("cp %s %s", src, dest))
 end
 
 return {
@@ -118,5 +118,7 @@ return {
     read   = read_file,
     write  = write_file,
     rm     = remove,
-    list   = list
+    list   = list,
+
+    mv = mv
 }

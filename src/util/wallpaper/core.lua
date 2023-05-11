@@ -1,7 +1,8 @@
 local config = require("config")
 
-local fs = require("src.util.fs")
 local time = require("src.util.time")
+
+local reset_if_needed = require("src.util.wallpaper.reset")
 
 local math = math
 
@@ -79,6 +80,8 @@ function wallpaper.set_current(identifier)
         -- TODO emit signal
     end
 end
+
+reset_if_needed(wallpaper.config)
 
 wallpaper.set_current()
 

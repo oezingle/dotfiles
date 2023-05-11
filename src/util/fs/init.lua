@@ -15,7 +15,6 @@ local operations = require(folder_of_this_file .. "operations")
 ---@module "src.util.fs.get_icon"
 local get_icon = require(folder_of_this_file .. "get_icon")
 
-
 return setmetatable({
     directories = directories,
 
