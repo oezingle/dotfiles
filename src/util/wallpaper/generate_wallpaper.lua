@@ -29,8 +29,17 @@ local function generate_wallpaper(identifier, width, height, blur)
         ---@type string
         local blur_string = blur and " -blur 20x20 " or ""
 
+        --[[
+            https://imagemagick.org/script/opencl.php
+
+            magick's OpenCL support is limited in this case to the -blur operator, and requires
+            that the source code be compiled with OpenCL enabled.
+        ]]
+
+
+        --          enable OpenCL           throttle           1 thread
         ---@type string
-        local cmd = "MAGICK_THROTTLE=25 MAGICK_THREAD_LIMIT=1 " ..
+        local cmd = "MAGICK_OCL_DEVICE=true MAGICK_THROTTLE=25 MAGICK_THREAD_LIMIT=1 " ..
             "magick convert" ..
             resize_string ..
             crop_string ..

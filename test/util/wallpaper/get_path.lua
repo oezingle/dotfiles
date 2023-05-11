@@ -1,6 +1,7 @@
-local generate_wallpaper = require("src.util.wallpaper.generate_wallpaper")
+
+local get_path = require("src.util.wallpaper.get_path")
+
 local test = require("lib.test")
-local Promise = require("src.util.Promise")
 
 local wallpaper = require("src.util.wallpaper.core")
 
@@ -16,14 +17,14 @@ local function assert_good_path(p)
     assert(p:sub(1, 1) --[[ @as string ]] == "/")
 end 
 
-test.suite("wallpaper.generate_wallpaper",
-    test.test(function()
-        local path = Promise.await(generate_wallpaper(wallpaper.current, 640, 480, false))
+test.suite("wallpaper.get_path", 
+    test.test(function ()
+        local path = get_path(wallpaper.current, 640, 480, false)
 
         assert_good_path(path)
     end, "640x480"),
-    test.test(function()
-        local path = Promise.await(generate_wallpaper(wallpaper.current, 640, 480, true))
+    test.test(function ()
+        local path = get_path(wallpaper.current, 640, 480, true)
 
         assert_good_path(path)
     end, "640x480 blur")

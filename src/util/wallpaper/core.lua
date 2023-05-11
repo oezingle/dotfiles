@@ -80,4 +80,6 @@ function wallpaper.set_current(identifier)
     end
 end
 
+wallpaper.set_current()
+
 return wallpaper

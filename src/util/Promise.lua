@@ -213,6 +213,12 @@ function Promise.await(promise)
 
     local context = mainloop:get_context()
 
+    local ok, err = true, nil
+
+    promise:catch(function (msg)
+        ok, err = false, msg
+    end)
+
     -- Push context to default so g_idle_add works on this loop,
     -- not on an AwesomeWM loop
     -- https://stackoverflow.com/questions/19903537/how-to-attach-gsocketservice-to-non-default-main-loop-context
@@ -223,6 +229,10 @@ function Promise.await(promise)
             mainloop:quit()
 
             return false
+        end
+
+        if not ok then
+            error(err)
         end
 
         return true
