@@ -9,7 +9,7 @@ local shapes = require("src.util.shapes")
 local Class = require("src.util.Class")
 
 local client_preview = require("src.widgets.element.client_preview")
-local get_wallpaper = require("src.util.wallpaper.get_wallpaper")
+local get_wallpaper = require("src.util.wallpaper_old.get_wallpaper")
 local clienticon_or_xorg = require("src.widgets.element.clienticon_or_xorg")
 
 local tag_preview = {}

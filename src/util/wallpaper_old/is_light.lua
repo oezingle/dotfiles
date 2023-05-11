@@ -3,7 +3,7 @@ local spawn = require("src.agnostic.spawn")
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
----@module "src.util.wallpaper.init"
+---@module "src.util.wallpaper_old.init"
 local wallpaper = require(folder_of_this_file .. "init")
 
 --- Check if a wallpaper is bright

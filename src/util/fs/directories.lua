@@ -13,9 +13,11 @@ local cache_dir = config_dir .. "cache/"
 
 local wallpaper_dir = config_dir .. "cache/wallpaper/"
 
-local icon_dir = config_dir .. "icon/"
+local asset_dir = config_dir .. "asset/"
 
-local translation_dir = config_dir .. "translation/"
+local icon_dir = asset_dir .. "icon/"
+
+local translation_dir = asset_dir .. "translation/"
 
 local script_dir = config_dir .. "sh/"
 
@@ -23,6 +25,7 @@ local dirs = {
     config = config_dir,
     cache = cache_dir,
     wallpaper = wallpaper_dir,
+    assets = asset_dir,
     icon = icon_dir,
     translation = translation_dir,
     script = script_dir

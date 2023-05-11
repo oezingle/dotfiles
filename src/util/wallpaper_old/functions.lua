@@ -27,7 +27,7 @@ assert(next(config.wallpaper.list), "No wallpapers found")
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
----@module "src.util.wallpaper.reset"
+---@module "src.util.wallpaper_old.reset"
 require(folder_of_this_file .. "reset")
 
 local wallpaper = {}

@@ -35,6 +35,10 @@
 	- [disable TearFree, TripleBuffer, SwapbuffersWait](https://wiki.archlinux.org/title/Intel_graphics#Disabling_TearFree,_TripleBuffer,_SwapbuffersWait)
 
 - rebuild screen preview
+	- first-class multimonitor support
+	- component for wallpaper images so sizes don't have to be explicitly set
+	- rewrite wallpapers first to use promises, with a 1x1 black image until generated
+		- Promises + on_change or similar, a la pywal
 
 - Use pre-built buttons
 
@@ -76,3 +80,5 @@
 
 - https://github.com/Drauthius/awesome-sharedtags
 	- optional?
+
+- fix wal_svg for battery widget

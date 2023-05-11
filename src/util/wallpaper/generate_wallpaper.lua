@@ -1,31 +1,25 @@
-local fs = require("src.util.fs")
-local spawn = require("src.agnostic.spawn")
+local fs        = require("src.util.fs")
+local spawn     = require("src.agnostic.spawn.promise")
+local Promise   = require("src.util.Promise")
+local get_path  = require("src.util.wallpaper.get_path")
+local wallpaper = require("src.util.wallpaper.core")
 
-local folder_of_this_file = (...):match("(.-)[^%.]+$")
-
----@module "src.util.wallpaper.init"
-local wallpaper = require(folder_of_this_file .. "init")
-
-local wallpaper_dir = fs.directories.wallpaper
-
--- https://shoonia.github.io/1x1/#000000ff
+local string    = string
 
 --- Generate a wallpaper for a given iterator
----@param identifier any
+---@param identifier string|number|nil
 ---@param width number
 ---@param height number
 ---@param blur boolean
----@param async_cb function?
-local function generate_wallpaper(identifier, width, height, blur, async_cb)
-    local dir = wallpaper_dir .. tostring(identifier) .. "/"
-
-    if not fs.isdir(dir) then
-        fs.mkdir(dir)
+---@return Promise<string>
+local function generate_wallpaper(identifier, width, height, blur)
+    if not identifier then
+        identifier = wallpaper.current
     end
 
-    local filename = dir .. tostring(width) .. "x" .. tostring(height) .. (blur and "_blur" or "")
+    local path = get_path(identifier, width, height, blur)
 
-    if not fs.exists(filename) then
+    if not fs.exists(path) then
         ---@type string
         local resize_string = string.format(" -resize %dx%d^ ", width, height)
 
@@ -36,59 +30,19 @@ local function generate_wallpaper(identifier, width, height, blur, async_cb)
         local blur_string = blur and " -blur 20x20 " or ""
 
         ---@type string
-        local throttle_string = async_cb and "MAGICK_THROTTLE=50 MAGICK_THREAD_LIMIT=1 " or ""
-
-        ---@type string
-        local cmd = throttle_string ..
+        local cmd = "MAGICK_THROTTLE=25 MAGICK_THREAD_LIMIT=1 " ..
             "magick convert" ..
             resize_string ..
             crop_string ..
-            blur_string .. "'" .. wallpaper.table[identifier] .. "' '" .. filename .. "'"
+            blur_string .. string.format("'%s' '%s'", wallpaper.config.table[identifier], path)
 
-        if async_cb then
-            spawn(cmd, function()
-                async_cb()
+        return spawn(cmd)
+            :after(function()
+                return path
             end)
-        else
-            os.execute(cmd)
-        end
     else
-        -- callback for wallpapers that already exist
-        if async_cb then
-            async_cb()
-        end
+        return Promise.resolve(path)
     end
 end
 
---- Generate wallpapers asyncronously with an iterator function
----@param iter function an iterator
----@param width number
----@param height number
----@param blur boolean
-local function generate_wallpaper_iter(iter, width, height, blur)
-    local identifier = iter()
-
-    if not identifier then
-        return
-    end
-
-    -- recursive call
-    generate_wallpaper(identifier, width, height, blur, function()
-        generate_wallpaper_iter(iter, width, height, blur)
-    end)
-end
-
-local function list_iter(t)
-    local i = 0
-    local n = #t
-    return function()
-        i = i + 1
-        if i <= n then return t[i] end
-    end
-end
-
-return {
-    generate_wallpaper = generate_wallpaper,
-    generate_wallpaper_iter = generate_wallpaper_iter,
-    list_iter = list_iter
-}
+return generate_wallpaper

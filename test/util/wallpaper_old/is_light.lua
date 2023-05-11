@@ -1,5 +1,5 @@
 
-local is_light = require("src.util.wallpaper.is_light")
+local is_light = require("src.util.wallpaper_old.is_light")
 local test = require("lib.test")
 
 test.suite("wallpaper.is_light", 

@@ -11,7 +11,7 @@ require("src.widgets.components.screen_preview.keygrabber")
 
 -- TODO clicking a tag/client doesn't work with multiple displays
 
-local get_wallpaper = require("src.util.wallpaper.get_wallpaper")
+local get_wallpaper = require("src.util.wallpaper_old.get_wallpaper")
 
 -- Broken out to save ~200loc
 local update_selected_tag_preview = require("src.widgets.components.screen_preview.update_selected_tag_preview")
@@ -28,7 +28,6 @@ local function create_screen_preview(s)
     -- TODO this value doesn't respond to changes in tag counts!
     local tag_count = #s.tags
     ]]
-
     -- TODO make this value interact with tag_count so that the preview is always the right size
     -- Area of the lower current tag preview
     local preview_width = width * (5 / 6)
@@ -54,7 +53,6 @@ local function create_screen_preview(s)
                 {
                     widget = wibox.widget.imagebox,
                     image = get_wallpaper(width, height, true),
-
                     id = "blurred-bg"
                 },
                 layout = wibox.container.place,
@@ -78,9 +76,8 @@ local function create_screen_preview(s)
                             {
                                 {
                                     widget = wibox.widget.imagebox,
-                                    image = get_wallpaper(preview_width, preview_height),
-
                                     id = "preview-bg",
+                                    image = get_wallpaper(preview_width, preview_height),
 
                                     clip_shape = shapes.rounded_rect()
                                 },
@@ -157,8 +154,8 @@ local function create_screen_preview(s)
             wanted_screen = s
         end
 
-        if s ~= wanted_screen then 
-            return 
+        if s ~= wanted_screen then
+            return
         end
 
         s.screen_preview.old_tags = gtable.clone(s.selected_tags, false)
@@ -175,8 +172,8 @@ local function create_screen_preview(s)
             wanted_screen = s
         end
 
-        if s ~= wanted_screen then 
-            return 
+        if s ~= wanted_screen then
+            return
         end
 
         -- Check if the old_tags table has contents
@@ -195,8 +192,8 @@ local function create_screen_preview(s)
             wanted_screen = s
         end
 
-        if s ~= wanted_screen then 
-            return 
+        if s ~= wanted_screen then
+            return
         end
 
         if s.screen_preview.visible then
@@ -207,8 +204,8 @@ local function create_screen_preview(s)
     end)
 
     -- support wallpaper changes
-    awesome.connect_signal("wallpaper_should_change", function ()
-        local first_child = function (id)
+    awesome.connect_signal("wallpaper_should_change", function()
+        local first_child = function(id)
             return s.screen_preview:get_children_by_id(id)[1]
         end
 

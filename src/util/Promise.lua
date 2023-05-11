@@ -2,6 +2,10 @@ local class = require("lib.30log")
 local pack = require("src.agnostic.version.pack")
 local unpack = require("src.agnostic.version.unpack")
 
+local lgi = require("lgi")
+
+local GLib = lgi.GLib
+
 ---@alias PromiseCallback fun(resolve: function, reject: function?) | nil
 
 ---@alias PromiseChainFunction<T> (fun(arg: T): any)|nil
@@ -71,15 +75,22 @@ local function Promise_settle(self, value, reject)
         else
             -- TODO this doesn't work
 
+
             --- Attach returned promise's chain into this chain
             if self.next then
                 local last = child
+
+                ---@diagnostic disable-next-line:need-check-nil
                 while last.next do
                     last = last.next
                 end
+
                 last.next = self.next
+
+                ---@diagnostic disable-next-line:need-check-nil
                 last.next.prev = last
             end
+
 
             -- throw in the child promise
             self.next = child
@@ -194,6 +205,35 @@ function Promise:_trigger()
 end
 
 -- TODO Promise:await() - somehow
+---@generic T
+---@param promise Promise<T>
+---@return T
+function Promise.await(promise)
+    local mainloop = GLib.MainLoop(nil, false)
+
+    local context = mainloop:get_context()
+
+    -- Push context to default so g_idle_add works on this loop,
+    -- not on an AwesomeWM loop
+    -- https://stackoverflow.com/questions/19903537/how-to-attach-gsocketservice-to-non-default-main-loop-context
+    context:push_thread_default()
+
+    GLib.idle_add(GLib.PRIORITY_DEFAULT, function()
+        if promise.fulfilled then
+            mainloop:quit()
+
+            return false
+        end
+
+        return true
+    end)
+
+    context:pop_thread_default()
+
+    mainloop:run()
+
+    return unpack(promise._private.value)
+end
 
 --- Return a Promise that resolves with the value given by ...
 ---@return Promise

@@ -2,8 +2,8 @@ local fs                 = require("src.util.fs")
 local check_dependencies = require("src.sh.check_dependencies")
 local has_awesome        = require("lib.test").has_awesome
 local spawn              = require("src.agnostic.spawn")
-local get_wallpaper      = require("src.util.wallpaper.get_wallpaper")
-local is_light           = require("src.util.wallpaper.is_light")
+local get_wallpaper      = require("src.util.wallpaper_old.get_wallpaper")
+local is_light           = require("src.util.wallpaper_old.is_light")
 
 local config             = nil
 if has_awesome() then

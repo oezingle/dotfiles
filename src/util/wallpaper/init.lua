@@ -1,2 +1,2 @@
 
-return require("src.util.wallpaper.functions")
+return require("src.util.wallpaper_old.core")

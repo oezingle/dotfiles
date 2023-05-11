@@ -64,4 +64,4 @@ local unix_signal = {
 ---@field themes_path string The path where themes were installed to.
 ---@field icon_path string The path where icons were installed to.
 
----@alias Awesome CAwesome | ClassSignalAble<"debug::error" | "debug::deprecation" | "debug::index::miss" | "debug::newindex::miss" | "systray::update" | "wallpaper_changed" | "xkb::map_changed" | "xkb::group_changed." | "refresh" | "startup" | "exit" | "screen::change" | "spawn::canceled" | "spawn::change" | "spawn::completed" | "spawn::initiated" | "spawn::timeout">
+---@alias Awesome CAwesome | ClassSignalAble<"debug::error" | "debug::deprecation" | "debug::index::miss" | "debug::newindex::miss" | "systray::update" | "xkb::map_changed" | "xkb::group_changed." | "refresh" | "startup" | "exit" | "screen::change" | "spawn::canceled" | "spawn::change" | "spawn::completed" | "spawn::initiated" | "spawn::timeout">

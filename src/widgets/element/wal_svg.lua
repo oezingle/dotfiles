@@ -37,7 +37,7 @@ function wal_svg:_reload()
 
     self._private.widget.image = gsurface.load_uncached(fs.directories.cache .. "wal_svg.svg")
 
-    self:emit_signal("widget::redraw_needed")
+    -- self:emit_signal("widget::redraw_needed")
 end
 
 ---@param path string

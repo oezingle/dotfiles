@@ -1,13 +1,13 @@
 local applet           = require("src.widgets.helper.applet")
 local atk              = require("src.widgets.helper.applet.toolkit")
-local wallpaper_widget = require("src.widgets.applet.choose_wallpaper.wallpaper_widget")
+local wallpaper_widget = require("src.widgets.element.wallpaper_widget")
 local wibox            = require("wibox")
 local get_font         = require("src.util.get_font")
 local config           = require("config")
 local shapes           = require("src.util.shapes")
 local no_scroll        = require("src.widgets.helper.function.no_scroll")
 
-local wallpaper = require("src.util.wallpaper")
+local wallpaper = require("src.util.wallpaper_old")
 
 local function create_choose_wallpaper()
 

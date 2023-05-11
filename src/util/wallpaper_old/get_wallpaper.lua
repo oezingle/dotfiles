@@ -3,10 +3,10 @@ local wallpaper_dir = fs.directories.wallpaper
 
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
----@module "src.util.wallpaper.init"
+---@module "src.util.wallpaper_old.init"
 local wallpaper = require(folder_of_this_file .. "init")
 
----@module "src.util.wallpaper.generate_wallpaper"
+---@module "src.util.wallpaper_old.generate_wallpaper"
 local generate_lib = require(folder_of_this_file .. "generate_wallpaper")
 
 local generate_wallpaper = generate_lib.generate_wallpaper
@@ -49,8 +49,8 @@ local function get_wallpaper(width, height, blur, identifier)
     generate_wallpaper_iter(iter, width, height, blur)
 
     return wallpaper_dir ..
-        tostring(identifier) ..
-        "/" .. tostring(width) .. "x" .. tostring(height) .. (blur and "_blur" or "")
+    tostring(identifier) ..
+    "/" .. tostring(width) .. "x" .. tostring(height) .. (blur and "_blur" or "")
 end
 
 return get_wallpaper

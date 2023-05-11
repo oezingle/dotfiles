@@ -2,8 +2,8 @@ local base          = require("wibox.widget.base")
 local gsurface      = require("gears.surface")
 local gtable        = require("gears.table")
 local gshape        = require("gears.shape")
-local get_wallpaper = require("src.util.wallpaper.get_wallpaper")
-local wallpaper     = require("src.util.wallpaper")
+local get_wallpaper = require("src.util.wallpaper_old.get_wallpaper")
+local wallpaper     = require("src.util.wallpaper_old")
 
 local Class = require("src.util.Class")
 

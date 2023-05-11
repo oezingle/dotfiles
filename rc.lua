@@ -101,7 +101,7 @@ require("src.widgets.components.client_switcher")()
 require("src.widgets.applet")
 
 -- set wallpaper
-local get_wallpaper = require("src.util.wallpaper.get_wallpaper")
+local get_wallpaper = require("src.util.wallpaper_old.get_wallpaper")
 
 -- Rofi popup
 local rofi = require('src.sh.rofi')

@@ -8,12 +8,12 @@ local table = table
 
 local time = {}
 
----@class simpledate
+---@class Time.Simpledate
 ---@field hour number|nil
 ---@field min number|nil
 ---@field sec number|nil
 
----@return simpledate
+---@return Time.Simpledate
 function time.current()
     local current = os.date("*t")
 
@@ -24,7 +24,7 @@ function time.current()
 end
 
 ---@param str string
----@return simpledate
+---@return Time.Simpledate
 function time.from_string(str)
     assert(string.match(str, "%d+:%d+"))
 
@@ -40,7 +40,7 @@ function time.from_string(str)
     }
 end
 
----@param date simpledate
+---@param date Time.Simpledate
 ---@return number
 function time.to_seconds(date)
     -- quicker than os.date(os.time(osdate))
