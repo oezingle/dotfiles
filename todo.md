@@ -37,8 +37,7 @@
 - rebuild screen preview
 	- first-class multimonitor support
 	- component for wallpaper images so sizes don't have to be explicitly set
-	- rewrite wallpapers first to use promises, with a 1x1 black image until generated
-		- Promises + on_change or similar, a la pywal
+	- small visuak bug rn with occupied tags ( no border )[ might have something to do with wallpaper_widget ]
 
 - Use pre-built buttons
 
@@ -82,12 +81,6 @@
 	- optional?
 
 - fix wal_svg for battery widget
-
-- use new wallpaper API for 
-	- screen_preview
-		- /tag_preview
-		- /init
-	- ChooseWallpaper
 
 - remove any uses of require("lib.test").has_awesome in favor of simple `if awesome then ... end` syntax
 
