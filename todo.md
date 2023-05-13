@@ -88,4 +88,7 @@
 		- /tag_preview
 		- /init
 	- ChooseWallpaper
-	- wallpaper widget
+
+- remove any uses of require("lib.test").has_awesome in favor of simple `if awesome then ... end` syntax
+
+- avoid querying globals - maybe can be detected with _ENV

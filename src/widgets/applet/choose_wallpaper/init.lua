@@ -7,7 +7,7 @@ local config           = require("config")
 local shapes           = require("src.util.shapes")
 local no_scroll        = require("src.widgets.helper.function.no_scroll")
 
-local wallpaper = require("src.util.wallpaper_old")
+local wallpaper = require("src.util.wallpaper")
 
 local function create_choose_wallpaper()
 
@@ -22,7 +22,7 @@ local function create_choose_wallpaper()
         min_rows_size = 92
     }
 
-    for _, identifier in ipairs(wallpaper.all_identifiers()) do
+    for _, identifier in ipairs(wallpaper.identifiers()) do
         local button = wibox.widget {
             {
                 {
@@ -62,7 +62,7 @@ local function create_choose_wallpaper()
             w.bg = config.button.hover
         end)
         button:connect_signal("mouse::leave", function(w)
-            if identifier == wallpaper.get_current_identifier() then
+            if identifier == wallpaper.current then
                 w.bg = config.button.active
             else
                 w.bg = config.button.normal
@@ -70,7 +70,7 @@ local function create_choose_wallpaper()
         end)
 
         awesome.connect_signal("wallpaper_changed", function()
-            if identifier == wallpaper.get_current_identifier() then
+            if identifier == wallpaper.current then
                 button.bg = config.button.active
             else
                 button.bg = config.button.normal
@@ -78,7 +78,7 @@ local function create_choose_wallpaper()
         end)
 
         button:connect_signal("button::press", no_scroll(function()
-            wallpaper.set_identifier(identifier)
+            wallpaper.set_current(identifier)
         end))
 
         grid:add(button)

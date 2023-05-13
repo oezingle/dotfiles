@@ -9,8 +9,8 @@ local shapes = require("src.util.shapes")
 local Class = require("src.util.Class")
 
 local client_preview = require("src.widgets.element.client_preview")
-local get_wallpaper = require("src.util.wallpaper_old.get_wallpaper")
 local clienticon_or_xorg = require("src.widgets.element.clienticon_or_xorg")
+local wallpaper_widget = require("src.widgets.element.wallpaper_widget")
 
 local tag_preview = {}
 
@@ -80,8 +80,7 @@ function tag_preview:layout(context, d_width, d_height)
         forced_width = width,
 
         {
-            widget = wibox.widget.imagebox,
-            image = get_wallpaper(width, height),
+            widget = wallpaper_widget,
         },
         virtual_desktop
     }

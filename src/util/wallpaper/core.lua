@@ -86,8 +86,32 @@ function wallpaper.set_current(identifier)
     end
 end
 
+--- A slow method to get all identifiers
+---@return (string|integer)[]
+function wallpaper.identifiers()
+    local identifiers = {}
+
+    for k, _ in pairs(wallpaper.config.table) do
+        table.insert(identifiers, k)
+    end
+
+    return identifiers
+end
+
+-- TODO create timer if awesome
+
 reset_if_needed(wallpaper.config)
 
 wallpaper.set_current()
+
+if awesome then
+    local start_wallpaper_timer = require("src.util.wallpaper.timer")
+
+    start_wallpaper_timer(wallpaper.config, wallpaper.set_current)
+    
+    awesome.connect_signal("wallpaper::set_current", function()
+        wallpaper.set_current()
+    end)
+end
 
 return wallpaper

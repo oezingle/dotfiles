@@ -13,6 +13,8 @@ require("src.widgets.components.screen_preview.keygrabber")
 
 local get_wallpaper = require("src.util.wallpaper_old.get_wallpaper")
 
+local wallpaper_widget = require("src.widgets.element.wallpaper_widget")
+
 -- Broken out to save ~200loc
 local update_selected_tag_preview = require("src.widgets.components.screen_preview.update_selected_tag_preview")
 local create_tag_preview_list = require("src.widgets.components.screen_preview.create_tag_preview_list")
@@ -51,9 +53,11 @@ local function create_screen_preview(s)
             forced_height = height,
             {
                 {
-                    widget = wibox.widget.imagebox,
-                    image = get_wallpaper(width, height, true),
-                    id = "blurred-bg"
+                    widget = wallpaper_widget,
+                    blur = true,
+
+                    forced_width = width,
+                    forced_height = height
                 },
                 layout = wibox.container.place,
                 forced_width = width,
@@ -75,11 +79,15 @@ local function create_screen_preview(s)
                         {
                             {
                                 {
-                                    widget = wibox.widget.imagebox,
-                                    id = "preview-bg",
-                                    image = get_wallpaper(preview_width, preview_height),
+                                    widget = wallpaper_widget,
 
-                                    clip_shape = shapes.rounded_rect()
+                                    forced_width = preview_width,
+                                    forced_height = preview_height,
+
+                                    radius = 15,
+                                    
+                                    -- TODO support this?
+                                    -- clip_shape = shapes.rounded_rect()
                                 },
                                 {
                                     layout = wibox.layout.manual,
@@ -201,17 +209,6 @@ local function create_screen_preview(s)
         else
             awesome.emit_signal("screen_preview::show", s)
         end
-    end)
-
-    -- support wallpaper changes
-    awesome.connect_signal("wallpaper_should_change", function()
-        local first_child = function(id)
-            return s.screen_preview:get_children_by_id(id)[1]
-        end
-
-        first_child("blurred-bg").image = get_wallpaper(width, height, true)
-
-        first_child("preview-bg").image = get_wallpaper(preview_width, preview_height)
     end)
 end
 
