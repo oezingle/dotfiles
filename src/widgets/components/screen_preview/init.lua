@@ -11,8 +11,6 @@ require("src.widgets.components.screen_preview.keygrabber")
 
 -- TODO clicking a tag/client doesn't work with multiple displays
 
-local get_wallpaper = require("src.util.wallpaper_old.get_wallpaper")
-
 local wallpaper_widget = require("src.widgets.element.wallpaper_widget")
 
 -- Broken out to save ~200loc
