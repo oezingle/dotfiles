@@ -2,8 +2,6 @@
 
 -- https://stackoverflow.com/questions/1340230/check-if-directory-exists-in-lua
 
-local has_awesome = require("lib.test").has_awesome
-
 --- Check if a file or directory exists in this path
 ---@param file string path to a file
 ---@return boolean exists, string? error if the file path exists
@@ -23,7 +21,7 @@ local isdir
 ---@type function
 local mkdir
 
-if has_awesome() then
+if awesome then
     local gfs = require("gears.filesystem")
 
     --- Check if the path is a directory

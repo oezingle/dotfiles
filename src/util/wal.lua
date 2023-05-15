@@ -1,14 +1,10 @@
 local fs                 = require("src.util.fs")
 local check_dependencies = require("src.sh.check_dependencies")
-local has_awesome        = require("lib.test").has_awesome
 local spawn              = require("src.agnostic.spawn.promise")
 local wallpaper          = require("src.util.wallpaper")
 local is_light           = require("src.util.wallpaper.is_light")
 
-local config             = nil
-if has_awesome() then
-    config = require("config")
-end
+local    config = require("config")
 
 local json = require("lib.json")
 
@@ -58,7 +54,7 @@ end
 
 local has_pywal_installed = false
 
-if config and config.gimmicks.pywal then
+if config.gimmicks.pywal then
     check_dependencies({ "wal" })
         :after(function()
             has_pywal_installed = true

@@ -1,7 +1,6 @@
 local json = require("lib.json")
 local fs = require("src.util.fs")
 local class = require("lib.30log")
-local has_awesome = require("lib.test").has_awesome
 
 local cache_dir = fs.directories.cache
 
@@ -14,7 +13,6 @@ local cache_dir = fs.directories.cache
 ---@alias DemutatorFunction fun(input: table): any
 
 ---@class SaveState
----@field has_awesome boolean static readonly. if the file is running under AwesomeWM
 ---@field serializer SerializerFunction
 ---@field deserializer DeserializerFunction
 ---@field mutator MutatorFunction
@@ -22,7 +20,6 @@ local cache_dir = fs.directories.cache
 ---@field path string
 ---@operator call:SaveState
 local SaveState = class("SaveState", {
-    has_awesome = has_awesome()
 })
 
 ---@class SaveStateOptArgs
@@ -163,7 +160,7 @@ end
 --- Connect AwesomeWM exit signal
 ---@private
 function SaveState:enable_signal()
-    if self.has_awesome then
+    if awesome then
         awesome.connect_signal("exit", function()
             self:save_state()
         end)

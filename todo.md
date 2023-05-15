@@ -65,23 +65,14 @@
 
 - some sort of service for features to register their /sh/ hooks so that the sh file doesn't have to do as much heavy lifting
 
-- write utils to turn signals into async CLIs
-	- require('cli')() -> keyboard-prompted utils CLI
-	- cli:: signal namespace
-	- rebuild sh as an almost `systemctl` util - restart, stop, start services for features
-
 - battery widget does not react to pywal changes
+	- fix wal_svg for battery widget
 
 - Use dbus.smart_proxy_2
 
 - sort out weird fucking bugs with xfsettingsd setting gtk theme to Materia-transparent-light
 	- pywal related?
 
-- https://github.com/Drauthius/awesome-sharedtags
-	- optional?
-
-- fix wal_svg for battery widget
-
-- remove any uses of require("lib.test").has_awesome in favor of simple `if awesome then ... end` syntax
-
 - avoid querying globals - maybe can be detected with _ENV
+
+- scale wallpaper widgets when solid.png showing so it actually covers the widget
