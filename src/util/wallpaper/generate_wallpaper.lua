@@ -68,6 +68,10 @@ local function get_wallpaper(identifier, width, height, blur)
     width = int(width)
     height = int(height)
 
+    if width == 0 or height == 0 then
+        return Promise.resolve(fs.directories.assets .. "solid.png")
+    end
+
     local path = get_path(identifier, width, height, blur)
 
     if not fs.exists(path) then

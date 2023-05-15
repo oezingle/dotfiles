@@ -24,6 +24,8 @@ function wallpaper_widget:draw(_, cr, width, height)
 
     local s = gsurface(self.path)
 
+    -- TODO steal scaling stuff from src/widgets/element/client_preview.lua
+
     gshape.rounded_rect(cr, width, height, self._private.radius)
 
     cr:clip()

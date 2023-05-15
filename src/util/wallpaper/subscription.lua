@@ -33,6 +33,7 @@ function WallpaperSubscription:init(callback, width, height, blur, identifier)
 
     self:set_identifier(identifier)
 
+    -- TODO doesn't seem to actually work
     self.path = fs.directories.assets .. "solid.png"
 
     if self.callback then
