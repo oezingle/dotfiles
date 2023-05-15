@@ -7,7 +7,7 @@ local wallpaper = require("src.util.wallpaper.core")
 
 local int = math.floor
 
----@class Wallpaper.Subscription.Class : Wallpaper.Subscription, LogBaseFunctions
+---@class Wallpaper.Subscription.Class : Wallpaper.Subscription, Log.BaseFunctions
 ---@operator call:Wallpaper.Subscription.Class
 ---@field path string
 ---@field private dimensions { width: number, height: number }
@@ -33,7 +33,7 @@ function WallpaperSubscription:init(callback, width, height, blur, identifier)
 
     self:set_identifier(identifier)
 
-    self.path = fs.directories.assets .. "1x1.png"
+    self.path = fs.directories.assets .. "solid.png"
 
     if self.callback then
         self.callback(self.path)

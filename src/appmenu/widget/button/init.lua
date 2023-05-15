@@ -21,7 +21,7 @@ local menu_builder
 -- TODO highlight keyboard shortcuts if using keyboard control
 -- Reformat text to bold on keyboard::activate signal?
 
----@class MenuButton : LogBaseFunctions
+---@class MenuButton : Log.BaseFunctions
 ---@operator call:MenuButton
 ---@field menu_item MenuItem
 ---@field parent MenuBuilder|nil a parent widget

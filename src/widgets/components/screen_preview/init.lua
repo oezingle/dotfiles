@@ -1,6 +1,5 @@
 local wibox = require("wibox")
 local awful = require("awful")
-local shapes = require("src.util.shapes")
 
 local gears = require("gears")
 local gtable = gears.table

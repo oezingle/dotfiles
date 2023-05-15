@@ -4,7 +4,7 @@ local check_dependencies    = require("src.sh.check_dependencies")
 local Promise               = require("src.util.Promise")
 local awful                 = require("awful")
 
----@class JSONServiceProvider : Service, LogBaseFunctions
+---@class JSONServiceProvider : Service, Log.BaseFunctions
 ---@operator call:JSONServiceProvider
 local json_service_provider = class("JSONServiceProvider")
 

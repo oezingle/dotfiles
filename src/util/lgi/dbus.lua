@@ -183,7 +183,7 @@ function dbus.smart_proxy(proxy)
     }
 end
 
----@class DBus.SmartProxy2 : LogBaseFunctions
+---@class DBus.SmartProxy2 : Log.BaseFunctions
 ---@field method table<string, fun(variant: GVariant): Promise<GVariant>>
 ---@field method_sync table<string, fun(variant: GVariant): Promise<GVariant>>
 local smart_proxy_2 = class("SmartProxy")

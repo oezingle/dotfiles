@@ -1,6 +1,6 @@
 local class = require("lib.30log")
 
----@class BadArgParse : LogBaseFunctions
+---@class BadArgParse : Log.BaseFunctions
 ---@field name string?
 ---@field description string?
 ---@field arguments { name: string, description: string, default: any }[]

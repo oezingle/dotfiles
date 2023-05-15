@@ -3,6 +3,7 @@ local spawn     = require("src.agnostic.spawn.promise")
 local Promise   = require("src.util.Promise")
 local get_path  = require("src.util.wallpaper.get_path")
 local wallpaper = require("src.util.wallpaper.core")
+local JobQueue  = require("src.util.JobQueue")
 
 local string    = string
 
@@ -14,7 +15,7 @@ local int       = math.floor
 ---@param width number
 ---@param height number
 ---@param blur boolean
----@return Promise
+---@return Promise<string>
 local function generate_wallpaper(path, identifier, width, height, blur)
     ---@type string
     local resize_string = string.format(" -resize %dx%d^ ", width, height)
@@ -31,9 +32,9 @@ local function generate_wallpaper(path, identifier, width, height, blur)
             magick's OpenCL support is limited in this case to the -blur operator, and requires
             that the source code be compiled with OpenCL enabled.
         ]]
-    --          enable OpenCL           throttle           1 thread
+    --          enable OpenCL           1 thread
     ---@type string
-    local cmd = "MAGICK_OCL_DEVICE=true MAGICK_THROTTLE=25 MAGICK_THREAD_LIMIT=1 " ..
+    local cmd = "MAGICK_OCL_DEVICE=true MAGICK_THREAD_LIMIT=1 " ..
         "magick convert" ..
         resize_string ..
         crop_string ..
@@ -45,10 +46,7 @@ local function generate_wallpaper(path, identifier, width, height, blur)
         end)
 end
 
----@type { path: string, promise: Promise<string> }[]
-local wallpaper_queue = {}
-
--- TODO FIXME clean up queue items
+local wallpaper_queue = JobQueue()
 
 ---@param path string
 ---@param identifier string|integer|nil
@@ -57,34 +55,9 @@ local wallpaper_queue = {}
 ---@param blur boolean
 ---@return Promise<string>
 local function queue_wallpaper(path, identifier, width, height, blur)
-    for _, queue_item in ipairs(wallpaper_queue) do
-        -- This wallpaper is already in the queue to be generated
-        if queue_item.path == path then            
-            return Promise(function (res)
-                queue_item.promise:after(function (path)
-                    res(path)
-
-                    return path
-                end)
-            end)
-        end
-    end
-
-    local index = #wallpaper_queue
-    
-    local queue_item = {
-        path = path,
-        promise = generate_wallpaper(path, identifier, width, height, blur) 
-            :after(function (path)
-                table.remove(wallpaper_queue, index)
-
-                return path
-            end)
-    }
-
-    table.insert(wallpaper_queue, queue_item)
-
-    return queue_item.promise
+    return wallpaper_queue:add(function ()
+        return generate_wallpaper(path, identifier, width, height, blur)
+    end, path)
 end
 
 local function get_wallpaper(identifier, width, height, blur)

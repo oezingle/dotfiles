@@ -6,7 +6,7 @@ local service_status     = require("src.sh.service.status")
 
 local awful = require("awful")
 
----@class LuaServiceProvider : LuaServiceProvider.InitArgs, Service, LogBaseFunctions
+---@class LuaServiceProvider : LuaServiceProvider.InitArgs, Service, Log.BaseFunctions
 ---@field pidwatch fun(self: LuaServiceProvider, exec: string)
 ---@field check_dependencies fun(self: LuaServiceProvider): Promise<true>
 ---@operator call:LuaServiceProvider

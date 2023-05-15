@@ -7,7 +7,7 @@ local menu_provider = class("menu provider", {
 
 ---@alias MenuInfo { service: string, path: string }
 
----@class MenuItem : LogBaseFunctions
+---@class MenuItem : Log.BaseFunctions
 ---@field activate fun(self: MenuItem): Promise<boolean>
 ---@field get_children fun(self: MenuItem): Promise<MenuItem[]>
 ---@field has_children fun(self: MenuItem): Promise<boolean>
@@ -16,7 +16,7 @@ local menu_provider = class("menu provider", {
 
 ---@alias MenuSection { type: "section", items: MenuItem[] }
 
----@class MenuProvider : LogBaseFunctions
+---@class MenuProvider : Log.BaseFunctions
 ---@field client Client
 ---@field provides fun(client: Client): Promise<boolean>
 ---@field setup fun(): Promise|any|nil

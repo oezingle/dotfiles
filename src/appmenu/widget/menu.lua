@@ -9,7 +9,7 @@ local parse_widget_template = require("src.appmenu.parse_widget_template")
 ---@module 'widget.button'
 local menu_button
 
----@class MenuBuilder : LogBaseFunctions
+---@class MenuBuilder : Log.BaseFunctions
 ---@operator call:MenuBuilder
 ---@field menu_item MenuItem|nil
 ---@field widget table the internal widget
