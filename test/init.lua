@@ -48,6 +48,7 @@ local function perform_tests()
             for _, line in ipairs(lines) do
                 local modname = as_module(line)
 
+                -- TODO yeah no not this. At least rewrite fake_require
                 fake_require(modname)
             end
         end)

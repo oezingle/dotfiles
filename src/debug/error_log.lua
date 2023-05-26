@@ -24,4 +24,20 @@ local function error_log(message, startup)
     fs.write(error_dir .. "report_" .. time.utc() .. ".txt", message)
 end
 
-return error_log
+if awesome.startup_errors then
+    error_log(awesome.startup_errors, true)
+end
+
+-- Handle runtime errors after startup
+do
+    local in_error = false
+    awesome.connect_signal("debug::error", function(err)
+        -- Make sure we don't go into an endless error loop
+        if in_error then return end
+        in_error = true
+
+        error_log(debug.traceback(tostring(err)))
+
+        in_error = false
+    end)
+end

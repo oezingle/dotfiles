@@ -43,8 +43,7 @@
 
 - find a way to change GTK theme on the fly
 	- Materia seems to have no difference (this is an L)
-	- xfsettingsd + xconf
-		- https://docs.xfce.org/xfce/xfce4-settings/xfsettingsd
+	- xfsettingsd + xfconf
 		- `xfconf-query -c xsettings -p /Net/ThemeName`
 		- change icon theme too
 		- i had another idea that had something to do with macOs but i forget it
@@ -56,6 +55,9 @@
 			- if light wallpaper (for the love of god, cache the 1x1 or the is_light state or something), then set to light. If dark, set to dark.
 		- applet hook for `settings` to open xfce4-settings-manager
 		- make sure these dependencies are optional
+		- https://forum.xfce.org/viewtopic.php?id=12711
+		- https://docs.xfce.org/xfce/xfconf/start
+		- https://docs.xfce.org/xfce/xfce4-settings/xfsettingsd
 
 - a way to disable light wallpaper checks
 
@@ -67,12 +69,19 @@
 
 - battery widget does not react to pywal changes
 	- fix wal_svg for battery widget
+	- https://www.reddit.com/r/awesomewm/comments/c6r2co/how_to_force_a_widget_to_update/
 
 - Use dbus.smart_proxy_2
 
 - sort out weird fucking bugs with xfsettingsd setting gtk theme to Materia-transparent-light
 	- pywal related?
 
-- avoid querying globals - maybe can be detected with _ENV
+- fix src/debug/flag_globals.lua
+	- on exit print globals by count by file (ie, most queried global in file)
 
 - scale wallpaper widgets when solid.png showing so it actually covers the widget
+
+- try going back to naughty notifications
+
+- fix xfsettingsd creating 'super+r' shortcut (toggle floating)
+	- xfconf-query -c xfce4-keyboard-shortcuts -p "/commands/custom/<Super>r" --reset

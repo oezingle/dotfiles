@@ -1,3 +1,4 @@
+
 -- rebind print
 print = require("src.agnostic.print")
 
@@ -13,30 +14,8 @@ math.random()
 -- include CLI controls
 require("src.cli.server.awesome")
 
--- find timers
---[[
-do
-    local timer = require("gears.timer")
-    local start, stop = timer.start, timer.stop
-    local timers = {}
-    function timer:start()
-        timers[self] = debug.traceback()
-        return start(self)
-    end
-    function timer:stop()
-        timers[self] = nil
-        return stop(self)
-    end
-    timer.start_new(1, function()
-        print("Active timers:")
-        for timer, traceback in pairs(timers) do
-            print(timer, timer.timeout, traceback)
-        end
-        print("End of timers")
-    end)
-end
-]]
-local error_log = require("src.error_log")
+-- require("src.debug.error_log")
+-- require("src.debug.find_timers")
 
 local unpack = require("src.agnostic.version.unpack")
 
@@ -136,7 +115,7 @@ gears.timer.delayed_call(function()
 end)
 
 do
-    -- TODO used to load 0x0 images and i have no idea what i changed to fix it
+    -- TODO sometimes to loads 0x0 images
 
     -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
     screen.connect_signal("property::geometry", function (s)
@@ -502,10 +481,6 @@ if awesome.startup_errors then
         title = "Oops, there were errors during startup!",
         text = awesome.startup_errors
     })
-
-    if error_log then
-        error_log(awesome.startup_errors, true)
-    end
 end
 
 -- Handle runtime errors after startup
@@ -521,8 +496,6 @@ do
             title = "Oops, an error happened!",
             text = tostring(err)
         })
-
-        error_log(debug.traceback(tostring(err)))
 
         in_error = false
     end)

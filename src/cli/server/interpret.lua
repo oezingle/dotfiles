@@ -8,7 +8,7 @@
 -- basically it is my goal that CLIs i have already written could just exist within the awesome shell
 
 local get_commands = require("src.cli.get_commands")
-local envhacks     = require("src.cli.server.envhacks")
+local envhacks     = require("src.agnostic.version.envhacks")
 
 local unpack = require("src.agnostic.version.unpack")
 
@@ -49,15 +49,13 @@ local function interpret(command)
         return
     end
 
-    local run_command = loadfile(file)
+    local run_command = loadfile(file, nil, setmetatable({
+        arg = args
+    }, { __index = _ENV }))
 
     if not run_command then
         error("File doesn't load")
     end
-
-    envhacks.setfenv(run_command, setmetatable({
-        arg = args
-    }, { __index = _ENV }))
 
     local res = run_command()
 

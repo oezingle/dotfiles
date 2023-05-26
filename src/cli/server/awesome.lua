@@ -1,6 +1,6 @@
 local pack         = require("src.agnostic.version.pack")
 
-local envhacks     = require("src.cli.server.envhacks")
+local envhacks     = require("src.agnostic.version.envhacks")
 local interpret    = require("src.cli.server.interpret")
 
 local bad_argparse = require("src.cli.bad_argparse")
