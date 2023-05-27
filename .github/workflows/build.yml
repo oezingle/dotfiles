@@ -25,8 +25,8 @@ jobs:
         uses: actions/checkout@v3
       - name: "Cloning submodules"
         run: git submodule update --init --recursive
+      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
       - name: Building lua
-        uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
       - name: Running bundler
         run: sh lib/bundler/bootstrap
