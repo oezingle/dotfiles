@@ -1,4 +1,3 @@
-
 warn = function(...)
     print("WARN", ...)
 end
@@ -113,7 +112,7 @@ local function main()
     local args = parser:parse()
 
     ---@type Bundler.Config
-    local config = setmetatable({}, { __index = default_config })
+    local config = setmetatable({ strip = {} }, { __index = default_config })
 
     -- steal config file if provided
     if args.config then
@@ -146,6 +145,10 @@ local function main()
             in_file = v[1],
             out_file = v[2]
         })
+    end
+
+    for _, v in pairs(args.strip) do
+        config.strip[v] = true
     end
 
     config = fix_config(config)
