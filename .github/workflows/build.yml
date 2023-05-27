@@ -17,3 +17,13 @@ jobs:
       - name: Running bundler
         run: sh lib/bundler/bootstrap
       - run: ls build
+      - name: Push to bundler repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+        with:
+          source-directory: 'build/bundler'
+          destination-github-username: 'oezingle'
+          destination-repository-name: 'lua-bundler'
+          user-email: oezingle@gmail.com
+          target-branch: master
