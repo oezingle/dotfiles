@@ -16,3 +16,14 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+  Bootstrap-Bundler:
+    runs-on: ubuntu-latest
+    steps: 
+      - run: echo "Cloning submodules"
+      - run: git submodule update --init --recursive
+      #- run: cp config_example.lua config.lua
+      - run: echo "Building lua"
+      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
+      - uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+      - run: echo "Running bundler"
+      - run: sh lib/bundler/bootstrap
