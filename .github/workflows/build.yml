@@ -19,6 +19,8 @@ jobs:
   Bootstrap-Bundler:
     runs-on: ubuntu-latest
     steps: 
+      - run: echo "Changing dir"
+      - run: cd ${{ github.workspace }}
       - run: echo "Cloning submodules"
       - run: git submodule update --init --recursive
       #- run: cp config_example.lua config.lua
