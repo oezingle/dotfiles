@@ -16,4 +16,4 @@ jobs:
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
       - name: Running bundler
         run: sh lib/bundler/bootstrap
-      - run: ls lib
+      - run: ls build
