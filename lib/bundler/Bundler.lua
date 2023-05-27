@@ -175,7 +175,7 @@ function Bundler:_replace_requires(file)
     end
 
     if self.config.strip.annotations then
-        contents = contents:gsub()
+        -- contents = contents:gsub()
     end
 
     fs.write(file, contents)
