@@ -2,10 +2,12 @@
 
 -- https://stackoverflow.com/questions/1340230/check-if-directory-exists-in-lua
 
+local fs = {}
+
 --- Check if a file or directory exists in this path
 ---@param file string path to a file
 ---@return boolean exists, string? error if the file path exists
-local function exists(file)
+function fs.exists(file)
     local ok, err, code = os.rename(file, file)
     if not ok then
         if code == 13 then
@@ -16,24 +18,19 @@ local function exists(file)
     return ok, err
 end
 
----@type function
-local isdir
----@type function
-local mkdir
-
 if awesome then
     local gfs = require("gears.filesystem")
 
     --- Check if the path is a directory
     ---@param path string
     ---@return boolean
-    isdir = function(path)
+    fs.isdir = function(path)
         return gfs.is_dir(path)
     end
 
     --- Make a directory including parent directories
     ---@param path string directory path to create
-    mkdir = function(path)
+    fs.mkdir = function(path)
         gfs.make_directories(path)
     end
 else
@@ -42,7 +39,7 @@ else
     --- Check if the path is a directory
     ---@param path string
     ---@return boolean
-    isdir = function(path)
+    fs.isdir = function(path)
         if os.execute("cd '" .. path .. "'") then
             return true
         else
@@ -52,7 +49,7 @@ else
 
     --- Make a directory including parent directories
     ---@param path string directory path to create
-    mkdir = function(path)
+    fs.mkdir = function(path)
         os.execute("mkdir -p '" .. path .. "'")
     end
 end
@@ -60,7 +57,7 @@ end
 --- Read a file as a string
 ---@param path string the file path to read
 ---@return string|nil contents the file's contents or nil
-local function read_file(path)
+function fs.read(path)
     local file = io.open(path, "r") -- r read mode and b binary mode
     if not file then return nil end
     local content = file:read "*a" -- *a or *all reads the whole file
@@ -71,7 +68,7 @@ end
 --- Remove a file or directory
 ---@param path string the file/directory path
 ---@param recursive boolean? whether or not to use the rm -r flag
-local function remove(path, recursive)
+function fs.rm(path, recursive)
     recursive = recursive or false
 
     os.execute(    string.format("rm %s %s", recursive and "-r" or "", path))
@@ -81,7 +78,7 @@ end
 ---@param path string path to the file
 ---@param content string contents to write
 ---@return nil
-local function write_file(path, content)
+function fs.write(path, content)
     local file = io.open(path, "w")
 
     if not file then return nil end
@@ -94,29 +91,26 @@ end
 
 ---@param dir string the path of the directory to list out
 ---@return string[] files the files in the directory
-local function list(dir)
+function fs.list(dir)
     local files = {}
-    for file in io.popen(string.format([[ls -pa %s | grep -v /]], dir)):lines() do
+    for file in io.popen(string.format([[ls -pa %s | grep -v "\./"]], dir)):lines() do
         table.insert(files, file)
     end
 
     return files
 end
+fs.ls = fs.list
 
 ---@param src string
 ---@param dest string
-local function mv(src, dest)
-    os.execute(string.format("cp %s %s", src, dest))
+function fs.mv(src, dest)
+    os.execute(string.format("mv %s %s", src, dest))
 end
 
-return {
-    exists = exists,
-    mkdir  = mkdir,
-    isdir  = isdir,
-    read   = read_file,
-    write  = write_file,
-    rm     = remove,
-    list   = list,
+---@param src string
+---@param dest string
+function fs.cp(src, dest)
+    os.execute(string.format("cp -r %s %s", src, dest))
+end
 
-    mv = mv
-}
+return fs

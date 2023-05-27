@@ -103,6 +103,7 @@ end
 function menu_button:_create_popup()
     local appmenu_config = appmenu.get_config()
 
+    -- TODO remove config references
     self.popup = awful.popup {
         widget = self.child
             :get_widget(),

@@ -1,0 +1,10 @@
+{
+    "in_dir": "src/appmenu",
+    "out_dir": "build/appmenu",
+    "exports": [
+        {
+            "in_file": "cli",
+            "out_file": "cli"
+        }
+    ]
+}

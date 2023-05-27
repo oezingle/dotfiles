@@ -85,3 +85,8 @@
 
 - fix xfsettingsd creating 'super+r' shortcut (toggle floating)
 	- xfconf-query -c xfce4-keyboard-shortcuts -p "/commands/custom/<Super>r" --reset
+
+- use vs code to replace `for\s_,\s([^\s]+)\sin ipairs` with `for _, $1 in pairs` as pairs is faster
+	- only in time-critical code (eg emoji indexing)
+		- consider for i=1,#table (~2x faster)
+	- https://springrts.com/wiki/Lua_Performance
