@@ -19,13 +19,14 @@ jobs:
   Bootstrap-Bundler:
     runs-on: ubuntu-latest
     steps: 
-      - run: echo "Changing dir"
-      - run: cd ${{ github.workspace }}
-      - run: echo "Cloning submodules"
-      - run: git submodule update --init --recursive
-      #- run: cp config_example.lua config.lua
-      - run: echo "Building lua"
-      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
-      - uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
-      - run: echo "Running bundler"
-      - run: sh lib/bundler/bootstrap
+      - name: Change dir
+        run: cd ${{ github.workspace }}
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: "Cloning submodules"
+        run: git submodule update --init --recursive
+      - name: Building lua
+        uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
+        uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+      - name: Running bundler
+        run: sh lib/bundler/bootstrap
