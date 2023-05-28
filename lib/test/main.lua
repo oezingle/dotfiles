@@ -20,8 +20,6 @@ local global_state = {
 }
 
 function global_state.reset()
-    print("resetting")
-
     global_state.all_passed = true
 end
 

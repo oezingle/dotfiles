@@ -14,8 +14,10 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
       - name: Building lua
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
-      - name: Install LGI & GTK
-        run: sudo apt-get install -y libgtk-3-dev lua-lgi
+      - name: Install luarocks & GTK
+        run: sudo apt-get install -y libgtk-3-dev luarocks
+      - name: Install lgi
+        run: sudo luarocks install lgi
       - name: Run tests
         run: lua test.lua
   Tests-luajit:
