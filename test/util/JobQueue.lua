@@ -8,9 +8,9 @@ test.suite("JobQueue",
     test.test(function ()
         local queue = JobQueue()
         
-        local res = Promise.await(queue:add(function ()
+        local res = queue:add(function ()
             return Promise.resolve("Hello World!")
-        end))
+        end):await()
 
         assert(res == "Hello World!")
     end, "queue:add return value parity"),
@@ -35,7 +35,7 @@ test.suite("JobQueue",
                 res2 = b
             end)
 
-        Promise.await(queue:start())
+        queue:start():await()
 
         assert(res == res2)
     end, "queue:add identifier parity")

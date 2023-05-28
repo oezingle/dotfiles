@@ -18,12 +18,12 @@ end
 
 test.suite("wallpaper.generate_wallpaper",
     test.test(function()
-        local path = Promise.await(generate_wallpaper(wallpaper.current, 640, 480, false))
+        local path = generate_wallpaper(wallpaper.current, 640, 480, false):await()
 
         assert_good_path(path)
     end, "640x480"),
     test.test(function()
-        local path = Promise.await(generate_wallpaper(wallpaper.current, 640, 480, true))
+        local path = generate_wallpaper(wallpaper.current, 640, 480, true):await()
 
         assert_good_path(path)
     end, "640x480 blur")

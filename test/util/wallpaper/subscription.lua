@@ -13,7 +13,7 @@ test.suite("wallpaper.subscription",
         local sub = subscription()
             :init(nil, 640, 480, false, nil)
 
-        local walls = Promise.await(sub:generate())
+        local walls = sub:generate():await()
 
         for identifier in pairs(wallpaper.config.table) do
             local key = hash(identifier)
@@ -46,7 +46,7 @@ test.suite("wallpaper.subscription",
         -- though has the non-atomic side effect of 
         -- adding another copy of the generated path to paths.
         -- FOR SHAME!
-        Promise.await(sub:generate())
+        sub:generate():await()
 
         local one_by_one = paths[1]
 

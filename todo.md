@@ -97,7 +97,6 @@
 
 - improve tests 
 	- rewrite test.lua to exit non-zero if a test fails, for github actions
-	- use Promise.await()
 
 - allow multiple dirs for bundler (eg src, tests)
 
