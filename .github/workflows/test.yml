@@ -12,5 +12,5 @@ jobs:
         with:
           submodules: recursive
       - name: Set up environment
-        uses: ./.github/workflows/setup.yml
+        uses: ./.github/actions/setup
       - run: lua test.lua
