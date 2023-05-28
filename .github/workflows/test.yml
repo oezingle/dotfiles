@@ -23,7 +23,5 @@ jobs:
       - name: Building Luarocks
         uses: leafo/gh-actions-luarocks@v4
       - name: Installing lgi
-        run: |
-          luarocks install lgi
-          luarocks make
+        run: luarocks install lgi
       - run: lua test.lua
