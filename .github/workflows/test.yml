@@ -14,8 +14,22 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
       - name: Building lua
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+      - run: luarocks install lgi
       - run: lua test.lua
-  Tests-fail:
+  Tests-luajit:
     runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
+    steps: 
+      - name: Change dir
+        run: cd ${{ github.workspace }}
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: "Cloning submodules"
+        run: git submodule update --init --recursive
+      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
+      - name: Building lua
+        uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+        with: 
+          luaVersion: "luajit-2.1.0-beta3"
+      - run: luarocks install lgi
+      - run: lua test.lua
+  
