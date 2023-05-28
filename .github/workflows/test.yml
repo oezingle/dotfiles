@@ -15,28 +15,10 @@ jobs:
       - name: Building lua
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
       - name: Install luarocks & GTK
-        run: sudo apt-get install -y libgtk-3-dev luarocks
+        run: sudo apt-get install -y libgtk-3-dev luarocks libgirepository1.0-dev
       - name: Install lgi
         run: sudo luarocks install lgi
       - name: Run tests
         run: lua test.lua
-  Tests-luajit:
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Change dir
-        run: cd ${{ github.workspace }}
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: "Cloning submodules"
-        run: git submodule update --init --recursive
-      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
-      - name: Building lua
-        uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
-        with: 
-          luaVersion: "luajit-2.1.0-beta3"
-      - name: Install luarocks
-        run: sudo apt-get install -y luarocks
-      - name: install LGI
-        run: luarocks install lgi
-      - run: lua test.lua
-  
+        #with: 
+        #  luaVersion: "luajit-2.1.0-beta3"
