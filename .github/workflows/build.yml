@@ -16,9 +16,16 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
       - name: Building lua
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+      - name: Get changed files in the docs folder
+        id: changed-files-appmenu
+        uses: tj-actions/changed-files@v36
+        with:
+          files: src/appmenu/**
       - name: Running bundler
+        if: steps.changed-files-appmenu.outputs.any_changed == "true"
         run: sh src/appmenu/bundle
       - name: Push to Appmenu repository
+        if: steps.changed-files-appmenu.outputs.any_changed == "true"
         uses: cpina/github-action-push-to-another-repository@main
         env:
           SSH_DEPLOY_KEY: ${{ secrets.APPMENU_DEPLOY_KEY }}
