@@ -11,8 +11,8 @@ jobs:
         run: cd ${{ github.workspace }}
       - name: Check out repository code
         uses: actions/checkout@v3
-          with:
-            submodules: recursive
+        with:
+          submodules: recursive
       - name: copy default config
         run: cp config_example.lua config.lua
       - name: copy example wallpaper
