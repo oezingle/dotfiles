@@ -38,7 +38,10 @@ local function as_module(path)
     return new_path
 end
 
-local function perform_tests()
+---@param use_require boolean?
+local function perform_tests(use_require)
+    use_require = use_require or false
+
     print("\27[1m\n\n" .. string.rep("=", 80) .. "\nRunning unit tests\n" .. string.rep("=", 80) .. "\n\27[0m")
 
     spawn("cd " .. directories.config .. "; find test -name \"*.lua\" | grep -v \"test/init.lua\"",
@@ -48,8 +51,11 @@ local function perform_tests()
             for _, line in ipairs(lines) do
                 local modname = as_module(line)
 
-                -- TODO yeah no not this. At least rewrite fake_require
-                fake_require(modname)
+                if use_require then
+                    require(modname)
+                else
+                    fake_require(modname)
+                end
             end
         end)
 end
@@ -59,7 +65,13 @@ if test.has_awesome() then
         perform_tests()
     end)
 else
-    perform_tests()
+    test.global_state.reset()
+
+    perform_tests(true)
+
+    if not test.global_state.all_passed then
+        os.exit(1)
+    end
 end
 
 --[[

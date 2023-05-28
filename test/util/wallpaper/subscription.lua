@@ -50,6 +50,6 @@ test.suite("wallpaper.subscription",
 
         local one_by_one = paths[1]
 
-        assert(one_by_one == fs.directories.assets .. "1x1.png")
-    end, "1x1 by default")
+        assert(one_by_one == fs.directories.assets .. "solid.png")
+    end, "solid.png by default")
 )

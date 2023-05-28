@@ -68,5 +68,5 @@ return {
     awesome_only_test = awesome_only_test,
     assert            = test_assert,
     not_implemented   = test_not_implemented,
-    has_awesome       = has_awesome
+    has_awesome       = has_awesome,
 }
