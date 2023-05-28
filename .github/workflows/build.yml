@@ -2,6 +2,30 @@ name: Build
 run-name: Build on push - ${{ github.actor }}
 on: [push]
 jobs:
+  Build-Appmenu:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Change dir
+        run: cd ${{ github.workspace }}
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: "Cloning submodules"
+        run: git submodule update --init --recursive
+      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
+      - name: Building lua
+        uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+      - name: Running bundler
+        run: sh src/appmenu/bundle
+      - name: Push to Appmenu repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.APPMENU_DEPLOY_KEY }}
+        with:
+          source-directory: 'build/appmenu'
+          destination-github-username: 'oezingle'
+          destination-repository-name: 'Awesome-Appmenu'  
+          user-email: oezingle@gmail.com
+          target-branch: master
   Build-Bundler:
     runs-on: ubuntu-latest
     steps: 
@@ -24,29 +48,5 @@ jobs:
           source-directory: 'build/bundler'
           destination-github-username: 'oezingle'
           destination-repository-name: 'lua-bundler'
-          user-email: oezingle@gmail.com
-          target-branch: master
-  Build-Appmenu:
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Change dir
-        run: cd ${{ github.workspace }}
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: "Cloning submodules"
-        run: git submodule update --init --recursive
-      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
-      - name: Building lua
-        uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
-      - name: Running bundler
-        run: sh src/appmenu/bundle
-      - name: Push to appmenu repository
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          SSH_DEPLOY_KEY: ${{ secrets.APPMENU_DEPLOY_KEY }}
-        with:
-          source-directory: 'build/appmenu'
-          destination-github-username: 'oezingle'
-          destination-repository-name: 'Awesome-Appmenu'  
           user-email: oezingle@gmail.com
           target-branch: master
