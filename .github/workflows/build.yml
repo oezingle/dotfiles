@@ -47,6 +47,6 @@ jobs:
         with:
           source-directory: 'build/appmenu'
           destination-github-username: 'oezingle'
-          destination-repository-name: 'lua-bundler'
+          destination-repository-name: 'awesome-appmenu'
           user-email: oezingle@gmail.com
           target-branch: master
