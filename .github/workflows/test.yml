@@ -1,0 +1,21 @@
+name: Test
+run-name: Run tests - ${{ github.actor }}
+on: [push]
+jobs:
+  Tests-lua:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Change dir
+        run: cd ${{ github.workspace }}
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: "Cloning submodules"
+        run: git submodule update --init --recursive
+      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
+      - name: Building lua
+        uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+      - run: lua test.lua
+  Tests-fail:
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
