@@ -11,12 +11,14 @@ jobs:
         run: cd ${{ github.workspace }}
       - name: Check out repository code
         uses: actions/checkout@v3
+          with:
+            submodules: recursive
       - name: copy default config
         run: cp config_example.lua config.lua
       - name: copy example wallpaper
-        run: wget https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1025px-Cat03.jpg -O ~/Pictures/wallpaper.jpg
-      - name: "Cloning submodules"
-        run: git submodule update --init --recursive
+        run: |
+          mkdir -p ~/Pictures
+          wget https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1025px-Cat03.jpg -O ~/Pictures/wallpaper.jpg
       - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
       - name: Building lua
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
