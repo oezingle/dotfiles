@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+PARENT_PATH=$(dirname "${BASH_SOURCE[0]}")
+
+lua ${PARENT_PATH}/init.lua "$@"

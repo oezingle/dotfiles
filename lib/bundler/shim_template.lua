@@ -2,7 +2,7 @@ if not ... then
     error("this file must be require()'d")
 end
 
-local folder_of_this_file = (...):match("(.-)%.[^%.]+$")
+local folder_of_this_file = (...):match("(.-)%.[^%.]+$") or ""
 
 local function add_this_library()
     local uuid = "<UUID>"
