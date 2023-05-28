@@ -16,6 +16,12 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
       - name: Building lua
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+      - name: Install LGI dependency
+        run: sudo apt-get install -y libgirepository1.0-dev
       - name: Building Luarocks
         uses: leafo/gh-actions-lua@v10
+      - name: Installing lgi
+        run: |
+          luarocks install lgi
+          luarocks make
       - run: lua test.lua
