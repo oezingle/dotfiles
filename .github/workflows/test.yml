@@ -4,7 +4,7 @@ name: Test
 run-name: Unit tests - ${{ github.actor }}
 on: [push]
 jobs:
-  Test-Lua-5.3:
+  Test-Lua-5_3:
     runs-on: ubuntu-latest
     steps: 
       - name: Change dir
