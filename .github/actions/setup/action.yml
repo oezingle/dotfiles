@@ -1,5 +1,11 @@
 name: Setup
 description: Setup lua environment
+
+inputs:
+  luaVersion: 
+    type: string
+    default: "5.3.5"
+
 runs:
   using: "composite"
   steps:
@@ -22,7 +28,7 @@ runs:
     - name: Building lua
       uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
       with:
-        luaVersion: "5.3.5"
+        luaVersion: "${{ inputs.luaVersion }}"
     - name: Install LGI dependency
       run: sudo apt-get install -y libgirepository1.0-dev
       shell: "bash"

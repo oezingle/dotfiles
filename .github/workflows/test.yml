@@ -14,3 +14,16 @@ jobs:
       - name: Set up environment
         uses: ./.github/actions/setup
       - run: lua test.lua
+  Test-LuaJit:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Set up environment
+        uses: ./.github/actions/setup
+        with:
+          luaVersion: "luajit-2.1.0-beta3"
+      - run: lua test.lua
+    
