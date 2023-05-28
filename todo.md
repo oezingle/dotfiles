@@ -101,3 +101,8 @@
 - allow multiple dirs for bundler (eg src, tests)
 
 - src.util.lgi.MainLoop tests
+	- src.util.lgi tests
+
+- use xfsettings better
+
+- expose some sort of non-widget appmenu API
