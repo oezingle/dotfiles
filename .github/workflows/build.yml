@@ -22,10 +22,10 @@ jobs:
         with:
           files: src/appmenu/**
       - name: Running bundler
-        if: steps.changed-files-appmenu.outputs.any_changed == "true"
+        if: steps.changed-files-appmenu.outputs.any_changed == 'true'
         run: sh src/appmenu/bundle
       - name: Push to Appmenu repository
-        if: steps.changed-files-appmenu.outputs.any_changed == "true"
+        if: steps.changed-files-appmenu.outputs.any_changed == 'true'
         uses: cpina/github-action-push-to-another-repository@main
         env:
           SSH_DEPLOY_KEY: ${{ secrets.APPMENU_DEPLOY_KEY }}
