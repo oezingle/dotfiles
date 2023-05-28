@@ -35,6 +35,10 @@ jobs:
   Build-Bundler:
     runs-on: ubuntu-latest
     steps: 
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
       - name: Set up environment
         uses: ./.github/actions/setup
       - name: Get changed files in the bundler folder
