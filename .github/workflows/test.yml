@@ -1,0 +1,21 @@
+# TODO https://github.com/actions/cache
+
+name: Test
+run-name: Unit tests - ${{ github.actor }}
+on: [push]
+jobs:
+  Test-Lua:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Change dir
+        run: cd ${{ github.workspace }}
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: "Cloning submodules"
+        run: git submodule update --init --recursive
+      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
+      - name: Building lua
+        uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+      - name: Building Luarocks
+        uses: leafo/gh-actions-lua@v10
+      - run: lua test.lua

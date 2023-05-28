@@ -106,3 +106,6 @@
 - use xfsettings better
 
 - expose some sort of non-widget appmenu API
+
+- github actions for tests - doesn't work because LGI is a little bitch
+	- test this on a clean system
