@@ -61,23 +61,37 @@ end
 
 --- Count total tests tested
 ---@param results TestResult[]
----@param needs_pass boolean? if the test needs to pass to count
-local function count_tests(results, needs_pass)
-    needs_pass = needs_pass or false
-
-    local count = 0
+---@return { passed: number, total: number, run: number }
+local function count_tests(results)
+    local passed = 0
+    local total = 0
+    local run = 0
 
     for _, result in ipairs(results) do
         if result[1] then
-            count = count + count_tests(result, needs_pass)
+            local subcount = count_tests(result)
+
+            passed = passed + subcount.passed
+            total = total + subcount.total
+            run = run + subcount.run
         else
-            if not needs_pass or result.success then
-                count = count + 1
+            if result.success == true then
+                passed = passed + 1
             end
+
+            if result.success ~= nil then
+                run = run + 1
+            end
+
+            total = total + 1
         end
     end
 
-    return count
+    return {
+        passed = passed,
+        total = total,
+        run = run
+    }
 end
 
 --- Check the overall success of a set of results
@@ -156,28 +170,27 @@ end
 local function suite(name, ...)
     local results = test_collection(...)
 
-    local total_tests = count_tests(results)
-    local tests_passed = count_tests(results, true)
+    local test_count = count_tests(results)
 
     print(
         "     " .. cli.success.get(overall_success(results)) ..
         " Tests for " .. name .. " - " ..
-        tostring(total_tests) .. " tests"
+        tostring(test_count.passed) .. " tests"
     )
 
     print_test_results(results, 0)
 
     print(
-        "     " .. cli.to_percent(tests_passed, total_tests) .. " tests passed"
+        "     " .. cli.to_percent(test_count.passed, test_count.run) .. " tests passed"
     )
 
     print()
 
-    if tests_passed ~= total_tests then
+    if test_count.passed ~= test_count.run then
         global_state.fail()
     end
 
-    return { results = results, passed = tests_passed, total = total_tests, name = name }
+    return { results = results, count = test_count, name = name }
 end
 
 --- Only call callback if running in AwesomeWM

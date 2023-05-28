@@ -18,6 +18,7 @@ local GLib = lgi.GLib
 ---@field next Promise|nil
 ---@field prev Promise|nil
 ---@field new fun(self: Promise)
+---@operator call(fun(res: function, rej: function)):Promise
 local Promise = class("Promise", {
     __is_a_promise = true
 })
@@ -205,7 +206,9 @@ function Promise:_trigger()
     self.triggered = true
 end
 
--- TODO Promise:await() - somehow
+-- TODO only works if this loop's idle priority is equal to the other's
+-- TODO hangs if higher, instantly returns if lower
+-- TODO make :catch resolve error object
 ---@generic T
 ---@param promise Promise<T>
 ---@return T
@@ -233,7 +236,9 @@ function Promise.await(promise)
         end
 
         if not ok then
-            error(err)
+            mainloop:quit()
+
+            return false
         end
 
         return true
@@ -242,6 +247,10 @@ function Promise.await(promise)
     context:pop_thread_default()
 
     mainloop:run()
+
+    if not ok then
+        error(err)
+    end
 
     return unpack(promise._private.value)
 end
