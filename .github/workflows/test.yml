@@ -4,7 +4,7 @@ name: Test
 run-name: Unit tests - ${{ github.actor }}
 on: [push]
 jobs:
-  Test-Lua:
+  Test-Lua-5.3:
     runs-on: ubuntu-latest
     steps: 
       - name: Change dir
@@ -16,6 +16,8 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
       - name: Building lua
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+        with:
+          luaVersion: "5.3.5"
       - name: Install LGI dependency
         run: sudo apt-get install -y libgirepository1.0-dev
       - name: Building Luarocks
