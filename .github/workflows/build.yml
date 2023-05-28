@@ -2,7 +2,7 @@ name: Build
 run-name: Build on push - ${{ github.actor }}
 on: [push]
 jobs:
-  Bootstrap-Bundler:
+  Build-Bundler:
     runs-on: ubuntu-latest
     steps: 
       - name: Change dir
@@ -19,7 +19,7 @@ jobs:
       - name: Push to bundler repository
         uses: cpina/github-action-push-to-another-repository@main
         env:
-          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+          SSH_DEPLOY_KEY: ${{ secrets.BUNDLER_DEPLOY_KEY }}
         with:
           source-directory: 'build/bundler'
           destination-github-username: 'oezingle'
@@ -47,6 +47,6 @@ jobs:
         with:
           source-directory: 'build/appmenu'
           destination-github-username: 'oezingle'
-          destination-repository-name: 'Awesome-Appmenu'
+          destination-repository-name: 'Awesome-Appmenu'  
           user-email: oezingle@gmail.com
           target-branch: master
