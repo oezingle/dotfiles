@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Set up environment
-        uses: .github/workflows/setup.yml
+        uses: ./.github/workflows/setup.yml
       - name: Get changed files in the appmenu folder
         id: changed-files-appmenu
         uses: tj-actions/changed-files@v36
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Set up environment
-        uses: .github/workflows/setup.yml
+        uses: ./.github/workflows/setup.yml
       - name: Get changed files in the bundler folder
         id: changed-files-bundler
         uses: tj-actions/changed-files@v36

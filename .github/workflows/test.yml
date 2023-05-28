@@ -8,5 +8,5 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Set up environment
-        uses: .github/workflows/setup.yml
+        uses: ./.github/workflows/setup.yml
       - run: lua test.lua
