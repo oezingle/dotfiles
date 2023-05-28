@@ -106,7 +106,9 @@ local config = {
     -- string|{ list: string[]|table<string of type "h:mm", string>, time: number|string|nil }
     -- list: array or table indexed by hour and minute
     -- time: string (parsed to number) or number (number of hours per wallpaper change) or nil
-    wallpaper = "~/.config/wallpaper.jpg",
+    wallpaper = {
+        list = "~/.config/wallpaper.jpg",
+    }
 }
 
 -- gimmicks have to be explicitly set to false

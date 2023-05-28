@@ -62,7 +62,7 @@
 ---@field apps DotfileConfigurationApps
 ---@field notification_lifespan number
 ---@field gimmicks DotfileConfigurationGimmicks
----@field wallpaper { time: string?, list: table<string, string>|string[] }|string
+---@field wallpaper { time: string?, list: table<string, string>|string[]|string }
 ---@field applet DotfileConfigurationApplets|nil
 ---@field lock_time number
 
