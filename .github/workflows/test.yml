@@ -12,14 +12,7 @@ jobs:
       - name: "Cloning submodules"
         run: git submodule update --init --recursive
       - name: Install luarocks & GTK
-        run: sudo apt-get install -y libgtk-3-dev luarocks libgirepository1.0-dev
-      - name: Install lgi
-        run: sudo luarocks install lgi
-      - name: Some inane fuckery
-        run: sudo /sbin/ldconfig
-      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
-      - name: Building lua
-        uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+        run: sudo apt-get install -y install awesome awesome-extra
       - name: Run tests
         run: lua test.lua
         #with: 
