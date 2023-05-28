@@ -5,7 +5,6 @@ local awful                 = require("awful")
 local gtimer                = require("gears.timer")
 
 local no_scroll             = require("src.widgets.helper.function.no_scroll")
-local config                = require("config")
 
 local appmenu               = require("src.appmenu.appmenu")
 
@@ -111,8 +110,8 @@ function menu_button:_create_popup()
         ontop = true,
         visible = false,
 
-        bg = config.taskbar.bg,
-        fg = config.popup.fg,
+        bg = appmenu_config.popup.bg,
+        fg = appmenu_config.popup.fg,
 
         shape = appmenu_config.popup.shape
     }
@@ -158,11 +157,13 @@ end
 
 -- TODO remove predetermined colors - appmenu.get_config().hover_color?
 function menu_button:hover()
+    local appmenu_config = appmenu.get_config()
+
     if self.parent then
         self.parent:leave_children()
     end
 
-    self.widget.bg = config.button.hover
+    self.widget.bg = appmenu_config.button_hover_color
 
     self.is_hovered = true
 

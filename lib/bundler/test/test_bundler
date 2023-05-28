@@ -1,3 +1,0 @@
-#!/bin/sh
-
-lua lib/bundler/init.lua -c lib/bundler/test/config.json

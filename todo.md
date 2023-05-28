@@ -92,3 +92,11 @@
 	- https://springrts.com/wiki/Lua_Performance
 
 - better Readme for bundler
+
+- rewrite simple_appmenu_server in lua
+
+- improve tests 
+	- rewrite test.lua to exit non-zero if a test fails, for github actions
+	- use Promise.await()
+
+- allow multiple dirs for bundler (eg src, tests)

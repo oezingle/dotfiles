@@ -90,7 +90,7 @@ test.suite("Promise",
     end, "Promise.all()"),
 
     test.awesome_only_test(function()
-        Promise(function(res)
+        Promise.await(Promise(function(res)
             require("awful.spawn").easy_async("which awesome", res)
         end)
             :after(function(awesome_path)
@@ -98,20 +98,20 @@ test.suite("Promise",
             end)
             :catch(function (err)
                 print("Error in async promise test:", err)
-            end)
+            end))
     end, "Async Promise"),
 
     test.awesome_only_test(function()
-        Promise(function(_, rej)
+        Promise.await(Promise(function(_, rej)
             require("awful.spawn").easy_async("which awesome", rej)
         end)
             :catch(function(awesome_path)
                 assert(awesome_path)
-            end)
+            end))
     end, "Async Promise Rejection"),
 
     test.awesome_only_test(function()
-        Promise.resolve()
+        Promise.await(Promise.resolve()
             :after(function()
                 return Promise(function(res)
                     require("awful.spawn").easy_async("which awesome", res)
@@ -126,12 +126,12 @@ test.suite("Promise",
             end)
             :catch(function (err)
                 print("Error in async promise test:", err)
-            end)
+            end))
     end, "Async Promise Nesting"),
 
     -- TODO is actually broken
     test.awesome_only_test(function()
-        Promise.all({
+        Promise.await(Promise.all({
             Promise(function(res)
                 require("awful.spawn").easy_async("which awesome", res)
             end),
@@ -145,6 +145,6 @@ test.suite("Promise",
             end)
             :catch(function (err)
                 print("Error in async promise test:", err)
-            end)
+            end))
     end, "Async Promise.all()")
 )

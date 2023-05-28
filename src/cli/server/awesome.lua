@@ -76,7 +76,7 @@ local function on_bus_acquired(connection, name, user_data)
             args: GVariant,
             invocation: GDBusMethodInvocation
         ]]
-        GObject.Closure(function(connection, client, _, _, method, args, invocation)
+        GObject.Closure(function(_, _, _, _, method, args, invocation)
             xpcall(
                 function()
                     if not method == "SendCommand" then

@@ -141,7 +141,8 @@ local function create_appmenu()
         },
         popup = {
             shape = shapes.rounded_rect()
-        }
+        },
+        button_hover_color = config.button.hover
     })
 end
 

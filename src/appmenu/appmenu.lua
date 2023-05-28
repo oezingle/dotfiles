@@ -12,7 +12,8 @@ local traceback = debug.traceback
 ---@field menu_template { vertical: WidgetTemplate, horizontal: WidgetTemplate }?
 ---@field button_template WidgetTemplate|{ vertical: WidgetTemplate, horizontal: WidgetTemplate }|nil
 ---@field divider_template WidgetTemplate?
----@field popup { shape: GearsShape?, offset: { x: integer|integer[]|nil, y: integer|integer[]|nil }|nil }
+---@field popup { shape: GearsShape?, offset: { x: integer|integer[]|nil, y: integer|integer[]|nil }|nil, bg: string?, fg: string? }
+---@field button_hover_color string?
 -- TODO super is just a guess
 ---@field shortcut_symbols table<"Control"|"Alt"|"Shift"|"Super"|"children", string>?
 
