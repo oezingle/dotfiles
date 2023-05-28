@@ -4,19 +4,24 @@ name: Build
 run-name: Build on push - ${{ github.actor }}
 on: [push]
 jobs:
-  Build-Appmenu:
+  Setup:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Change dir
         run: cd ${{ github.workspace }}
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: "Cloning submodules"
-        run: git submodule update --init --recursive
+        with:
+          submodules: recursive
       - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
       - name: Building lua
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
-      - name: Get changed files in the docs folder
+
+  Build-Appmenu:
+    runs-on: ubuntu-latest
+    needs: Setup
+    steps: 
+      - name: Get changed files in the appmenu folder
         id: changed-files-appmenu
         uses: tj-actions/changed-files@v36
         with:
@@ -37,19 +42,18 @@ jobs:
           target-branch: master
   Build-Bundler:
     runs-on: ubuntu-latest
+    needs: Setup
     steps: 
-      - name: Change dir
-        run: cd ${{ github.workspace }}
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: "Cloning submodules"
-        run: git submodule update --init --recursive
-      - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
-      - name: Building lua
-        uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
+      - name: Get changed files in the bundler folder
+        id: changed-files-bundler
+        uses: tj-actions/changed-files@v36
+        with:
+          files: lib/bundler.**
       - name: Running bundler
+        if: steps.changed-files-bundler.outputs.any_changed == 'true'
         run: sh lib/bundler/bootstrap
       - name: Push to bundler repository
+        if: steps.changed-files-bundler.outputs.any_changed == 'true'
         uses: cpina/github-action-push-to-another-repository@main
         env:
           SSH_DEPLOY_KEY: ${{ secrets.BUNDLER_DEPLOY_KEY }}
