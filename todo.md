@@ -90,3 +90,5 @@
 	- only in time-critical code (eg emoji indexing)
 		- consider for i=1,#table (~2x faster)
 	- https://springrts.com/wiki/Lua_Performance
+
+- better Readme for bundler

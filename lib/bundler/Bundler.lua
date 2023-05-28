@@ -236,6 +236,15 @@ function Bundler:_create_exports()
     end
 end
 
+---@protected
+function Bundler:_create_public()
+    if self.config.public_dir then
+        for _, file in pairs(fs.list(self.config.public_dir)) do
+            fs.cp(self.config.public_dir .. pathlib.sep .. file, self.config.out_dir .. pathlib.sep .. file)
+        end
+    end
+end
+
 function Bundler:run()
     self.paths.dep = self.config.out_dir .. pathlib.sep .. "dep"
 
@@ -254,6 +263,8 @@ function Bundler:run()
     self:_create_shim()
 
     self:_create_exports()
+
+    self:_create_public()
 end
 
 return Bundler
