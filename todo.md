@@ -100,3 +100,5 @@
 	- use Promise.await()
 
 - allow multiple dirs for bundler (eg src, tests)
+
+- src.util.lgi.MainLoop tests

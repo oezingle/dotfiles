@@ -10,12 +10,9 @@ test.suite(
         check_dependencies({ "sh" })
             :after(function(met)
                 has_sh = met
-            end)
+            end):await()
 
-        -- check_dependencies works in async under AwesomeWM
-        if not test.has_awesome() then
-            assert(has_sh)
-        end
+        assert(has_sh)
     end, "check sh"),
     test.test(function()
         local has_dependencies = false
@@ -23,23 +20,18 @@ test.suite(
         check_dependencies({ "sh", "bash" })
             :after(function(met)
                 has_dependencies = met
-            end)
+            end):await()
 
-        -- check_dependencies works in async under AwesomeWM
-        if not test.has_awesome() then
-            assert(has_dependencies)
-        end
+        assert(has_dependencies)
     end, "check sh and bash"),
-    test.test(function ()
+    test.test(function()
         local has_dependencies
-        
-        check_dependencies({ "/does/not/exist", "/not/a/real/path", "sh" })
-            :after(function (met)
-                has_dependencies = met
-            end)
 
-        if not test.has_awesome() then
-            assert(not has_dependencies)
-        end
+        check_dependencies({ "/does/not/exist", "/not/a/real/path", "sh" })
+            :after(function(met)
+                has_dependencies = met
+            end):await()
+
+        assert(not has_dependencies)
     end, "check nonexistent dependencies")
 )
