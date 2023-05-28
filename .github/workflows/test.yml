@@ -11,6 +11,10 @@ jobs:
         run: cd ${{ github.workspace }}
       - name: Check out repository code
         uses: actions/checkout@v3
+      - name: copy default config
+        run: cp config_example.lua config.lua
+      - name: copy example wallpaper
+        run: wget https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1025px-Cat03.jpg -O ~/Pictures/wallpaper.jpg
       - name: "Cloning submodules"
         run: git submodule update --init --recursive
       - uses: ilammy/msvc-dev-cmd@v1 # Windows fix for lua
