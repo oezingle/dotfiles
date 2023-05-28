@@ -18,6 +18,8 @@ jobs:
         run: sudo apt-get install -y libgtk-3-dev luarocks libgirepository1.0-dev
       - name: Install lgi
         run: sudo luarocks install lgi
+      - name: Some inane fuckery
+        run: sudo /sbin/ldconfig
       - name: Run tests
         run: lua test.lua
         #with: 
