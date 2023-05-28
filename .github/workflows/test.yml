@@ -17,7 +17,7 @@ jobs:
       - name: Building lua
         uses: leafo/gh-actions-lua@v10 # Builds lua from source - not fast, but should work
         with: 
-          luaVersion: "5.3.6
+          luaVersion: "5.3.6"
       - run: lua -v
       - name: Run tests
         run: lua test.lua
