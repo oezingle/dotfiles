@@ -2,7 +2,7 @@
 
 local envhacks = {}
 
----@param f unknown
+---@param f function|integer
 ---@param t table
 ---@diagnostic disable-next-line:deprecated
 envhacks.setfenv = setfenv or function(f, t)
@@ -20,7 +20,8 @@ envhacks.setfenv = setfenv or function(f, t)
     end
 end
 
----@param f unknown
+---@param f function|integer
+---@return table
 ---@diagnostic disable-next-line:deprecated
 envhacks.getfenv = getfenv or function(f)
     f = (type(f) == 'function' and f or debug.getinfo(f + 1, 'f').func)
