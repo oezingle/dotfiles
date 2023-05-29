@@ -6,19 +6,10 @@
 
 ---@alias Type Primitive|ComplexType
 
-local folder_of_this_file = (...):match("(.-)[^%.]+$")
-
----@module "src.util.get_config.type_checker.generate"
-local generate = require(folder_of_this_file .. "type_checker.generate")
-
----@module "src.util.get_config.type_checker.parse"
-local parse = require(folder_of_this_file .. "type_checker.parse")
-
----@module "src.util.get_config.type_checker.check"
-local check_type = require(folder_of_this_file .. "type_checker.check")
-
----@module "src.util.get_config.type_checker.class"
-local TypeChecker = require(folder_of_this_file .. "type_checker.class")
+local generate = require("src.util.get_config.type_checker.generate")
+local parse = require("src.util.get_config.type_checker.parse")
+local check_type = require("src.util.get_config.type_checker.check")
+local TypeChecker = require("src.util.get_config.type_checker.class")
 
 -- TODO option to bake references to alias
 

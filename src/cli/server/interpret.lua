@@ -51,7 +51,7 @@ local function interpret(command)
 
     local run_command = loadfile(file, nil, setmetatable({
         arg = args
-    }, { __index = _ENV }))
+    }, { __index = envhacks.getfenv() }))
 
     if not run_command then
         error("File doesn't load")

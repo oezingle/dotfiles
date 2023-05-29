@@ -3,7 +3,7 @@
 local folder_of_this_file = (...):match("(.-)[^%.]+$")
 
 -- allow src.util.fs.init and src.util.fs
-if string.sub(folder_of_this_file, -3) ~= "fs." then
+if not folder_of_this_file:match("fs%.") then
     folder_of_this_file = folder_of_this_file .. "fs."
 end
 

@@ -1,6 +1,8 @@
 
 local fs = require("src.util.fs")
 
+local envhacks = require("src.agnostic.version.envhacks")
+
 local flag_globals = {}
 
 local default_globals = { ["assert"] = true, ["collectgarbage"] = true, ["package"] = true, ["setmetatable"] = true, ["ipairs"] = true, ["_G"] = true, ["arg"] = true, ["rawset"] = true, ["xpcall"] = true, ["_VERSION"] = true, ["os"] = true, ["next"] = true, ["rawlen"] = true, ["loadfile"] = true, ["rawget"] = true, ["print"] = true, ["debug"] = true, ["tonumber"] = true, ["math"] = true, ["table"] = true, ["error"] = true, ["rawequal"] = true, ["select"] = true, ["load"] = true, ["type"] = true, ["pairs"] = true, ["warn"] = true, ["utf8"] = true, ["dofile"] = true, ["tostring"] = true, ["getmetatable"] = true, ["io"] = true, ["string"] = true, ["require"] = true, ["pcall"] = true, ["coroutine"] = true }
@@ -46,6 +48,8 @@ end
 function flag_globals.get_env (table)
     table = table or {}
 
+    local env = envhacks.getfenv()
+
     return setmetatable(table, {
         __index = function (_, k)
             
@@ -55,7 +59,7 @@ function flag_globals.get_env (table)
                 print(string.format("In %s: global \"%s\" queried", caller, k))                    
             end
 
-            return _ENV[k]
+            return env[k]
         end,
 
         __newindex = function (_, k, v)  
@@ -63,7 +67,7 @@ function flag_globals.get_env (table)
             
             print(string.format("In %s: global \"%s\" set to %s", caller, k, tostring(v)))                    
 
-            _ENV[k] = v
+            env[k] = v
         end
     })
 end
