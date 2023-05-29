@@ -1,12 +1,7 @@
-
-local folder_of_this_file = (...):match("(.-)[^%.]+$")
-
----@module "test.cli"
-local cli = require(folder_of_this_file .. "cli")
----@module "test.testing_functions"
-local library = require(folder_of_this_file .. "testing_functions")
----@module "test.profile"
-local profile = require(folder_of_this_file .. "profile")
+local cli = require("lib.test.cli")
+local library = require("lib.test.testing_functions")
+local profile = require("lib.test.profile")
+local version = require("lib.test.version")
 
 local pack = table.pack or function(...)
     local tmp = { ... }
@@ -218,6 +213,6 @@ return {
     has_awesome       = library.has_awesome,
     --
     profile           = profile,
-
-    global_state      = global_state
+    global_state      = global_state,
+    version           = version
 }

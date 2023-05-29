@@ -48,7 +48,7 @@ end
 function flag_globals.get_env (table)
     table = table or {}
 
-    local env = envhacks.getfenv()
+    local env = envhacks.getfenv(1)
 
     return setmetatable(table, {
         __index = function (_, k)
