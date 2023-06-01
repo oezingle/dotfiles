@@ -1,3 +1,3 @@
 #!/bin/sh
 
-lua lib/bundler/init.lua -i lib/bundler -o build/bundler -e init.lua -p lib/bundler/public -l "gears.filesystem"
+lua lib/bundler/init.lua -i lib/bundler -o build/bundler -e init.lua -e Bundler.lua -p lib/bundler/public -l "gears.filesystem"

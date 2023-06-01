@@ -5,7 +5,8 @@ local folder_of_this_file
 if pcall(debug.getlocal, 4, 1) then
     folder_of_this_file = (...):match("(.-)[^%.]+$")
 
-    if not folder_of_this_file:match("<OUTDIR_END>%.") then
+    -- TODO should match to end
+    if not folder_of_this_file:match("<OUTDIR_END>%.$") then
         folder_of_this_file = folder_of_this_file .. "<OUTDIR_END>."
     end
 else
