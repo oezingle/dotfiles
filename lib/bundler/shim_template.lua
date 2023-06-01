@@ -2,7 +2,6 @@ if not ... then
     error("this file must be require()'d")
 end
 
--- TODO check if folder_of_this_file:match("<OUTDIR:match("[/\\](.*)$")>%.")
 local folder_of_this_file = (...):match("(.-)%.[^%.]+$") or ""
 
 local function add_this_library()

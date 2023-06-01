@@ -56,13 +56,7 @@ local function parse_config(config_or_path)
 
             config = setmetatable(read_config, { __index = default_config })
         elseif extension == ".lua" then
-            local file = io.open(config_or_path, "r")
-
-            assert(file, "Config file specified does not exist")
-
-            assert(file:read(0), "Cannot read config file")
-
-            local read_config = load(file:read("a"), config_or_path)(pathlib.to_lua(config_or_path), config_or_path)
+            local read_config = loadfile(config_or_path)(pathlib.to_lua(config_or_path), config_or_path)
 
             config = setmetatable(read_config, { __index = default_config })
         else

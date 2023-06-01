@@ -230,7 +230,12 @@ function Bundler:_create_exports()
     for _, export in pairs(self.config.exports) do
         local export_path = folder_of_this_file:gsub("%.", pathlib.sep) .. "export_template.lua"
 
-        local export_template = fs.read(export_path):gsub("<UUID>", self.uuid):gsub("<OUT_FILE>", export.out_file)
+        local outdir_end = self.config.out_dir:match("[/\\]([^/\\]+)$")
+
+        local export_template = fs.read(export_path)
+            :gsub("<UUID>", self.uuid)
+            :gsub("<OUT_FILE>", export.out_file)
+            :gsub("<OUTDIR_END>", outdir_end)
 
         fs.write(self.config.out_dir .. pathlib.sep .. export.out_file .. ".lua", export_template)
     end
