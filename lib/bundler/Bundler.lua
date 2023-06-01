@@ -162,32 +162,6 @@ function Bundler:_replace_requires(file)
         end
     end
 
-    -- string replacer -> replace all strings( '', "", [[]] ) with "string[num]". simple as.
-    -- move char by char, if current string && char == opposite of current string's quote, yay!
-    -- if not, add to current string (table.concat(chars) faster than str .. char? )
-    -- include last .. char for [[ ]]. 
-    -- then, just find all instances of "string[num]" (quotes makes this easy on me)
-    -- and replace by index
-    
-    -- the only risk here is a string in a comment - what do?
-    -- maybe if no current string, comment is current string, where opposite is \n or \r
-    
-
-    if self.config.strip.comments then
-        warn("stripping comments currently disabled. annoy the developer.")
-    end
-
-    if self.config.strip.annotations then
-        -- TODO probably has some big ol flaw, use if self.strip.comments or self.strip.annotations to check if bracketbuffer
-        -- contents = contents:gsub("%s*%-%-%-%@[^\n\r]+", "")
-
-        warn("stripping annotations currently disabled. annoy the developer.")
-    end
-
-    if self.config.strip.empty then
-        contents = contents:gsub("[\n\r]%s*[\n\r]", "\n")
-    end
-
     fs.write(file, contents)
 end
 

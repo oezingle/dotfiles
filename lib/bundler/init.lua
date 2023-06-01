@@ -16,7 +16,6 @@ local json = require("lib.json")
 ---@field out_dir string
 ---@field in_dir string
 ---@field exports {  in_file: string, out_file: string }[] the files to shim for public use
----@field strip { comments: boolean, annotations: boolean, empty: boolean } strip out comments, annotation comments, or empty lines
 ---@field public_dir string|nil an optional directory for LICENSE, README, etc, to be copied to <config.out_dir>/ 
 local default_config = {
     out_dir = "./build",
@@ -24,12 +23,6 @@ local default_config = {
     in_dir = "./src",
 
     exports = {},
-
-    strip = {
-        comments = false,
-        annotations = false,
-        empty = false
-    },
 
     public_dir = nil
 
@@ -105,7 +98,6 @@ local function main()
     parser:option("-m --main", "Set the main file in the source directory")
     parser:option("-e --export", "Export a given file"):count("*")
     parser:option("-m --map", "Remap a given file - <in> <out>"):count("*"):args(2)
-    parser:option("-s --strip", "Remove one of the choices"):choices({ "comments", "annotations", "empty" }):count("*")
     parser:option("-p --publicdir", "Set the directory to copy LICENSE, README, etc from to outdir")
 
     local args = parser:parse()
@@ -149,10 +141,6 @@ local function main()
             in_file = v[1],
             out_file = v[2]
         })
-    end
-
-    for _, v in pairs(args.strip) do
-        config.strip[v] = true
     end
 
     config = fix_config(config)
