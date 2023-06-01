@@ -1,5 +1,5 @@
 local pathlib = {
-    -- TODO windows support
+    -- TODO windows support (ha)
     sep = "/",
 }
 

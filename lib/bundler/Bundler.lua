@@ -117,15 +117,11 @@ function Bundler:_find_dependency(lua_path, required_by)
 
         fs.write(build_path, content)
 
-        -- TODO this is probably gonna create an issue with overwriting files
-        -- TODO beuler? beuler?
         self:_replace_requires(build_path)
 
         return true
     else
         -- TODO consider flag for this in config - error instead of warn
-        -- TODO config.libraries or something to ignore runtime libraries
-        -- TODO check package.path & package.cpath for these before warning - dependencies should be allowed!
         
         if not self.config.libraries[lua_path] then
             warn(string.format("library %s not found in project", lua_path))            

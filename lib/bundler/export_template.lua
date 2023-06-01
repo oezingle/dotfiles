@@ -3,8 +3,6 @@ local folder_of_this_file
 -- https://stackoverflow.com/questions/4521085/main-function-in-lua
 
 if pcall(debug.getlocal, 4, 1) then
-    -- TODO check if folder_of_this_file:match("<OUTDIR:match("[/\\](.*)$")>%.")
-
     folder_of_this_file = (...):match("(.-)[^%.]+$")
 
     if not folder_of_this_file:match("<OUTDIR_END>%.") then
