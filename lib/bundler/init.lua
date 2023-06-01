@@ -17,6 +17,7 @@ local json = require("lib.json")
 ---@field in_dir string
 ---@field exports {  in_file: string, out_file: string }[] the files to shim for public use
 ---@field public_dir string|nil an optional directory for LICENSE, README, etc, to be copied to <config.out_dir>/ 
+---@field libraries table<string, boolean> a list of libraries included with the lua distribution to ignore
 local default_config = {
     out_dir = "./build",
 
@@ -24,9 +25,9 @@ local default_config = {
 
     exports = {},
 
-    public_dir = nil
+    libraries = {},
 
-    -- treeshake = true
+    public_dir = nil
 }
 
 ---@param config_or_path Bundler.Config|string
@@ -99,11 +100,13 @@ local function main()
     parser:option("-e --export", "Export a given file"):count("*")
     parser:option("-m --map", "Remap a given file - <in> <out>"):count("*"):args(2)
     parser:option("-p --publicdir", "Set the directory to copy LICENSE, README, etc from to outdir")
+    parser:option("-l --library", "Add a library that is globally available in the target distribution of lua"):count("*")
 
     local args = parser:parse()
 
+    -- TODO deep setmetatable?
     ---@type Bundler.Config
-    local config = setmetatable({ strip = {} }, { __index = default_config })
+    local config = setmetatable({ }, { __index = default_config })
 
     -- steal config file if provided
     if args.config then
@@ -131,16 +134,20 @@ local function main()
     end
 
     -- map file -> file
-    for _, v in ipairs(args.export) do
+    for _, v in pairs(args.export) do
         table.insert(config.exports, { in_file = v, out_file = v })
     end
 
     -- map fileA -> fileB
-    for _, v in ipairs(args.map) do
+    for _, v in pairs(args.map) do
         table.insert(config.exports, {
             in_file = v[1],
             out_file = v[2]
         })
+    end
+
+    for _, v in pairs(args.library) do
+        config.libraries[v] = true
     end
 
     config = fix_config(config)
