@@ -45,7 +45,7 @@ jobs:
         id: changed-files-bundler
         uses: tj-actions/changed-files@v36
         with:
-          files: lib/bundler.**
+          files: lib/bundler/**
       - name: Running bundler
         if: steps.changed-files-bundler.outputs.any_changed == 'true'
         run: sh lib/bundler/bootstrap
