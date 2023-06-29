@@ -6,6 +6,10 @@ local unpad = require("lib.widgey.unpad")
 local component_db = require("lib.widgey.component_db")
 local Component = require("lib.widgey.Component")
 
+local f_and_s = require("lib.widgey.f_and_s")
+local ftos = f_and_s.ftos
+local stof = f_and_s.stof
+
 ---@class C_XML.Node
 ---@field type "document"|"text"|"comment"|"element"|"pi"
 ---@field name string
@@ -58,6 +62,12 @@ function XMLTransformer:init(doc)
 
     self.suffix_code = {}
 end
+
+--- TODO transform doc before passing it in
+--- - prop={value} -> prop="{value}"
+--- - prop="{"value"}" -> prop="{\"value\"}"
+--- this first rule is hard
+
 
 ---@param doc string
 ---@return self self
@@ -154,12 +164,7 @@ function XMLTransformer:render_with_suffix_code()
         local suffix_code = {}
 
         for _, obj in pairs(self.suffix_code) do
-            local code = obj.code
-
-            -- forcestring a function
-            if type(code) == "function" then
-                code = string.format("load(%q)", string.dump(code, true))
-            end
+            local code = ftos(obj.code)
 
             local suffix = string.format(unpad([[
             do
@@ -172,8 +177,6 @@ function XMLTransformer:render_with_suffix_code()
             table.insert(suffix_code, suffix)
         end
 
-        local str_find_component = string.format("load(%q)", string.dump(self.find_component))
-
         return string.format(unpad([[
             do
                 local __find_component = %s
@@ -184,21 +187,10 @@ function XMLTransformer:render_with_suffix_code()
 
                 return __widget
             end
-        ]]), str_find_component, widget, table.concat(suffix_code, "\n\n"))
+        ]]), ftos(self.find_component), widget, table.concat(suffix_code, "\n\n"))
     else
         for _, obj in pairs(self.suffix_code) do
-            local code = obj.code
-
-            -- force function
-            if type(code) == "string" then
-                local fn, err = load("return " .. code)
-
-                if fn then
-                    code = fn
-                else
-                    error(err)
-                end
-            end
+            local code = stof(obj.code)
 
             local child = self.find_component(widget, obj.key)
 
@@ -253,13 +245,7 @@ function XMLTransformer:parse_xml_value(value)
             end
 
             -- self.parent hack fixes props issue in Dynamic mode for XML components
-            local fn, err = load("return " .. lua_value, nil, nil, setmetatable({ self = self.parent }, { __index = _G }))
-
-            if fn then
-                fn()
-            else
-                error(err)
-            end
+            stof(lua_value, nil, setmetatable({ self = self.parent }, { __index = _G }))
         else
             -- return native string
             return value

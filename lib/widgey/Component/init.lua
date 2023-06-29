@@ -2,16 +2,17 @@ local class = require("lib.30log")
 local unpack = require("src.agnostic.version.unpack")
 local serialize_prop = require("lib.widgey.Component.serialize_prop")
 
+local f_and_s = require("lib.widgey.f_and_s")
+local ftos = f_and_s.ftos
+local stof = f_and_s.stof
+
 ---@module 'lib.widgey.XMLTransformer'
 local XMLTransformer
 
 ---@module 'lib.widgey.component_db'
 local component_db
 
--- silly little hack - static rendering works without mocks even!
-local wibox = package.loaded['wibox']
-
--- local wibox = require("wibox")
+local wibox = require("wibox")
 
 ---@alias Component.Props { children: Component[]?, [string]: any }
 
@@ -81,11 +82,7 @@ Component.codegen_handlers = {
     onSignal = function(self, prop)
         for _, signal in pairs(prop) do
             local name = signal[1]
-            local cb = signal[2]
-
-            if type(cb) == "function" then
-                cb = string.format("load(%q)", string.dump(cb, true))
-            end
+            local cb = ftos(signal[2])
 
             self:add_suffix_code(string.format([[function(w)
                 w:connect_signal(%q, %s)
@@ -95,17 +92,13 @@ Component.codegen_handlers = {
     ---@param self Component
     ---@param cb string|function
     onClick = function(self, cb)
-        if type(cb) == "function" then
-            cb = string.format("load(%q)", string.dump(cb, true))
-        end
-
         self:add_suffix_code(string.format([[function (w)
             w:connect_signal("button::press", function (w, lx, ly, button)
                 if button == 1 or button == 2 or button == 3 then
                     ;(%s)(w, lx, ly, button)
                 end
             end)
-        end]], cb))
+        end]], ftos(cb)))
     end
 }
 
@@ -127,17 +120,8 @@ function Component:set_props(props)
             -- * value without literal brackets (ie if a codegen handler 
             -- * expects a string argument) it'll parse that as lua and
             -- * throw a big ol error. (this is an issue caused by static)
-            if type(v) == "string" then
-                local fn, err = load("return " .. v)
-
-                if fn then
-                    v = fn()
-                else
-                    error(err)
-                end
-            end
-
-            self.code_props[k] = v
+            
+            self.code_props[k] = stof(v)
         else
             -- TODO don't love this level of nesting
             if self:is_static() and k ~= "children" then
@@ -222,6 +206,7 @@ local function __render_children(children)
 end
 
 --- !! renderer-specific !!
+--- Execute lua code to render the component
 ---@param code string
 function Component:lua(code)
     if self:is_static() then
@@ -238,27 +223,23 @@ function Component:lua(code)
 
         return transformed
     else
-        -- TODO doesn't work for margin??
         code = code:gsub("self%.props%.children", "__render_children(self.props.children)")
 
         local env = setmetatable({ self = self, wibox = wibox, __render_children = __render_children }, { __index = _G })
 
-        local fn, err = load("return " .. code, tostring(self), nil, env)
-
-        if fn then
-            return fn()
-        else
-            error(err)
-        end
+        return stof( code, tostring(self), env)
     end
 end
 
 function Component:xml(xmldoc)
-    return self:lua(XMLTransformer()
-        :set_static(self:is_static())
+    -- TODO this might fuck up the XMLTransformer's suffix_code stuff
+    local render = self:lua(XMLTransformer()
+        :set_static(true) -- always static because we're wrapping this in self:lua
         :set_parent(self, 1)
         :set_document(xmldoc)
         :render())
+
+    return render
 end
 
 return Component

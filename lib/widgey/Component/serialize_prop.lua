@@ -2,6 +2,8 @@
 -- http://lua-users.org/wiki/DataDumper - old, unsafe, allows every lua type
 -- https://github.com/gvx/Smallfolk - modern, supports inane tables, no closure/thread/
 
+local ftos = require("lib.widgey.f_and_s").ftos
+
 --- Serialize a prop if possible, or return nil
 ---@param prop any
 ---@overload fun(prop: nil|number|string|boolean|table|function): string
@@ -42,7 +44,7 @@ local function serialize_prop(prop)
             return string.format("{ %s }", table.concat(keyvalues, ", "))
         end,
         ["function"] = function(value)
-            return string.format("load(%q)", string.dump(value))
+            return ftos(value, true)
         end
     }
 

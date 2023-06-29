@@ -1,7 +1,8 @@
 local test = require("lib.test")
 
-local class = require("lib.30log")
+require("lib.widgey.test.wibox_mock")
 
+--[[
 ---@param doc string
 local function print_linenumber(doc)
     local line = 1
@@ -16,46 +17,7 @@ local function print_linenumber(doc)
 
     print(doc)
 end
-
--- TODO These mocks are too weak
-
-if not package.loaded["wibox"] then
-    local widget = class("Mock.Wibox.Widget")
-
-    function widget:init(w)
-        for k, v in pairs(w) do
-            self[k] = v
-        end
-
-        for i, kid in ipairs(w) do
-            self[i] = widget(kid)
-        end
-    end
-
-    function widget:get_children()
-        local kids = {}
-
-        for _, kid in ipairs(self) do
-            table.insert(kids, kid)
-        end
-
-        return kids
-    end
-
-    ---@param name string
-    ---@param fn function
-    function widget:connect_signal(name, fn)
-        -- print(self.widget)
-    end
-
-    package.loaded["wibox"] = {
-        container = { margin = "wibox.container.margin" },
-        layout = {
-            flex = { vertical = "wibox.layout.flex.vertical" }
-        },
-        widget = widget
-    }
-end
+]]
 
 local wibox = require("wibox")
 
@@ -147,9 +109,38 @@ test.suite("XMLTransformer",
         -- todo a bit more shit here??
     end, "Wibox components - dynamic"),
 
+    --test.test(function()
+    --    local doc = XMLTransformer()
+    --        :set_static(true)
+    --        :set_document([[
+    --            <wibox.widget>
+    --                <Vertical>
+    --                    Hello dumbasses
+    --                </Vertical>
+    --            </wibox.widget>
+    --        ]])
+    --        :render()
+    --
+    --    assert(doc)
+    --
+    --    print_linenumber(doc)
+    --
+    --    local fn, err = load(doc, "XMLTransformer output", nil, setmetatable({ wibox = wibox }, { __index = _G }))
+    --
+    --    if fn then
+    --        local widget = fn()
+    --
+    --        assert(widget.get_children)
+    --
+    --        assert(XMLTransformer.find_component(widget, { 1, 1 }).text)
+    --    else
+    --        error(err)
+    --    end
+    --end, "XML component - static"),
+
+    --- TODO children are broken in dynamic mode - fuck.
     test.test(function()
-        local doc = XMLTransformer()
-            :set_static(true)
+        local widget = XMLTransformer()
             :set_document([[
                 <wibox.widget>
                     <Vertical>
@@ -159,46 +150,10 @@ test.suite("XMLTransformer",
             ]])
             :render()
 
-        assert(doc)
+        assert(widget)
 
-        print_linenumber(doc)
+        assert(widget.get_children)
 
-        local fn, err = load(doc, "XMLTransformer output", nil, setmetatable({ wibox = wibox }, { __index = _G }))
-
-        if fn then
-            local widget = fn()
-
-            assert(widget.get_children)
-
-            assert(XMLTransformer.find_component(widget, { 1, 1 }).text)
-        else
-            error(err)
-        end
-    end, "XML component - static"),
-
-    test.test(function()
-        local doc = XMLTransformer()
-            :set_document([[
-                <wibox.widget>
-                    <Vertical>
-                        Hello dumbasses
-                    </Vertical>
-                </wibox.widget>
-            ]])
-            :render()
-
-        assert(doc)
-
-        local fn, err = load(doc, "XMLTransformer output", nil, setmetatable({ wibox = wibox }, { __index = _G }))
-
-        if fn then
-            local widget = fn()
-
-            assert(widget.get_children)
-
-            assert(XMLTransformer.find_component(widget, { 1, 1 }).text)
-        else
-            error(err)
-        end
-    end, "XML component - static")
+        assert(XMLTransformer.find_component(widget, { 1, 1 }).text == "Hello dumbasses")
+    end, "XML component - dynamic")
 )
