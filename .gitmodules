@@ -25,3 +25,6 @@
 [submodule "lib/argparse"]
 	path = lib/argparse
 	url = https://github.com/luarocks/argparse.git
+[submodule "lib/slaxml"]
+	path = lib/slaxml
+	url = https://github.com/Phrogz/SLAXML.git

@@ -1,5 +1,5 @@
 
-require("jit_loader_patch")
+require("src.agnostic.jitfix")
 
 -- rebind print
 print = require("src.agnostic.print")

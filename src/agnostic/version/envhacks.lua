@@ -1,5 +1,7 @@
 -- http://lua-users.org/lists/lua-l/2010-06/msg00313.html
 
+local debug = debug
+
 local envhacks = {}
 
 ---@param f function|integer

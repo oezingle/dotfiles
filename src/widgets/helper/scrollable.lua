@@ -121,7 +121,7 @@ local function scrollable(child)
         set_scroll_bar()
     end
 
-    offset:connect_signal("button::press", function(data, lx, ly, button)
+    offset:connect_signal("button::press", function(_, _, _, button)
         if button == 4 or button == 5 then
             if button == 4 then
                 scroll_px = scroll_px - SCROLL_AMOUNT

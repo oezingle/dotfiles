@@ -1,10 +1,7 @@
 
 jit = jit or nil
-if jit then
-    for k, v in pairs(package) do
-        print(k, v)
-    end
 
+if jit then
     ---@diagnostic disable-next-line:deprecated
     table.insert(package.searchers or package.loaders, function (library)
         if not library:match("%.init$") then
