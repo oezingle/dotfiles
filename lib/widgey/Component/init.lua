@@ -122,12 +122,11 @@ function Component:set_props(props)
 
     for k, v in pairs(props) do
         -- TODO check typings
-
         if self.codegen_handlers[k] then
-            -- TODO stupid issue here - if you try to specify a prop value
-            -- TODO without a literal bracket it'll parse that as lua and
-            -- TODO throw a big ol error. Fix by parsing literals better in
-            -- TODO XMLTransformer, then remove this check
+            -- * stupid issue here - if you try to specify a codegen prop
+            -- * value without literal brackets (ie if a codegen handler 
+            -- * expects a string argument) it'll parse that as lua and
+            -- * throw a big ol error. (this is an issue caused by static)
             if type(v) == "string" then
                 local fn, err = load("return " .. v)
 
@@ -254,19 +253,12 @@ function Component:lua(code)
     end
 end
 
--- todo text is broken
--- todo props don't disappear - this is XMLTransformer's fault
-
--- todo two possible moves
--- todo - transform XML, keep props as-is, run code through self:lua
--- todo - gsub props in XML, transform, boom.
-
 function Component:xml(xmldoc)
-    return XMLTransformer()
+    return self:lua(XMLTransformer()
         :set_static(self:is_static())
         :set_parent(self, 1)
         :set_document(xmldoc)
-        :render()
+        :render())
 end
 
 return Component

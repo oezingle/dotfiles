@@ -146,6 +146,7 @@ function XMLTransformer:set_parent(parent, index)
     return self
 end
 
+---@return any
 function XMLTransformer:render_with_suffix_code()
     local widget = self.root:render()
 
@@ -174,16 +175,16 @@ function XMLTransformer:render_with_suffix_code()
         local str_find_component = string.format("load(%q)", string.dump(self.find_component))
 
         return string.format(unpad([[
-        do
-            local __find_component = %s
+            do
+                local __find_component = %s
 
-            local __widget = %s
+                local __widget = %s
 
-            %s
+                %s
 
-            return __widget
-        end
-    ]]), str_find_component, widget, table.concat(suffix_code, "\n\n"))
+                return __widget
+            end
+        ]]), str_find_component, widget, table.concat(suffix_code, "\n\n"))
     else
         for _, obj in pairs(self.suffix_code) do
             local code = obj.code
@@ -210,8 +211,6 @@ end
 
 --- !! renderer-specific !!
 function XMLTransformer:render()
-    -- TODO hide under self.parent logic
-
     if self.parent then
         for _, obj in pairs(self.suffix_code) do
             self.parent:add_suffix_code(obj.code, obj.key)
@@ -238,13 +237,11 @@ function XMLTransformer:parse_xml_value(value)
             --    return "\"" .. value .. "\""
             --else
             -- This is just a string
-            return string.format("%q", lua_value)
+            return string.format("%q", value)
             --end
         end
     else
         if lua_value then
-            -- TODO smart parsers
-
             if lua_value:match("%d+%.?%d-") then
                 return tonumber(lua_value)
             end
@@ -303,20 +300,13 @@ function XMLTransformer:create_node(xmlnode)
             local name = attr.name
             local value = attr.value
 
-            if not name or not value then
-                goto continue
+            if name and value then
+                props[name] = self:parse_xml_value(value)
             end
-
-            -- fix empty XML parsed arg values in static mode
-            if not self:is_static() and value:match("^self%.props%.%a+$") then
-                value = "nil"
-            end
-
-            props[name] = self:parse_xml_value(value)
-
-            ::continue::
         end
 
+        -- silly fix: xml components have text of {self.props.children} as an inlet.
+        -- this if statement detects that
         if #xmlnode.kids == 1 and xmlnode.kids[1].type == "text" and unpad(xmlnode.kids[1].value) == "{self.props.children}" then
             props.children = "self.props.children"
         else
