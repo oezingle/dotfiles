@@ -2,8 +2,7 @@
 
 -- TODO some way to expect output from awesome? tail cmd? async shit?
 
-require("jit_loader_patch")
-
+require("src.agnostic.jitfix")
 
 local _, err = pcall(require, "gears")
 
