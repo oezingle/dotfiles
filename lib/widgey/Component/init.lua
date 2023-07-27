@@ -1,10 +1,11 @@
-local class = require("lib.30log")
-local unpack = require("src.agnostic.version.unpack")
+local class          = require("lib.30log")
+local unpack         = require("src.agnostic.version.unpack")
+
 local serialize_prop = require("lib.widgey.Component.serialize_prop")
 
-local f_and_s = require("lib.widgey.f_and_s")
-local ftos = f_and_s.ftos
-local stof = f_and_s.stof
+local f_and_s        = require("lib.widgey.f_and_s")
+local ftos           = f_and_s.ftos
+local stof           = f_and_s.stof
 
 ---@module 'lib.widgey.XMLTransformer'
 local XMLTransformer
@@ -12,7 +13,7 @@ local XMLTransformer
 ---@module 'lib.widgey.component_db'
 local component_db
 
-local wibox = require("wibox")
+local wibox          = require("wibox")
 
 ---@alias Component.Props { children: Component[]?, [string]: any }
 
@@ -28,7 +29,7 @@ local wibox = require("wibox")
 ---@field parent Component.Parent
 ---@field default_props Component.Props?
 ---@field render fun(self: Component): any
-local Component = class("Component")
+local Component      = class("Component")
 
 -- shims & dependency injectors!
 do
@@ -117,10 +118,10 @@ function Component:set_props(props)
         -- TODO check typings
         if self.codegen_handlers[k] then
             -- * stupid issue here - if you try to specify a codegen prop
-            -- * value without literal brackets (ie if a codegen handler 
+            -- * value without literal brackets (ie if a codegen handler
             -- * expects a string argument) it'll parse that as lua and
             -- * throw a big ol error. (this is an issue caused by static)
-            
+
             self.code_props[k] = stof(v)
         else
             -- TODO don't love this level of nesting
@@ -227,19 +228,22 @@ function Component:lua(code)
 
         local env = setmetatable({ self = self, wibox = wibox, __render_children = __render_children }, { __index = _G })
 
-        return stof( code, tostring(self), env)
+        return stof(code, tostring(self), env)
     end
 end
 
-function Component:xml(xmldoc)
-    -- TODO this might fuck up the XMLTransformer's suffix_code stuff
-    local render = self:lua(XMLTransformer()
-        :set_static(true) -- always static because we're wrapping this in self:lua
-        :set_parent(self, 1)
-        :set_document(xmldoc)
-        :render())
+-- TODO check if xml doc hasn't changed, use cached XMLTransformer - just render() called
 
-    return render
+--- Render XML to render this component
+function Component:xml(xmldoc)
+        -- TODO this might fuck up the XMLTransformer's suffix_code stuff
+        local render = self:lua(XMLTransformer()
+            :set_static(true) -- always static because we're wrapping this in self:lua
+            :set_parent(self, 1)
+            :set_document(xmldoc)
+            :render())
+    
+            return render
 end
 
 return Component

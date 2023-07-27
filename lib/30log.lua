@@ -24,6 +24,7 @@ if false then
     ---@alias Log.ClassExtender (fun(self: LogClass, name: string, properties: T): LogClass<T>)|(fun(self: LogClass, name: string): LogClass<table>)
 
     ---@class Log.BaseFunctions
+    ---@operator call:(Log.BaseFunctions | { extend: Log.ClassExtender<{}> })
     ---@field public init fun(self: LogClass, ...: any) abstract function to initialize the class. return value ignored
     ---@field public new function interally used by 30log. do not modify
     ---@field instanceOf fun(self: LogClass, class: Log.BaseFunctions): boolean check if an object is an instance of a class
@@ -36,6 +37,7 @@ if false then
     -- TODO https://github.com/Yonaba/30log/wiki/Mixins
 
     ---@alias LogClass<T> Log.BaseFunctions | { extend: Log.ClassExtender<T> } | T
+
 
     ---@generic T
     ---@type (fun(name: string, properties: T): LogClass<T>)|(fun(name: string): LogClass<table>)

@@ -1,7 +1,8 @@
 local class = require("lib.30log")
 local slaxml = require("lib.slaxml")
 
-local unpad = require("lib.widgey.unpad")
+local unpad = require("lib.widgey.unpad") -- TODO move to ./XMLTransformer/ ?
+local xml_gsub       = require("lib.widgey.XMLTransformer.xml_gsub")
 
 local component_db = require("lib.widgey.component_db")
 local Component = require("lib.widgey.Component")
@@ -73,7 +74,7 @@ end
 ---@return self self
 function XMLTransformer:set_document(doc)
     ---@type XML.Node.Document
-    local xml = slaxml:dom(doc)
+    local xml = slaxml:dom(xml_gsub(doc))
 
     local first_node = self:first_child(xml)
 

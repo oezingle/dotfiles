@@ -34,9 +34,13 @@ function SuffixCodeScapegoat:add_suffix_code(code, child_key)
     table.insert(self.suffix_code, string.format("self:add_suffix_code(%s, %s)", code, child_key))
 end
 
+local loaderconfig = {
+    PRINT_TRANSFORM = false
+}
+
 ---@param content string
 local function transform(content)
-    local xmlpattern = "(self:xml%(%[%[(.-)%]%]%))"
+    local xmlpattern = "(return self:xml%(%[%[(.-)%]%]%))"
 
     content = content:gsub(xmlpattern, function(_, xml)
         local parent = SuffixCodeScapegoat()
@@ -47,10 +51,12 @@ local function transform(content)
             :set_document(xml)
             :render()
 
-        return string.format("%s\n%s", transformed, table.concat(parent:get_suffix_code(), ",\n"))
+        return string.format("local __widget = %s\n%s\nreturn __widget", transformed, table.concat(parent:get_suffix_code(), ",\n"))
     end)
 
+    if loaderconfig.PRINT_TRANSFORM then
     print(content)
+end
 
     return content
 end
@@ -82,3 +88,5 @@ table.insert(package.searchers or package.loaders, function(modulename)
     -- TODO lame ass error message
     return "Unable to load file " .. modulename
 end)
+
+return loaderconfig

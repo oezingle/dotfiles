@@ -1,5 +1,7 @@
 -- https://stackoverflow.com/questions/2834579/print-all-local-variables-accessible-to-the-current-scope-in-lua
 
+-- todo currently unused, decide if i should implement.
+
 ---@param level number?
 local function get_locals(level)
     level = level or 2
