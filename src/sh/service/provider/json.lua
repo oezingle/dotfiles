@@ -17,7 +17,7 @@ local json_service_provider = class("JSONServiceProvider")
 ---@field status Service.Status
 ---@field pid integer
 
-local service_status = require("src.sh.service.status")
+local service_status        = require("src.sh.service.status")
 
 ---@param args { exec: string|string[], description: string?, dependencies: string|string[]|nil, kill: boolean? }
 ---@return JSONServiceTable
@@ -46,7 +46,7 @@ local function safe_service(args)
         dependencies = dependencies,
         kill         = kill,
         -- shell        = shell,
-        status        = service_status.NOT_RUNNING,
+        status       = service_status.NOT_RUNNING,
         pid          = 0
     }
 end
@@ -94,34 +94,38 @@ function json_service_provider:start()
         promise = check_dependencies(self.service.dependencies)
     end
 
-    promise:after(function(met)
-        if not met then
-            self.service.status = service_status.ERROR
-        end
+    promise
+        :after(function(met)
+            if not met then
+                self.service.status = service_status.ERROR
 
-        -- https://awesomewm.org/doc/api/libraries/awful.spawn.html#easy_async_with_shell
-        self.service.pid = awful.spawn.easy_async_with_shell(self.service.exec, function(stdout, stderr, _, code)
-            if not self.service.kill then
-                if code == 0 then
-                    self.service.status = service_status.EXITED
-                else
-                    self.service.status = service_status.ERROR
+                error("Dependencies unmet")
+            end
+
+            -- https://awesomewm.org/doc/api/libraries/awful.spawn.html#easy_async_with_shell
+            self.service.pid = awful.spawn.easy_async_with_shell(self.service.exec, function(stdout, stderr, _, code)
+                if not self.service.kill then
+                    if code == 0 then
+                        self.service.status = service_status.EXITED
+                    else
+                        self.service.status = service_status.ERROR
+                    end
                 end
-                    
+            end)
+
+            self.service.status = service_status.STARTED
+
+            if self.service.kill then
+                self.service.status = service_status.RUNNING
+
+                awesome.connect_signal("exit", function()
+                    self:stop()
+                end)
             end
         end)
-
-        self.service.status = service_status.STARTED
-
-        if self.service.kill then
-            self.service.status = service_status.RUNNING
-
-            awesome.connect_signal("exit", function()
-                self:stop()
-            end)
-        end
-
-    end)
+        :catch(function(err)
+            print(self.name .. " - " .. tostring(err))
+        end)
 end
 
 function json_service_provider:get_info()

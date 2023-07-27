@@ -69,7 +69,7 @@ function lua_service_provider:check_dependencies()
             return true
         end)
         :catch(function (err)
-            print(err)
+            print(self.name .. " - " .. tostring(err))
         end)
 end
 
