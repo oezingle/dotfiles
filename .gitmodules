@@ -10,18 +10,12 @@
 [submodule "lib/json"]
 	path = lib/json
 	url = https://github.com/rxi/json.lua
-[submodule "lib/lua_reload"]
-	path = lib/lua_reload
-	url = https://github.com/anton-kl/lua-hot-reload
 [submodule "lib/luaxp"]
 	path = lib/luaxp
 	url = https://github.com/toggledbits/luaxp.git
 [submodule "lib/gemoji"]
 	path = lib/gemoji
 	url = https://github.com/github/gemoji
-[submodule "lib/profiler"]
-	path = lib/profiler
-	url = https://github.com/charlesmallah/lua-profiler
 [submodule "lib/argparse"]
 	path = lib/argparse
 	url = https://github.com/luarocks/argparse.git
