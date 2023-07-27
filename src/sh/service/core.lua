@@ -1,8 +1,8 @@
 local pack                  = require("src.agnostic.version.pack")
+local script_dir            = require("src.agnostic.version.script_dir")
 local fs                    = require("src.util.fs")
 
 local service_status        = require("src.sh.service.status")
-
 local json_service_provider = require("src.sh.service.provider.json")
 
 ---@alias Service.Info { name: string, description: string, status: Service.Status, dependencies: string[], pid: integer }
@@ -12,12 +12,14 @@ local json_service_provider = require("src.sh.service.provider.json")
 ---@field start fun(self: Service)
 ---@field stop fun(self: Service)
 
+
 local services = {
     ---@type Service[]
     list   = {},
 
     status = service_status
 }
+
 
 ---@type string[]
 local args = pack(...)
@@ -35,7 +37,7 @@ function services.find(name)
 end
 
 local function load_services()
-    local services_folder = args[2]:gsub("/[%a_]+%.lua", "/services")
+    local services_folder = script_dir(args) .. "services"
 
     for _, service_file in ipairs(fs.list(services_folder)) do
         local path = services_folder .. "/" .. service_file
