@@ -2,6 +2,7 @@ local pack         = require("src.agnostic.version.pack")
 
 local envhacks     = require("src.agnostic.version.envhacks")
 local interpret    = require("src.cli.server.interpret")
+local config = require("config")
 
 local bad_argparse = require("src.cli.bad_argparse")
 
@@ -110,4 +111,6 @@ local function create_cli_hooks()
     )
 end
 
-create_cli_hooks()
+if config.gimmicks.cli then
+    create_cli_hooks()    
+end

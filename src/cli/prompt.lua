@@ -1,3 +1,6 @@
+
+require("src.agnostic.jitfix")
+
 local keyboard = require("src.cli.keyboard")
 
 local get_commands = require("src.cli.get_commands")
@@ -42,6 +45,9 @@ local function prompt()
                 for k, _ in pairs(get_commands()) do
                     table.insert(commands, k)
                 end
+
+                table.insert(commands, "help")
+                table.insert(commands, "sh")
 
                 print("", table.concat(commands, " "))
 

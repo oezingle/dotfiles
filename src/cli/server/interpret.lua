@@ -15,7 +15,6 @@ local unpack = require("src.agnostic.version.unpack")
 local string = string
 local loadfile = loadfile
 local type = type
-local os = os
 
 --- Split a string into its non-empty strings
 ---@param s string
