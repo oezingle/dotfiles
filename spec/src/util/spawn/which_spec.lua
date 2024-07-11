@@ -1,0 +1,25 @@
+require("src.amenities.init")
+
+local which = require("src.util.spawn.which")
+
+describe("which", function()
+    it("returns the location of installed programs", function()
+        which("sh")
+            :after(function(install)
+                assert.is_string(install)
+            end)
+            :catch(function(err)
+                error(err)
+            end)
+    end)
+
+    it("returns nil otherwise", function()
+        which("someprogramthatdoesnotexist")
+            :after(function(arg)
+
+            end)
+            :catch(function(err)
+                error(err)
+            end)
+    end)
+end)
