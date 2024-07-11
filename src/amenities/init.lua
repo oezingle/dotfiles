@@ -1,3 +1,4 @@
+---@nospec too simple
 
 -- create global warn()
 require("src.amenities.warn")
@@ -14,3 +15,6 @@ require("src.amenities.global_30log")
 
 -- allow the language server to see AwesomeWM types
 require("src.amenities.require_awesome_types")
+
+-- allow the language server to see Promises
+-- require("src.polyfill.Promise")

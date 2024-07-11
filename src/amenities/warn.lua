@@ -1,5 +1,4 @@
---- I tried testing this. it went bad.
----@nospec
+---@nospec I tried testing this. it went bad.
 
 local function nocolor_warn(...)
     print("WARN:", ...)
