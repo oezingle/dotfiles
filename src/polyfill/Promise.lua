@@ -1,9 +1,6 @@
 local class = require("lib.30log")
-local pack = require("src.agnostic.version.pack")
-local unpack = require("src.agnostic.version.unpack")
 
 local lgi = require("lgi")
-
 local GLib = lgi.GLib
 
 ---@alias PromiseCallback fun(resolve: function, reject: function?) | nil
@@ -112,7 +109,7 @@ end
 local function Promise_get_resolver(self)
     ---@param ... any[]
     return function(...)
-        Promise_settle(self, pack(...))
+        Promise_settle(self, table.pack(...))
     end
 end
 
@@ -120,7 +117,7 @@ end
 local function Promise_get_rejecter(self)
     ---@param ... any[]
     return function(...)
-        Promise_settle(self, pack(...), true)
+        Promise_settle(self, table.pack(...), true)
     end
 end
 
@@ -162,17 +159,17 @@ function Promise:chain(after, catch)
             -- :after's errors should be handled by :catch
 
             local after_succeded, after_res = xpcall(function()
-                return pack(after(unpack(arguments or {})))
+                return table.pack(after(table.unpack(arguments or {})))
             end, function(err) return err end)
 
             if after_succeded then
-                resolve(unpack(after_res))
+                resolve(table.unpack(after_res))
             else
                 reject(after_res)
             end
         else
             -- TODO resolve if catch returns a non-error? somehow?
-            reject(catch(unpack(arguments)))
+            reject(catch(table.unpack(arguments)))
         end
     end
 
@@ -219,7 +216,7 @@ function Promise.await(promise)
 
     local ok, err = true, nil
 
-    promise:catch(function (msg)
+    promise:catch(function(msg)
         ok, err = false, msg
     end)
 
@@ -252,26 +249,30 @@ function Promise.await(promise)
         error(err)
     end
 
-    return unpack(promise._private.value)
+    return table.unpack(promise._private.value)
 end
 
 --- Return a Promise that resolves with the value given by ...
----@return Promise
+---@generic T
+---@param ... Promise<T> | T
+---@return Promise<T>
 function Promise.resolve(...)
-    local args = pack(...)
+    local args = table.pack(...)
 
     return Promise(function(res)
-        res(unpack(args))
+        res(table.unpack(args))
     end)
 end
 
 --- Return a Promise that rejects with the value given by ...
----@return Promise
+---@generic T
+---@param ... Promise<T> | T
+---@return Promise<T>
 function Promise.reject(...)
-    local args = pack(...)
+    local args = table.pack(...)
 
     return Promise(function(_, rej)
-        rej(unpack(args))
+        rej(table.unpack(args))
     end)
 end
 
@@ -292,7 +293,7 @@ function Promise.all(promises)
                 resolves_left = resolves_left + 1
 
                 promise:chain(function(...)
-                    values[i] = pack(...)
+                    values[i] = table.pack(...)
 
                     resolves_left = resolves_left - 1
 
