@@ -1,0 +1,6 @@
+return {
+    default = {
+        verbose = true,
+        helper = "src/amenities/init.lua"
+    }
+}

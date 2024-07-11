@@ -2,7 +2,7 @@
 
 require("src.amenities.init")
 
-local sep = require("src.polyfilll.path.sep")
+local sep = require("src.polyfill.path.sep")
 
 local function get_src_files()
     local stdout, err = io.popen("find src -name \"*.lua\"", "r")
@@ -37,7 +37,19 @@ local function ignore_file(filename)
         end
 
         -- Annotations are supposed to be 3 lines, but there's no trouble with looking for just 2
-        if line:match("%-%-@nospec") or line:match("%-%-@meta") then
+        if line:match("%-%-@nospec") then
+            --[[
+            local reason = line:match("%-%-@nospec%s(.*)$")
+            
+            if not reason or #reason == 0 then
+                warn("bleh", filename)
+            end
+            ]]
+
+            return true
+        end
+
+        if line:match("%-%-@meta") then
             return true
         end
     until not (line:match("^%s*$") or line:match("^%-%-"))
