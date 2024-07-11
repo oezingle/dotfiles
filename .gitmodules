@@ -1,3 +1,6 @@
 [submodule "lib/30log"]
 	path = lib/30log
 	url = https://github.com/Yonaba/30log.git
+[submodule "lib/semver"]
+	path = lib/semver
+	url = https://github.com/kikito/semver.lua.git
