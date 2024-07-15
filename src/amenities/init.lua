@@ -1,7 +1,10 @@
 ---@nospec too simple
 
--- create global warn()
-require("src.amenities.warn")
+-- allow calling logger functions wherever you damn please
+require("src.amenities.global_log")
+
+-- allow calling class() wherever you damn please
+require("src.amenities.global_30log")
 
 -- table.pack() & table.unpack()
 require("src.amenities.table_pack")
@@ -10,11 +13,5 @@ require("src.amenities.table_pack")
 -- require("src.somelib") works to the same effect as require("src.somelib.init") 
 require("src.amenities.search_init")
 
--- allow calling class() wherever you damn please
-require("src.amenities.global_30log")
-
 -- allow the language server to see AwesomeWM types
 require("src.amenities.require_awesome_types")
-
--- allow the language server to see Promises
--- require("src.polyfill.Promise")

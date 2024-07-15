@@ -4,3 +4,9 @@
 [submodule "lib/semver"]
 	path = lib/semver
 	url = https://github.com/kikito/semver.lua.git
+[submodule "lib/log"]
+	path = lib/log
+	url = https://github.com/rxi/log.lua.git
+[submodule "lib/inspect"]
+	path = lib/inspect
+	url = https://github.com/kikito/inspect.lua.git

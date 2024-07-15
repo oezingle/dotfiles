@@ -11,6 +11,8 @@ typed.Table = require("src.typed.Table")
 typed.Union = require("src.typed.Union")
 typed.Array = require("src.typed.Array")
 
+typed.KeyedTable = require("src.typed.KeyedTable")
+
 ---@param type Zingle.Typed.Type
 ---@param passed any
 function typed.default (type, passed) 

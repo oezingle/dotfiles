@@ -1,7 +1,5 @@
 #!/usr/bin/luajit
 
-require("src.amenities.init")
-
 local sep = require("src.polyfill.path.sep")
 
 local function get_src_files()
@@ -23,7 +21,7 @@ local function ignore_file(filename)
     local file = io.open(filename)
 
     if not file then
-        warn(string.format("Expected src file %s inaccessable", filename))
+        print(string.format("Expected src file %s inaccessable", filename))
 
         return false
     end
@@ -69,7 +67,7 @@ for filename in get_src_files() do
         local spec_file = io.open(spec_name, "r")
 
         if not spec_file then
-            warn(string.format(
+            print(string.format(
                 " - No test coverage for %s",
                 filename
             ))
