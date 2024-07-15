@@ -23,6 +23,8 @@ describe("LuaHotConfigurationProvider", function()
         local provider = LuaHotConfigurationProvider(function() end)
 
         it("reads config nicely", function()
+            package.loaded["config.awesome"] = nil
+
             local flatconfig = require("config.awesome")
             local hotconfig = provider:get()
 
