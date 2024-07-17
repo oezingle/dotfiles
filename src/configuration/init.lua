@@ -2,8 +2,8 @@
 local Configuration = require("src.configuration.Configuration")
 local default = require("src.configuration.section.default")
 
-local LuaHotConfigurationProvider = require("src.configuration.LuaHotConfigurationProvider")
-local LuaConfigurationProvider = require("src.configuration.LuaConfigurationProvider")
+local LuaHotConfigurationProvider = require("src.configuration.provider.LuaHot")
+local LuaConfigurationProvider = require("src.configuration.provider.Lua")
 
 local providers = {
     LuaHotConfigurationProvider,

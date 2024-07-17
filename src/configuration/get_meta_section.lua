@@ -1,6 +1,6 @@
 local Configuration               = require("src.configuration.Configuration")
 local default                     = require("src.configuration.section.default")
-local LuaConfigurationProvider    = require("src.configuration.LuaConfigurationProvider")
+local LuaConfigurationProvider    = require("src.configuration.provider.Lua")
 
 --- Bootstrap config, getting the meta-config for the config providers
 ---@return Promise<Zingle.Awesome.Config.Section.Default.meta>

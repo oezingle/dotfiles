@@ -1,4 +1,4 @@
-local LuaHotConfigurationProvider = require("src.configuration.LuaHotConfigurationProvider")
+local LuaHotConfigurationProvider = require("src.configuration.provider.LuaHot")
 local Promise                     = require("src.polyfill.Promise")
 local assert_deep_equals          = require("spec.helper.assert_deep_equals")
 
