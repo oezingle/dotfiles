@@ -1,6 +1,8 @@
 local nil_coalesce        = require("src.polyfill.nil_coalesce")
 local split               = require("src.polyfill.string.split")
 
+local inspect             = require("lib.inspect.inspect")
+
 -- TODO __index metamethod would do wonders here - toss an error immediately.
 
 --- Would be an alias, but that would break non-templated usage
@@ -41,7 +43,7 @@ function ConfigurationObject:default(passed)
 
     local default = self.type and self.type:default(passed) or {}
 
-    -- TODO edge case where default is a non-iterable value - probably unlikely, but could occur!
+    -- TODO edge case where default is a non-indexible value - probably unlikely, but could occur!
     for _, child in ipairs(self.children) do
         local key = child.key
 
@@ -54,7 +56,10 @@ function ConfigurationObject:default(passed)
 end
 
 function ConfigurationObject:__tostring()
-    local top_line = string.format("%s %q <%s>", self.type:display(), self.key, self.type:default()) ..
+    local default = self.type and self.type:default() or "unknown"
+    local type = self.type and self.type:display() or "unknown"
+
+    local top_line = string.format("%s %q <%s>", type, self.key, default) ..
         (self.display and string.format(" - Displays as %q", self.display) or "")
 
     local lines = {

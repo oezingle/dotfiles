@@ -9,6 +9,11 @@ local config = {
                 -- enabled = true
             }
         }
+    },
+    notify = {
+        log = {
+            level = "info"
+        }
     }
 }
 

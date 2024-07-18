@@ -27,7 +27,7 @@ function Configuration:init(configuration_object, providers, noisy)
 
     self.configuration_object = configuration_object
 
-    self.noisy = noisy
+    self.noisy = noisy or false
 
     self.handles = {}
 end

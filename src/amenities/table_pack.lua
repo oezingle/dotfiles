@@ -7,7 +7,9 @@
 
 ---@diagnostic disable-next-line:duplicate-set-field
 table.pack = function (...)
-    return {n=select('#',...), ...}
+    --- Used to feature backwards compatibility with table.n, but this broke much!
+    -- n=select('#',...), 
+    return {...}
 end
 
 table.unpack = table.unpack or unpack

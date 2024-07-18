@@ -1,10 +1,12 @@
 ---@nospec too simple
 
 -- allow calling logger functions wherever you damn please
-require("src.amenities.global_log")
-
+require("src.amenities.global.logger")
 -- allow calling class() wherever you damn please
-require("src.amenities.global_30log")
+require("src.amenities.global.30log")
+-- allows getting a stringified representation of a lua object wherever you damn please
+require("src.amenities.global.inspect")
+
 
 -- table.pack() & table.unpack()
 require("src.amenities.table_pack")
