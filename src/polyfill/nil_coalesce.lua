@@ -26,7 +26,6 @@
 local nil_coalesce = function (...)
     local args = table.pack(...)
     
-    --- #Oops!
     for i=0,#args do
         local element = args[i]
 
