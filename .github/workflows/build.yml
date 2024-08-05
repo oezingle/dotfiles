@@ -15,7 +15,7 @@ jobs:
         uses: ./.github/actions/setup
       - name: Get changed files in the appmenu folder
         id: changed-files-appmenu
-        uses: tj-actions/changed-files@v36
+        uses: tj-actions/changed-files@v44.5.7
         with:
           files: src/appmenu/**
       - name: Running bundler
@@ -43,7 +43,7 @@ jobs:
         uses: ./.github/actions/setup
       - name: Get changed files in the bundler folder
         id: changed-files-bundler
-        uses: tj-actions/changed-files@v36
+        uses: tj-actions/changed-files@v44.5.7
         with:
           files: lib/bundler/**
       - name: Running bundler
