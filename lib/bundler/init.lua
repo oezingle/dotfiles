@@ -128,6 +128,7 @@ local function main()
         config.public_dir = args.publicdir
     end
 
+    -- TODO strip this option?
     -- set main via args.export
     if args.main then
         table.insert(args.export, args.main)

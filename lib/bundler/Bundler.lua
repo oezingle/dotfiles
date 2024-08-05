@@ -204,12 +204,18 @@ function Bundler:_create_exports()
 
         local outdir_end = self.config.out_dir:match("[/\\]([^/\\]+)$")
 
-        local export_template = fs.read(export_path)
+        local export_content = fs.read(export_path)
+
+        if not export_content then
+            error(string.format("Unable to read bundle template %q", export_path))
+        end
+
+        export_content = export_content
             :gsub("<UUID>", self.uuid)
             :gsub("<OUT_FILE>", export.out_file)
             :gsub("<OUTDIR_END>", outdir_end)
-
-        fs.write(self.config.out_dir .. pathlib.sep .. export.out_file .. ".lua", export_template)
+        
+        fs.write(self.config.out_dir .. pathlib.sep .. export.out_file .. ".lua", export_content)
     end
 end
 

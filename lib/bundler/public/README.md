@@ -12,3 +12,6 @@ Check the options using `lua bundler/bundler -h`
 
 ### JSON/LUA configuration
 The bundler supports both .json configuration files and .lua files that return a configuration table. Check out `default_config` in `init.lua`
+
+### Command-line handler
+Bundled code that uses differences in `arg` and `...` to determine if it's being run as a library or from the command line will fail to work as expected. However, you may export a function called `__from_cli` from your module, which will be called if the bundler detects that `arg[1] == table.pack(...)[1]`

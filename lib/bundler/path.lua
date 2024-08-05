@@ -1,6 +1,5 @@
 local pathlib = {
-    -- TODO windows support (ha)
-    sep = "/",
+    sep = package.path:sub(1,1),
 }
 
 ---@param lua_path string
