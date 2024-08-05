@@ -60,7 +60,7 @@ end
 function fs.read(path)
     local file = io.open(path, "r") -- r read mode and b binary mode
     if not file then return nil end
-    local content = file:read "*a" -- *a or *all reads the whole file
+    local content = file:read "*a"  -- *a or *all reads the whole file
     file:close()
     return content
 end
@@ -71,7 +71,7 @@ end
 function fs.rm(path, recursive)
     recursive = recursive or false
 
-    os.execute(    string.format("rm %s %s", recursive and "-r" or "", path))
+    os.execute(string.format("rm %s %s", recursive and "-r" or "", path))
 end
 
 --- Write content to a file
@@ -94,11 +94,14 @@ end
 function fs.list(dir)
     local files = {}
     for file in io.popen(string.format([[ls -pa %s | grep -v "\./"]], dir)):lines() do
-        table.insert(files, file)
+        if file ~= "." and file ~= ".." then
+            table.insert(files, file)
+        end
     end
 
     return files
 end
+
 fs.ls = fs.list
 
 ---@param src string
