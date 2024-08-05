@@ -93,11 +93,11 @@ end
 ---@return string[] files the files in the directory
 function fs.list(dir)
     local files = {}
-    for file in io.popen(string.format("ls -pa %s", dir)):lines() do
-        if not file:match("/%.$") and not file:match("/%.%.$") then
-            table.insert(files, file)
-        end
+    for file in io.popen(string.format("ls -pA %s", dir)):lines() do
+        table.insert(files, file)
     end
+
+    print(table.concat(files, ", "))
 
     return files
 end
