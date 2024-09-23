@@ -1,6 +1,6 @@
 
 local GLibTimer = require("src.util.timer.GLibTimer")
-local MainLoop = require("src.util.MainLoop")
+local MainLoop = require("src.util.lgi.MainLoop")
 
 describe("GLibTimer", function ()
     it("runs for a given amount of time", function ()

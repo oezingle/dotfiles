@@ -1,5 +1,5 @@
-local String = require("src.util.typedd.String")
-local Array = require("src.util.typedd.Array")
+local String = require("src.util.typed.String")
+local Array = require("src.util.typed.Array")
 local assert_deep_equals = require("spec.helper.assert_deep_equals")
 
 describe("Array", function()

@@ -1,4 +1,4 @@
-local typed = require("src.util.typedd.init")
+local typed = require("src.util.typed")
 
 describe("typed", function()
     it("checks", function()

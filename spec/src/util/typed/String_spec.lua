@@ -1,5 +1,5 @@
 
-local String = require("src.util.typedd.String")
+local String = require("src.util.typed.String")
 
 describe("String", function()
     it("displays nicely", function ()
