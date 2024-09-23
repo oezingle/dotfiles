@@ -1,5 +1,5 @@
 
-local Type = require("src.typed.Type")
+local Type = require("src.util.typed.Type")
 
 local map = require("src.polyfill.list.map")
 

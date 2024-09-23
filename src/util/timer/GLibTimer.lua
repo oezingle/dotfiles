@@ -1,5 +1,4 @@
 
-local lgi = require("lgi")
 local GLib = lgi.GLib
 
 ---@class Zingle.GLibTimer : Log.BaseFunctions
@@ -47,7 +46,7 @@ end
 
 ---@param cb function
 function GLibTimer.delayed_call(cb)
-    GLib.idle_add(function ()
+    GLib.idle_add(GLib.PRIORITY_DEFAULT, function ()
         cb()
         
         return false

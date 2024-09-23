@@ -1,6 +1,5 @@
 local class = require("lib.30log")
 
-local lgi = require("lgi")
 local GLib = lgi.GLib
 
 ---@alias PromiseCallback fun(resolve: function, reject: function?) | nil

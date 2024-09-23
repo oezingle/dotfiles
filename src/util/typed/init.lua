@@ -1,3 +1,3 @@
 ---@nospec too simple
 
-return require("src.typed.typed")
+return require("src.util.typed.typed")

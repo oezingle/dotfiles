@@ -1,4 +1,4 @@
-local Type = require("src.typed.Type")
+local Type = require("src.util.typed.Type")
 local nil_coalesce = require("src.polyfill.nil_coalesce")
 
 --- A table with specific keys as opposed to any value

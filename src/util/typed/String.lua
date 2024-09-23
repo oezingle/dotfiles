@@ -1,4 +1,4 @@
-local Type = require("src.typed.Type")
+local Type = require("src.util.typed.Type")
 
 ---@class Zingle.Typed.Type.String : Zingle.Typed.CType
 ---@operator call:Zingle.Typed.Type.String

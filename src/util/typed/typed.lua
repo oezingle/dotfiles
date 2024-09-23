@@ -1,17 +1,17 @@
 
 local typed = {}
 
-typed.Number = require("src.typed.Number")
-typed.Boolean = require("src.typed.Boolean")
-typed.String = require("src.typed.String")
-typed.Function = require("src.typed.Function")
-typed.Nil = require("src.typed.Nil")
-typed.Table = require("src.typed.Table")
+typed.Number = require("src.util.typed.Number")
+typed.Boolean = require("src.util.typed.Boolean")
+typed.String = require("src.util.typed.String")
+typed.Function = require("src.util.typed.Function")
+typed.Nil = require("src.util.typed.Nil")
+typed.Table = require("src.util.typed.Table")
 
-typed.Union = require("src.typed.Union")
-typed.Array = require("src.typed.Array")
+typed.Union = require("src.util.typed.Union")
+typed.Array = require("src.util.typed.Array")
 
-typed.KeyedTable = require("src.typed.KeyedTable")
+typed.KeyedTable = require("src.util.typed.KeyedTable")
 
 ---@param type Zingle.Typed.Type
 ---@param passed any
@@ -21,14 +21,9 @@ end
 
 ---@param type Zingle.Typed.Type
 ---@param value any
+---@return boolean ok, string? err
 function typed.check (type, value)
-    -- return type:check(value)
-
-    local ok, err = type:check(value)
-
-    if not ok then
-        error(err)
-    end
+    return type:check(value)
 end
 
 return typed
