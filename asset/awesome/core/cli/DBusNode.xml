@@ -1,0 +1,25 @@
+<!-- https://docs.gtk.org/glib/gvariant-format-strings.html#numeric-types -->
+
+<node>
+    <interface name='org.zingle.awesome.wm'>
+        <method name="set_info">
+            <arg type="q" name="lines" direction="in" />
+            <arg type="q" name="cols" direction="in" />
+            <arg type="b" name="color" direction="in" />
+
+            <arg type="b" name="recv" direction="out" />
+        </method>
+
+        <method name="disconnect" />
+
+        <method name="send_command">
+            <arg type='s' name='command' direction='in'/>
+        </method>
+
+        <signal name='log'>
+            <arg type='s' name='client' />
+            <arg type='s' name='level' />
+            <arg type='s' name='message' />
+        </signal>
+    </interface>
+</node>
