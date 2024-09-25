@@ -1,6 +1,5 @@
 
 local Promise = require("src.polyfill.Promise")
-local lgi = require("lgi")
 
 local Gio = lgi.Gio
 

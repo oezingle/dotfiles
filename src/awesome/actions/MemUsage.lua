@@ -11,8 +11,13 @@ local MemUsage = Action.create("MemUsage", {
     -- end
 })
 
-function MemUsage:on_call()
-    collectgarbage("step")
+function MemUsage:on_call(collect)
+    -- TODO this but better
+    if collect == "collect" then
+        collectgarbage("collect")
+    end
+
+    -- collectgarbage("step")
     
     local mem = collectgarbage("count")
 

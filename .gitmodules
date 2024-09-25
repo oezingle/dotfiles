@@ -10,3 +10,6 @@
 [submodule "lib/inspect"]
 	path = lib/inspect
 	url = https://github.com/kikito/inspect.lua.git
+[submodule "lib/json"]
+	path = lib/json
+	url = https://github.com/rxi/json.lua

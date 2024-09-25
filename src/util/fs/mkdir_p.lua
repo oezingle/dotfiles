@@ -24,7 +24,7 @@ local function mkdir_p (path)
         end
 
         return path
-    end, "")
+    end, dir:sub(1,1) == sep and sep or "")
 end
 
 return mkdir_p

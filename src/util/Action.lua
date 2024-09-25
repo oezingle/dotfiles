@@ -2,7 +2,7 @@ local log = require("lib.log")
 local typed = require("src.util.typed.typed")
 
 ---@class Zingle.Awesome.Action : Log.BaseFunctions
----@field log Log
+---@field log Logger
 ---@field call fun(self: self, ...: any) Handle this action generically
 ---@field on_call fun(self: self, ...: any)
 ---@field command string?
@@ -15,6 +15,9 @@ local Action = class("Zingle.Awesome.Action", {
     names = {},
     commands = {},
 })
+
+setmetatable(Action.names, { __mode = "v" })
+setmetatable(Action.commands, { __mode = "v" })
 
 function Action:init(name)
     self.name = name

@@ -32,11 +32,11 @@ local function callable_table(path, subpaths)
     recurse_insert_path(path, subpaths)
 
     return setmetatable(subpaths, {
-        __call = function(t, file)
+        __call = function(t, file, notexists_ok)
             local path = join(script_dir(), t.__parent_path, path, file)
 
             if file then
-                assert(fs.exists(path), string.format("File %q does not exist!", path))
+                assert(fs.exists(path) or notexists_ok, string.format("File %q does not exist!", path))
             end
 
             return path
@@ -61,6 +61,11 @@ local dir = {
     config = callable_table("config", {
         actions = callable_table("actions"),
         scripts = callable_table("scripts"),
+        services = callable_table("services"),
+    }),
+    generated = callable_table("generated", {
+        persistent_storage = callable_table("persistent-storage"),
+        log = callable_table("log"),
     })
 }
 

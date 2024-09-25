@@ -10,8 +10,8 @@
 ---@operator call:Zingle.Set
 local Set = class("Zingle.Set")
 
-function Set:init ()
-    self.key_table = {}
+function Set:init (keys)
+    self.key_table = keys or {}
 end
 
 function Set:keys ()

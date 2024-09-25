@@ -1,9 +1,11 @@
-local Promise = require("src.polyfill.Promise")
-local map = require("src.polyfill.list.map")
-local Set = require("src.util.Set")
+local Promise           = require("src.polyfill.Promise")
+local map               = require("src.polyfill.list.map")
+local Set               = require("src.util.Set")
+local PersistentStorage = require("src.util.PersistentStorage")
+local dir               = require("src.util.dir")
 
 ---@class Zingle.Awesome.Service : Log.BaseFunctions
----@field log Log
+---@field log Logger
 ---@field start fun(self: self | string): Promise?
 ---@field stop fun(self: self | string): Promise?
 ---@field restart fun(self: self | string): Promise?
@@ -14,19 +16,25 @@ local Set = require("src.util.Set")
 ---@field stop_jobs table<string, Promise<Zingle.Awesome.Service>>
 ---@field names table<string, Zingle.Awesome.Service>
 ---@field unregistered table<string, Zingle.Awesome.Service>
+---@field enabled Zingle.Set<string>
 ---
 ---@field private start_by_name fun(name: string)
 ---@field private stop_by_name fun(name: string)
 ---@field private start_by_instance fun(instance: Zingle.Awesome.Service): Promise<Zingle.Awesome.Service>
 ---@field private stop_by_instance fun(instance: Zingle.Awesome.Service): Promise<Zingle.Awesome.Service>
 ---@operator call:Zingle.Awesome.Service
-local Service = class("Zingle.Awesome.Service", {
-    names = {},
+local Service           = class("Zingle.Awesome.Service", {
+    names        = {},
     unregistered = {},
 
-    start_jobs = {},
-    stop_jobs = {},
+    start_jobs   = {},
+    stop_jobs    = {},
+
+    enabled      = Set(PersistentStorage.create(dir.config("services.json", true)))
 })
+
+setmetatable(Service.names, { __mode = "v" })
+setmetatable(Service.unregistered, { __mode = "v" })
 
 ---@class Zingle.Awesome.Service.Options
 ---@field name string
@@ -62,12 +70,23 @@ function Service:set_logger(log)
 end
 
 ---@param name string
-function Service.start_by_name(name)
+function Service.by_name(name)
     local service = Service.names[name]
 
     if not service then
         Service.log.warn(string.format("Unknown service requested by name %q", name))
 
+        return
+    end
+
+    return service
+end
+
+---@param name string
+function Service.start_by_name(name)
+    local service = Service.by_name(name)
+
+    if not service then
         return
     end
 
@@ -76,11 +95,9 @@ end
 
 ---@param name string
 function Service.stop_by_name(name)
-    local service = Service.names[name]
+    local service = Service.by_name(name)
 
     if not service then
-        Service.log.warn(string.format("Unknown service requested by name %q", name))
-
         return
     end
 
@@ -89,6 +106,8 @@ end
 
 ---@param self Zingle.Awesome.Service
 function Service.start_by_instance(self)
+    self.log.info(string.format("Starting service %s", self.name))
+
     Service.stop_jobs[self.name] = nil
 
     if not Service.start_jobs[self.name] then
@@ -124,32 +143,34 @@ end
 
 ---@param self Zingle.Awesome.Service
 function Service.stop_by_instance(self)
+    self.log.info(string.format("Stopping service %s", self.name))
+
     Service.start_jobs[self.name] = nil
 
     if not Service.stop_jobs[self.name] then
         self.status = Service.statuses.STOPPING
 
         Service.stop_jobs[self.name] = Promise.all(map(
-            self.dependents:keys(),
-            function (dependent)
-                -- TODO FIXME this fucks up restart.
-                self.log.warn(string.format("Stopping dependent service %q", dependent))
+                self.dependents:keys(),
+                function(dependent)
+                    -- TODO FIXME this fucks up restart.
+                    self.log.warn(string.format("Stopping dependent service %q", dependent))
 
-                return Service.stop(dependent)
-            end
-        ))
-        :after(function ()
-            return self.stop(self)
-        end)
-        :after(function ()
-            self.status = Service.statuses.STOPPED
+                    return Service.stop(dependent)
+                end
+            ))
+            :after(function()
+                return self.stop(self)
+            end)
+            :after(function()
+                self.status = Service.statuses.STOPPED
 
-            for _, dependency in pairs(self.dependencies) do
-                Service.names[dependency].dependents:remove(self.name)
-            end
+                for _, dependency in pairs(self.dependencies) do
+                    Service.names[dependency].dependents:remove(self.name)
+                end
 
-            return self
-        end)
+                return self
+            end)
     end
 
     return Service.stop_jobs[self.name]
@@ -212,13 +233,39 @@ function Service.start_all()
             "Service %s is not registered. Use Service.register(service)", name
         ))
     end
+
+    local jobs = {}
+    for name in pairs(Service.enabled) do
+        local job = Service.start(name)
+
+        table.insert(jobs, job)
+    end
+
+    return Promise.all(jobs)
 end
 
---[[
-TODO Service.start_all()
-- find dependencies, work in that order
-- warn for any services that haven't called register yet
-- check depends & start asynchronously
-]]
+function Service.enable(name)
+    local service = Service.by_name(name)
+
+    if not service then
+        return false
+    end
+
+    Service.enabled:add(name)
+
+    return true
+end
+
+function Service.disable(name)
+    local service = Service.by_name(name)
+
+    if not service then
+        return false
+    end
+
+    Service.enabled:remove(name)
+
+    return true
+end
 
 return Service
