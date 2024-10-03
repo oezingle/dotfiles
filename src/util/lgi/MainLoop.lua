@@ -2,6 +2,8 @@
 local GLib = lgi.GLib
 
 ---@class GLib.MainContext
+---@field push_thread_default fun(self: self) make this context the thread default
+---@field pop_thread_default fun(self: self) remove this context as the thread default
 
 ---@class LGI.GLib.MainLoop
 ---@field is_running boolean

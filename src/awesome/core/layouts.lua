@@ -35,10 +35,8 @@ local ignore_fmt = "Ignoring layout %q: %s"
 ]]
 
 
----@param info Zingle.Awesome.ConfigurationInfo
-function ret.on_config_change(info)
-    local config = info.configuration
-
+---@param config Zingle.Awesome.ConfigurationInfo
+function ret.on_config_change(config)
     local section = config.wm.layouts
 
     local layouts = {}

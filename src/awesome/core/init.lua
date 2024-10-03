@@ -1,22 +1,21 @@
-local Service             = require("src.util.Service")
+local Service      = require("src.util.Service")
+local load_scripts = require("src.awesome.core.load_scripts")
 
-local enable_gc           = require("src.awesome.core.gc")
-local enable_load_scripts = require("src.awesome.core.poll_scripts")
-local init_ui             = require("src.awesome.ui")
-
+local init_ui      = require("src.awesome.ui")
 
 local function main()
     require("src.awesome.core.error.runtime")
 
     require("src.awesome.core.layouts")
 
+    -- Creates pollers
+    load_scripts.reset()
     -- This line loads services, so we MUST put it before Service.start_all()
-    enable_load_scripts()
+    load_scripts.poll()
 
     Service.log = log
     Service.start_all()
 
-    enable_gc()
     init_ui()
 end
 

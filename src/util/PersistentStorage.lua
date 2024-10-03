@@ -93,10 +93,11 @@ function PersistentStorage.create(path, default)
 
     if awesome then
         local commit_closure = function()
+            log.info("Committing PersistentStorage state")
+
             PersistentStorage.commit(storage)
         end
-
-        -- TODO FIXME test this!
+        
         awesome.connect_signal("exit", commit_closure)
         awesome.connect_signal("debug::error", commit_closure)
     end

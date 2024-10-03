@@ -36,7 +36,12 @@ if false then
     ---@field extend Log.ClassExtender
     ---@field super LogClass?
     ---
+    ---@field with fun(self: LogClass, mixin: table)
+    ---@field without fun(self: LogClass, mixin: table)
+    ---
     ---@field class LogClass
+    ---
+    ---@operator call:self
     -- TODO https://github.com/Yonaba/30log/wiki/Mixins
 
     ---@alias LogClass<T> Log.BaseFunctions | { extend: Log.ClassExtender<T> } | T

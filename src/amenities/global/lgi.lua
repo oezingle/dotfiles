@@ -12,6 +12,7 @@
 ---@field PRIORITY_DEFAULT 0
 ---@field MainLoop LGI.GLib.MainLoop
 ---@field Variant LGI.GLib.GVariant
+---@field timeout_add fun(priority: integer, milliseconds: integer, fun: LGI.GLib.LoopCallback)
 ---@field timeout_add_seconds fun(priority: integer, seconds: integer, fun: LGI.GLib.LoopCallback)
 ---@alias LGI CLGI | table
 

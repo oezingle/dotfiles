@@ -1,7 +1,7 @@
 ---@meta
 
----@enum UnixSignal
-local unix_signal = {
+---@enum Awesome.UnixSignal
+local UnixSignal = {
     SIGCHLD = 17,
     SIGPOLL = 29,
     SIGHUP = 1,
@@ -39,15 +39,15 @@ local unix_signal = {
 }
 
 --- https://awesomewm.org/doc/api/libraries/awesome.html
----@class CAwesome
+---@class Awesome.CAwesome
 ---@field register_xproperty fun(name: string, type: "string"|"number"|"boolean")
 ---@field quit fun(code: integer?) quit Awesome
 ---@field exec fun(cmd: string) Execute another application, probably a window manager, to replace awesome.
 ---@field restart fun() restart Awesome
----@field kill fun(pid: integer, signal: UnixSignal? ) kill a process. 0 and negative values have special meaning. See `man kill`.
+---@field kill fun(pid: integer, signal: Awesome.UnixSignal? ) kill a process. 0 and negative values have special meaning. See `man kill`.
 ---@field sync fun() Synchronize with the X11 server.
----@field pixbuf_to_surface fun(pixbuf: table, path: unknown?): Surface Translate a GdkPixbuf to a cairo image surface.
----@field load_image fun(path: string): Surface Load an image from its path and return it as a cairo image
+---@field pixbuf_to_surface fun(pixbuf: table, path: unknown?): Awesome.Gears.Surface Translate a GdkPixbuf to a cairo image surface.
+---@field load_image fun(path: string): Awesome.Gears.Surface Load an image from its path and return it as a cairo image
 ---@field set_preferred_icon_size fun(size: number) Set the preferred size for client icons.
 ---@field spawn unknown Spawn a program on the default screen
 ---@field xkb_set_layout_group fun(group: integer)  Switch keyboard layout. Integer from 0-3
@@ -64,4 +64,8 @@ local unix_signal = {
 ---@field themes_path string The path where themes were installed to.
 ---@field icon_path string The path where icons were installed to.
 
----@alias Awesome CAwesome | ClassSignalAble<"debug::error" | "debug::deprecation" | "debug::index::miss" | "debug::newindex::miss" | "systray::update" | "wallpaper_changed" | "xkb::map_changed" | "xkb::group_changed." | "refresh" | "startup" | "exit" | "screen::change" | "spawn::canceled" | "spawn::change" | "spawn::completed" | "spawn::initiated" | "spawn::timeout">
+---@alias Awesome Awesome.CAwesome | Awesome.ClassSignalable<"debug::error" | "debug::deprecation" | "debug::index::miss" | "debug::newindex::miss" | "systray::update" | "wallpaper_changed" | "xkb::map_changed" | "xkb::group_changed." | "refresh" | "startup" | "exit" | "screen::change" | "spawn::canceled" | "spawn::change" | "spawn::completed" | "spawn::initiated" | "spawn::timeout">
+
+return {
+    UnixSignal = UnixSignal
+}

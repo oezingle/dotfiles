@@ -1,10 +1,14 @@
-local Promise           = require("src.polyfill.Promise")
-local map               = require("src.polyfill.list.map")
-local Set               = require("src.util.Set")
-local PersistentStorage = require("src.util.PersistentStorage")
-local dir               = require("src.util.dir")
+local Promise            = require("src.polyfill.Promise")
+local map                = require("src.polyfill.list.map")
+local includes           = require("src.polyfill.list.includes")
+local Set                = require("src.util.Set")
+local PersistentStorage  = require("src.util.PersistentStorage")
+local dir                = require("src.util.dir")
+local ConfigurationMixin = require("src.configuration.ConfigurationMixin")
 
----@class Zingle.Awesome.Service : Log.BaseFunctions
+-- TODO FIXME default services should be enabled on first boot if config doesn't exist.
+
+---@class Zingle.Awesome.Service : Log.BaseFunctions, Zingle.Awesome.ConfigurationMixin
 ---@field log Logger
 ---@field start fun(self: self | string): Promise?
 ---@field stop fun(self: self | string): Promise?
@@ -23,7 +27,7 @@ local dir               = require("src.util.dir")
 ---@field private start_by_instance fun(instance: Zingle.Awesome.Service): Promise<Zingle.Awesome.Service>
 ---@field private stop_by_instance fun(instance: Zingle.Awesome.Service): Promise<Zingle.Awesome.Service>
 ---@operator call:Zingle.Awesome.Service
-local Service           = class("Zingle.Awesome.Service", {
+local Service            = class("Zingle.Awesome.Service", {
     names        = {},
     unregistered = {},
 
@@ -33,11 +37,18 @@ local Service           = class("Zingle.Awesome.Service", {
     enabled      = Set(PersistentStorage.create(dir.config("services.json", true)))
 })
 
+-- No faffing about
+Service.log              = log
+
+Service:with(ConfigurationMixin)
+
+-- Create weak tables
 setmetatable(Service.names, { __mode = "v" })
 setmetatable(Service.unregistered, { __mode = "v" })
 
 ---@class Zingle.Awesome.Service.Options
 ---@field name string
+--- TODO FIXME move exec to BashService
 ---@field exec string? -- TODO just execute in bash
 ---@field dependencies string[]?
 
@@ -52,6 +63,8 @@ Service.statuses = {
 
 ---@param options Zingle.Awesome.Service.Options
 function Service:init(options)
+    self:use_config()
+
     self.name = options.name
     Service.unregistered[self.name] = self
 
@@ -61,6 +74,13 @@ function Service:init(options)
 
     self.dependencies = options.dependencies or {}
     self.dependents = Set()
+end
+
+-- Instances (individual services) may not provide this callback, so we provide a default
+do
+    -- store field as var so language server can't complain about duplicate fields
+    local field = "on_config_change"
+    Service[field] = function() end
 end
 
 function Service:set_logger(log)
@@ -74,7 +94,7 @@ function Service.by_name(name)
     local service = Service.names[name]
 
     if not service then
-        Service.log.warn(string.format("Unknown service requested by name %q", name))
+        Service.log.error(string.format("Unknown service requested by name %q", name))
 
         return
     end
@@ -227,18 +247,38 @@ function Service.register(self)
     Service.names[self.name] = self
 end
 
-function Service.start_all()
+function Service.warn_unregistered()
     for name in pairs(Service.unregistered) do
-        Service.log.info(string.format(
+        Service.log.error(string.format(
             "Service %s is not registered. Use Service.register(service)", name
         ))
     end
+end
+
+function Service.start_all()
+    Service.warn_unregistered()
 
     local jobs = {}
     for name in pairs(Service.enabled) do
         local job = Service.start(name)
 
         table.insert(jobs, job)
+    end
+
+    return Promise.all(jobs)
+end
+
+---@param except string[]?
+function Service.stop_all(except)
+    except = except or {}
+
+    local jobs = {}
+    for name, service in pairs(Service.names) do
+        if service.status == Service.statuses.RUNNING or service.status == Service.statuses.STARTING and not includes(except, name) then
+            local job = Service.stop(service)
+
+            table.insert(jobs, job)
+        end
     end
 
     return Promise.all(jobs)

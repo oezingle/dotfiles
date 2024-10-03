@@ -20,12 +20,14 @@ function ServiceCTL:param_ok_method(method)
             " - start <service>",
             " - stop <service>",
             " - restart <service>",
+            " - enable <service>",
+            " - disable <service>",
             " - tail <service>",
             " - status [service]"
         }, "\n")
     end
 
-    if not includes({ "start", "stop", "restart", "tail", "status" }, method) then
+    if not includes({ "start", "stop", "restart", "enable", "disable", "tail", "status" }, method) then
         return string.format("No known verb %q", method)
     end
 
@@ -75,7 +77,7 @@ function ServiceCTL:on_call(method, name)
         local fmt = "%s\t%s\t%s"
 
         local lines = {
-            string.format(fmt, "NAME", "STATUS", "ENABLED")
+            string.format(fmt, "NAME\t", "STATUS", "ENABLED")
         }
 
         local has_name = name and #name ~= 0
@@ -85,7 +87,9 @@ function ServiceCTL:on_call(method, name)
         end
 
         for name, service in pairs(has_name and { [name] = Service.names[name] } or Service.names) do
-            local line = string.format(fmt, name, service.status, Service.enabled:has(name))
+            local name_fmt = #name <= 8 and name .. "\t" or name    
+
+            local line = string.format(fmt, name_fmt, service.status, Service.enabled:has(name))
 
             table.insert(lines, line)
         end
@@ -110,6 +114,10 @@ function ServiceCTL:on_call(method, name)
             Service.enable(name)
         elseif method == "disable" then
             Service.disable(name)
+        elseif method == "tail" then
+            self.log.error("Tail functionality has not been implemented yet.")
+
+            return
         end
     end
 end

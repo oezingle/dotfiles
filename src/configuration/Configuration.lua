@@ -1,16 +1,11 @@
-local tempstate    = require("src.state.temp")
 local Promise      = require("src.polyfill.Promise")
 local promise_iter = require("src.util.promise_iter")
 
----@class Zingle.Awesome.ConfigurationInfo
----@field configuration Zingle.Awesome.Config.Section.Default
----@field tempstate Zingle.Awesome.Tempstate
----@field package Zingle.Awesome.PackageLib
----@field save_state any
-
+---@alias Zingle.Awesome.ConfigurationInfo Zingle.Awesome.Config.Section.Default
 
 ---@alias Zingle.Awesome.ConfigurationChangeHandler fun(config: Zingle.Awesome.ConfigurationInfo)
 
+---@class Zingle.Awesome.ConfigurationChangeHandler.Identifier
 
 ---@class Zingle.Awesome.Configuration : Log.BaseFunctions
 ---
@@ -22,12 +17,10 @@ local promise_iter = require("src.util.promise_iter")
 ---@operator call:Zingle.Awesome.Configuration
 local Configuration = class("Zingle.Awesome.Configuration")
 
-function Configuration:init(configuration_object, providers, noisy)
+function Configuration:init(configuration_object, providers)
     self.provider_classes = providers
 
     self.configuration_object = configuration_object
-
-    self.noisy = noisy or false
 
     self.handles = {}
 end
@@ -35,36 +28,40 @@ end
 --- Call this callback when the configuration changes
 ---@param handle Zingle.Awesome.ConfigurationChangeHandler
 function Configuration:on_change(handle)
-    table.insert(self.handles, handle)
+    ---@type Zingle.Awesome.ConfigurationChangeHandler.Identifier
+    local identifier = {}
+    
+    self.handles[identifier] = handle
 
     -- Provider has initialized already!
     if self.provider then
-        local arg = self:get_handle_argument()
+        local config = self:bake_config()
 
-        handle(arg)
+        handle(config)
     end
+
+    return identifier
 end
 
-function Configuration:get_handle_argument ()
-    local arg = {
-        configuration = self:bake_config(),
-        tempstate = tempstate
-    }
-
-    return arg
+---@param identifier Zingle.Awesome.ConfigurationChangeHandler.Identifier
+function Configuration:unregister (identifier)
+    self.handles[identifier] = nil
 end
 
+--- Merge the configuration from self.configuration_object with whatever keys
+--- the provider has, resulting in a fully populated configuration
+---@return Zingle.Awesome.ConfigurationInfo
 function Configuration:bake_config()
     local configured = self.provider:get()
 
-    return self.configuration_object:default(configured)
+    return self.configuration_object:default(configured) --[[ @as Zingle.Awesome.ConfigurationInfo ]]
 end
 
 function Configuration:call_handles()
-    local arg = self:get_handle_argument()
+    local config = self:bake_config()
 
-    for _, handle in ipairs(self.handles) do
-        handle(arg)
+    for _, handle in pairs(self.handles) do
+        handle(config)
     end
 end
 
@@ -80,9 +77,7 @@ function Configuration:create_provider()
                     if can_use then
                         self.provider = Provider(call_handles)
 
-                        if self.noisy then
-                            log.debug(string.format("Using configuration provider %s", tostring(Provider)))
-                        end
+                        log.debug(string.format("Using configuration provider %s", tostring(Provider)))
 
                         control['return'](true)
                     end

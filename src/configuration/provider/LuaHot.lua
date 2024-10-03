@@ -2,6 +2,7 @@ local ConfigurationProvider       = require("src.configuration.ConfigurationProv
 local get_meta_section            = require("src.configuration.get_meta_section")
 local lfs                         = require("lfs")
 local timer_add                   = require("src.util.timer.timer_add")
+local SmartTimer                  = require("src.util.timer.SmartTimer")
 
 ---@class Zingle.Awesome.ConfigurationProvider.Lua.Hot : Zingle.Awesome.ConfigurationProvider
 ---@operator call:Zingle.Awesome.ConfigurationProvider.Lua.Hot
@@ -47,6 +48,13 @@ function LuaHotConfigurationProvider:poll()
 end
 
 function LuaHotConfigurationProvider:register_timer()
+    self.timer = SmartTimer.create({
+        callback = function ()
+            self:poll()
+        end,
+        timeout = 30
+    })
+
     return get_meta_section()
         :after(function(meta)
             local config_section = meta.providers.LuaHot
@@ -54,13 +62,11 @@ function LuaHotConfigurationProvider:register_timer()
             return config_section.poll_rate
         end)
         :after(function (poll_rate)
-            timer_add({
-                timeout = poll_rate,
-                callback = function ()
-                    self:poll()
-                end,
-                autostart = true
-            })                    
+            -- TODO FIXME causes error - timer already started
+            -- TODO switch to SmartTimer
+            self.timer.timeout = poll_rate
+            
+            self.timer:start()
         end)
 end
 

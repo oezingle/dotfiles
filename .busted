@@ -1,6 +1,6 @@
 return {
     default = {
         verbose = true,
-        helper = "src/amenities/busted_entry.lua"
+        helper = "src/amenities/entry/busted.lua"
     }
 }

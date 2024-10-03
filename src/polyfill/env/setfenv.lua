@@ -4,6 +4,7 @@ local debug = debug
 
 ---@param f function|integer
 ---@param t table
+---@return function
 ---@diagnostic disable-next-line:deprecated
 local setfenv = setfenv or function(f, t)
     f = (type(f) == 'function' and f or debug.getinfo(f + 1, 'f').func)
@@ -18,6 +19,8 @@ local setfenv = setfenv or function(f, t)
 
         debug.setupvalue(f, up, t)
     end
+
+    return f
 end
 
 return setfenv

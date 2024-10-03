@@ -19,9 +19,9 @@ function GLibTimer:init (opts)
 
     local single_shot = opts.single_shot
 
-    GLib.timeout_add_seconds(
+    GLib.timeout_add(
         GLib.PRIORITY_DEFAULT,
-        self.timeout,
+        math.floor(self.timeout * 1000),
         function ()
             if self.started then
                 cb()

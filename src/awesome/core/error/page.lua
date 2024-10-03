@@ -1,6 +1,7 @@
 
 local wibox = require("wibox")
 local log_error = require("src.awesome.core.error.log_error")
+local Service   = require("src.util.Service.Service")
 
 local error_page = {}
 
@@ -36,11 +37,19 @@ function error_page.display_for_screen(s, err)
     }
 end
 
+-- TODO FIXME better error entrypoint than this!
 ---@param err string
 function error_page.display (err)
     log.fatal(err)
     
     log_error(err)
+
+    pcall(function ()
+        Service.stop_all({ "cli" })
+            :after(function ()
+                log.info("Successfully stopped all services")
+            end)
+    end)
 
     for s in screen do
         error_page.display_for_screen(s, err)

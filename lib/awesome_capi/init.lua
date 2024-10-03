@@ -1,35 +1,43 @@
 ---@meta
 
---- ---@diagnostic disable:lowercase-global
+-- ---@diagnostic disable:lowercase-global
 
----@alias Surface table
----@alias GearsShape function
----@alias Struts { right: integer, left: integer, top: integer, bottom: integer }
----@alias Key table
----@alias Wibox table
----@alias Widget table
----@alias Layout table|function
+---@alias Awesome.Gears.Surface table
+---@alias Awesome.Gears.Shape function
+---@alias Awesome.Struts { right: integer, left: integer, top: integer, bottom: integer }
+---@alias Awesome.Key table
+---@alias Awesome.Wibox table
+---@alias Awesome.Wibox.Widget table
+---@alias Awesome.Layout table|function
 
 ---@type Awesome
-awesome = awesome or {}
+awesome = awesome
 
----@type ClientModule
+---@type Awesome.ClientModule
 client = client or {}
 
----@type ScreenModule
+---@type Awesome.ScreenModule
 screen = screen or {}
 
----@type Root
+---@type Awesome.Root
 root = root or {}
 
----@type TagModule
+---@type Awesome.TagModule
 tag = tag or {}
 
----@type Mouse
+---@type Awesome.Mouse
 mouse        = mouse or {}
 
----@type Mousegrabber
+---@type Awesome.Mousegrabber
 mousegrabber = mousegrabber or {}
 
----@type ButtonModule
+---@type Awesome.ButtonModule
 button       = button or {}
+
+local UnixSignal = require("lib.awesome_capi.awesome.module.Awesome").UnixSignal
+local Mouse = require("lib.awesome_capi.awesome.module.Mouse")
+
+return {
+    UnixSignal = UnixSignal,
+    Mouse = Mouse
+}

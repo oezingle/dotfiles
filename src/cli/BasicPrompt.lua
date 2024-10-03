@@ -116,6 +116,7 @@ function BasicPrompt:on_log(gvariant)
 end
 
 function BasicPrompt:attempt_connect()
+    load_scripts.reset()
     load_scripts.poll()
 
     io.write("Connecting to DBus... ")

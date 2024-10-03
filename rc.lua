@@ -1,17 +1,21 @@
 require("src.amenities.init")
 
-local main = require("src.awesome.core")
-
 local error_page = require("src.awesome.core.error.page")
 
-local NO_RESTART = true
+local safe_mode = true
 
-if NO_RESTART then
-    xpcall(main, function (err)
+if safe_mode then
+    xpcall(function ()
+        local main = require("src.awesome.core")
+
+        main()
+    end, function (err)
         local message = debug.traceback(err)
 
         error_page.display(message)
     end)
 else
+    local main = require("src.awesome.core")
+
     main()
 end

@@ -1,7 +1,5 @@
 local class = require("lib.30log")
 
-local GLib = lgi.GLib
-
 ---@alias PromiseCallback fun(resolve: function, reject: function?) | nil
 
 ---@alias PromiseChainFunction<T> (fun(arg: T): any)|nil
@@ -205,54 +203,59 @@ function Promise:_trigger()
     self.triggered = true
 end
 
--- TODO only works if this loop's idle priority is equal to the other's
--- TODO hangs if higher, instantly returns if lower
--- TODO make :catch resolve error object
----@generic T
----@param promise Promise<T>
----@return T
-function Promise.await(promise)
-    local mainloop = GLib.MainLoop(nil, false)
+if lgi then
+    local GLib = lgi.GLib
 
-    local context = mainloop:get_context()
+    -- TODO only works if this loop's idle priority is equal to the other's
+    -- TODO hangs if higher, instantly returns if lower
+    -- TODO make :catch resolve error object
+    ---@generic T
+    ---@param promise Promise<T>
+    ---@return T
+    function Promise.await(promise)
+        local mainloop = GLib.MainLoop(nil, false)
 
-    local ok, err = true, nil
+        local context = mainloop:get_context()
 
-    promise:catch(function(msg)
-        ok, err = false, msg
-    end)
+        local ok, err = true, nil
 
-    -- Push context to default so g_idle_add works on this loop,
-    -- not on an AwesomeWM loop
-    -- https://stackoverflow.com/questions/19903537/how-to-attach-gsocketservice-to-non-default-main-loop-context
-    context:push_thread_default()
+        promise:catch(function(msg)
+            ok, err = false, msg
+        end)
 
-    GLib.idle_add(GLib.PRIORITY_DEFAULT, function()
-        if promise.fulfilled then
-            mainloop:quit()
+        -- Push context to default so g_idle_add works on this loop,
+        -- not on an AwesomeWM loop
+        -- https://stackoverflow.com/questions/19903537/how-to-attach-gsocketservice-to-non-default-main-loop-context
+        context:push_thread_default()
 
-            return false
-        end
+        GLib.idle_add(GLib.PRIORITY_DEFAULT, function()
+            if promise.fulfilled then
+                mainloop:quit()
+
+                return false
+            end
+
+            if not ok then
+                mainloop:quit()
+
+                return false
+            end
+
+            return true
+        end)
+
+        context:pop_thread_default()
+
+        mainloop:run()
 
         if not ok then
-            mainloop:quit()
-
-            return false
+            error(err)
         end
 
-        return true
-    end)
-
-    context:pop_thread_default()
-
-    mainloop:run()
-
-    if not ok then
-        error(err)
+        return table.unpack(promise._private.value)
     end
-
-    return table.unpack(promise._private.value)
 end
+
 
 --- Return a Promise that resolves with the value given by ...
 ---@generic T

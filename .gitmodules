@@ -13,3 +13,6 @@
 [submodule "lib/json"]
 	path = lib/json
 	url = https://github.com/rxi/json.lua
+[submodule "lib/argparse"]
+	path = lib/argparse
+	url = https://github.com/mpeterv/argparse

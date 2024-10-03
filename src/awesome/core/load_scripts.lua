@@ -1,16 +1,11 @@
-local join             = require("src.polyfill.path.join")
-local dir              = require("src.util.dir")
-local fs               = require("src.util.fs")
-local Action           = require("src.util.Action")
-local Service          = require("src.util.Service")
+local DirectoryPoller = require("src.awesome.core.DirectoryPoller")
+local Action          = require("src.util.Action")
+local Service         = require("src.util.Service")
+local TimerService    = require("src.util.Service.TimerService")
+local dir             = require("src.util.dir")
+local Virtualize      = require("src.util.Virtualize")
 
-local load_scripts     = {
-    ---@type table<string, any>
-    modules = {},
-}
-
-local validator        = {}
-load_scripts.validator = validator
+local validator       = {}
 
 function validator.is_action(object)
     return
@@ -26,122 +21,97 @@ function validator.is_service(object)
         object:instanceOf(Service)
 end
 
---[[
---- TODO FIXME custom require - setfenv for any calls to require() in loaded files
----@param modname string
-function load_scripts.require(modname)
+local load_scripts = {
+    ---@type Zingle.Awesome.DirectoryPoller[]
+    pollers = {},
+    validator = validator
+}
 
+function load_scripts.virtual_loader(path)
+    return Virtualize()
+        :set_name(string.format("load_scripts.loader %s", path))
+        :set_env(load_scripts.env)
+        :allow_module_begins_with("lib.30log")
+        :allow_module_begins_with("lib.log")
+        :allow_module_begins_with("src.polyfill")
+        :allow_module_begins_with("src.amenities")
+        :allow_module_begins_with("src.util.typed")
+        :set_input(path)
+        :get_module()
 end
 
+load_scripts.settings = {
+    [dir.src.awesome.actions()] = {
+        validator = validator.is_action
+    },
+    [dir.src.awesome.services()] = {
+        validator = validator.is_service
+    },
+    [dir.config.actions()] = {
+        validator = validator.is_action,
+        loader = load_scripts.virtual_loader,
+        expected = false
+    },
+    [dir.config.services()] = {
+        validator = validator.is_service,
+        loader = load_scripts.virtual_loader,
+        expected = false
+    },
+    [dir.config.scripts()] = {
+        loader = load_scripts.virtual_loader,
+        expected = false,
+    }
+}
 
-function load_scripts.make_loaded()
+load_scripts.env = (function()
+    local mock_Service = {
+        create = Service,
+        register = Service.register,
+        statuses = Service.statuses
+    }
 
-end
-]]
+    local mock_TimerService = {
+        create = TimerService,
+        register = TimerService.register,
+        statuses = TimerService.statuses
+    }
 
----@alias Zingle.Awesome.LoadScripts.FileInfo { validator: (fun(module: any): boolean)? }
-
----@return table<string, Zingle.Awesome.LoadScripts.FileInfo>
-function load_scripts.find_files()
-    local files_existing = {}
-
-    -- TODO FIXME make these paths betterer
-    for dir_name, settings in pairs({
-        [dir.src.awesome.actions()] = {
-            validator = validator.is_action
-        },
-        [dir.src.awesome.services()] = {
-            validator = validator.is_service
-        },
-        [dir.config.actions()] = {
-            validator = validator.is_action,
-            expected = false
-        },
-        [dir.config.services()] = {
-            validator = validator.is_service,
-            expected = false
-        },
-        [dir.config.scripts()] = {
-            expected = false
-        }
-    }) do
-        if not fs.exists(dir_name) then
-            if settings.expected then
-                log.warn(string.format("Expected directory %q, found nothing", dir_name))
-            end
-        elseif not fs.is_dir(dir_name) then
-            if settings.expected then
-                log.error(string.format("Expected directory %q, found file", dir_name))
-            end
-        else
-            for _, file in ipairs(fs.ls(dir_name)) do
-                local path = join(dir_name, file)
-
-                if fs.is_dir(path) then
-                    path = join(path, "init.lua")
-                end
-
-                files_existing[path] = {
-                    validator = settings.validator
-                }
-            end
-        end
-    end
-
-    return files_existing
-end
-
----@param existing table<string, Zingle.Awesome.LoadScripts.FileInfo>
-function load_scripts.prune(existing)
-    local has_dead = false
-
-    for path in pairs(load_scripts.modules) do
-        if not existing[path] then
-            log.info(string.format("Script %q found to be removed", path))
-
-            load_scripts.modules[path] = nil
-
-            has_dead = true
-        end
-    end
-
-    if has_dead then
-        collectgarbage("collect")
-    end
-end
+    return Virtualize()
+        :set_name("load_scripts.env preload")
+        :allow_module_begins_with("lib.30log")
+        :allow_module_begins_with("lib.log")
+        :allow_module_begins_with("src.polyfill")
+        :allow_module_begins_with("src.amenities")
+        :allow_module_begins_with("src.util.typed")
+        :unlock_env()
+        :preload_module("src.amenities.entry.virtual")
+        :lock_env()
+        :preload_module("src.util.Set")
+        :preload_module("src.util.Action")
+        :preload_module_unsafe("src.util.Service.Service", mock_Service)
+        :preload_module_unsafe("src.util.Service.TimerService", mock_TimerService)
+        :get_env()
+end)()
 
 function load_scripts.reset()
-    load_scripts.modules = {}
+    load_scripts.pollers = {}
+
+    for dir, settings in pairs(load_scripts.settings) do
+        local poller = DirectoryPoller.create({
+            dir = dir,
+            expected = settings.expected,
+            validator = settings.validator,
+            loader = settings.loader
+        })
+
+        table.insert(load_scripts.pollers, poller)
+    end
 end
 
 function load_scripts.poll()
-    local files = load_scripts.find_files()
-
-    for file, info in pairs(files) do
-        if not load_scripts.modules[file] then
-            local chunk, err = loadfile(file)
-
-            if chunk then
-                log.debug("Loading", file)
-
-                local module = chunk()
-
-                local validated = not info.validator or info.validator(module)
-
-                if validated then
-                    load_scripts.modules[file] = module
-
-                    log.info("Loaded", file)
-                else
-                    log.error(string.format("Ignoring %s, as it failed validation", file))
-                end
-            else
-                log.error(string.format("Unable to load file %q: %s", file, err))
-            end
-        end
+    for _, poller in ipairs(load_scripts.pollers) do
+        poller:poll()
     end
-
-    load_scripts.prune(files)
 end
 
 return load_scripts

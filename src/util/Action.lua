@@ -3,7 +3,7 @@ local typed = require("src.util.typed.typed")
 
 ---@class Zingle.Awesome.Action : Log.BaseFunctions
 ---@field log Logger
----@field call fun(self: self, ...: any) Handle this action generically
+---@field call fun(self: self, ...: any): (any, boolean) Handle this action generically
 ---@field on_call fun(self: self, ...: any)
 ---@field command string?
 ---@field args Zingle.Typed.Type[]?
@@ -44,18 +44,23 @@ end
 
 ---@param name string
 ---@param ... any
-function Action.call_by_name (name, ...)
+function Action.call_by_name(name, ...)
     local action = Action.names[name]
 
     if not action then
         log.warn(string.format("Unknown action requested by name %q", name))
 
-        return
+        return nil, false
     end
 
-    action:call(...)
+    return action:call(...)
 end
 
+-- TODO defang argparse to allow use in actions - some actions are CLIs and the
+-- overhead of parsing arguments like bash is highly worth it for development
+-- speed and usability
+
+---@return any ret, boolean ok
 function Action:call(...)
     --- Allow :call with tables (instances) or strings (action name)
     if type(self) == "string" then
@@ -67,11 +72,22 @@ function Action:call(...)
 
     if self.args and not typed.check(self.args, args) then
         -- TODO FIXME nice error
-        return
+        return nil, false
     end
 
-    -- TODO FIXME pcall here
-    self.on_call(self, ...)
+    -- TODO i believe i can change action:on_call to action:call using the same
+    -- methods as used in service:start() vs Service.start
+    local ok, ret = pcall(self.on_call, self, ...)
+
+    if not ok then
+        local err = ret
+
+        self.log.error(err)
+
+        return nil, false
+    end
+
+    return ret, true
 end
 
 ---@class Zingle.Awesome.Action.Options

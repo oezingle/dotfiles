@@ -4,7 +4,9 @@ local log = require("lib.log.log")
 if false then
     ---@alias Logger.LogFunction fun(...: any)
     
-    ---@class Log
+    ---@alias Logger.Level "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+
+    ---@class Logger
     ---@field trace Logger.LogFunction
     ---@field debug Logger.LogFunction
     ---@field info Logger.LogFunction
@@ -14,7 +16,7 @@ if false then
     ---
     ---@field usecolor boolean
     ---@field logfile string?
-    ---@field level "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+    ---@field level Logger.Level
     log = {}
 end
 

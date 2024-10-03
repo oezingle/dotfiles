@@ -24,11 +24,8 @@ local function join(...)
             item = item:sub(1, -2)
         end
 
-        -- TODO FIXME strip whitespace
-
-        if item:match("%S") then
+        -- Not stripping whitespace here is important - "/" -> "" -> {"", ...paths} -> "/...paths"
             table.insert(ret, item)
-        end
     end
 
     local joined = table.concat(ret, sep)

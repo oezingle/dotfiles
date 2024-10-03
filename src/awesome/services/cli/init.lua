@@ -10,8 +10,6 @@ local Promise          = require("src.polyfill.Promise")
 local map              = require("src.polyfill.list.map")
 local timer_add        = require("src.util.timer.timer_add")
 
--- TODO FIXME leaks ~1KiB per call
-
 ---@alias Zingle.Awesome.Service.CLIServer.DBusMethod fun(self: self, client_name: string, args: LGI.GLib.GVariant): LGI.GLib.GVariant?
 
 --[[
@@ -28,7 +26,7 @@ local timer_add        = require("src.util.timer.timer_add")
 ]]
 
 ---@class Zingle.Awesome.Service.CLIServer : Zingle.Awesome.Service
----@field clients table<string, { lines: number, cols: number, color: boolean, logger: Log, last_ping: number }>
+---@field clients table<string, { lines: number, cols: number, color: boolean, logger: Logger, last_ping: number }>
 local cli_server = Service.create({
     name = "cli"
 })
@@ -108,7 +106,7 @@ function cli_server:client_log(client_name, level, ...)
 end
 
 ---@param client string
----@return Log
+---@return Logger
 function cli_server:get_connection_logger(client)
     local logger = setmetatable({}, {
         __index = function(_, name)
@@ -156,8 +154,6 @@ function cli_server:on_invocation(_, client, _, _, method_name, args, invocation
     end
 
     local method = self["dbus_method_" .. method_name]
-
-    collectgarbage("step")
 
     if method then
         Promise.resolve(method(self, client, args))
