@@ -16,3 +16,7 @@
 [submodule "lib/argparse"]
 	path = lib/argparse
 	url = https://github.com/mpeterv/argparse
+[submodule "lib/LuaX"]
+	path = lib/LuaX
+	url = https://github.com/oezingle/LuaX
+	branch = build-dev

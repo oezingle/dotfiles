@@ -1,0 +1,11 @@
+
+- load lua/LuaX themes safely using Virtualize 
+  - themes provide a LuaX component for the entire desktop
+    - or not, pretty much every component of a theme is optional.
+  - default themes also provide example code / features
+    - fun stuff like the brat wibox (this will get dated quickly.)
+  - standard applets, styled components, block components
+    - a block component is a collection of styled components with logic
+      - eg, music display component (do horizontal and vertical lowkey)
+      - eg, macos-like menu component
+        - this may also register a service
