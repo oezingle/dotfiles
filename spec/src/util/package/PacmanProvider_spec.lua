@@ -1,0 +1,28 @@
+require("src.amenities.init")
+
+---@type Zingle.Awesome.PackageProvider
+local PacmanProvider = require("src.util.package.PacmanProvider")
+local Promise        = require("src.polyfill.Promise")
+
+describe("PacmanProvider", function ()
+    it("can be used on this system", function ()
+        Promise.resolve(PacmanProvider.can_use())
+            :after(function (can_use)
+                assert.True(can_use)
+            end)
+            :catch(function (arg)
+                error(arg)
+            end)
+    end)
+
+    it("gathers information on installed packages", function ()
+        Promise.resolve(PacmanProvider:has("pacman", "any"))
+            :after(function (info)
+                assert.True(info.has)
+                assert.False(info.is_luarock)
+            end)
+            :catch(function (arg)
+                error(arg)
+            end)
+    end)
+end)
