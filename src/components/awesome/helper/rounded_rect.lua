@@ -8,9 +8,7 @@ local rounded_rect = {
 ---@param radius number | nil
 ---@return Awesome.Gears.Shape | nil
 function rounded_rect.get(radius)
-    if radius == nil then
-        return nil
-    end
+    radius = radius or 0
 
     if not rounded_rect.cache[radius] then
         local shape = function(cr, width, height)

@@ -5,7 +5,10 @@ local function default_props(props)
         forced_height = props["forced-height"],
 
         opacity = props.opacity,
-        visible = props.visible
+        visible = props.visible,
+
+        -- added for wibox.mod.flexbox
+        flex_grow = props["flex-grow"]
     }
 end
 

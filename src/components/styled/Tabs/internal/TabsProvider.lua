@@ -16,7 +16,7 @@ local TabsProvider = LuaX(function (props)
         return Portal.create("tab-content")
     end, {})
 
-    local selected, set_selected = use_state(props.intitial)
+    local selected, set_selected = use_state(props.initial)
 
     return [[
         <TabsContext.Provider value={{ 
