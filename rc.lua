@@ -1,3 +1,7 @@
+require("src.util.spawn.git").init_submodules()
+
+os.exit(1)
+
 require("src.amenities.init")
 
 local error_page = require("src.awesome.core.error.page")
