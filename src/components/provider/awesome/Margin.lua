@@ -1,10 +1,10 @@
 
 local LuaX = require("lib.LuaX")
-local default_props = require("src.components.awesome.helper.default_props")
+local default_props = require("src.components.provider.awesome.helper.default_props")
 local create_element = LuaX.create_element
 
 local merge_props = require("src.components.helper.merge_props")
-local mouse_props = require("src.components.awesome.helper.mouse_props")
+local mouse_props = require("src.components.provider.awesome.helper.mouse_props")
 
 ---@param props Zingle.Awesome.Components.MarginProps
 local Margin = function (props)

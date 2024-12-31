@@ -1,9 +1,9 @@
 
 local LuaX = require("lib.LuaX")
 
-local Background = require("src.components.Background")
-local Text = require("src.components.Text")
-local Margin = require("src.components.Margin")
+local Background = require("src.components.base.Background")
+local Text = require("src.components.base.Text")
+local Margin = require("src.components.base.Margin")
 local use_state = require("lib.LuaX.hooks.use_state")
 
 --[[

@@ -20,3 +20,6 @@
 	path = lib/LuaX
 	url = https://github.com/oezingle/LuaX
 	branch = build-dev
+[submodule "lib/iconoir"]
+	path = lib/iconoir
+	url = https://github.com/iconoir-icons/iconoir

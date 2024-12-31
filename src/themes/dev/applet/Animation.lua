@@ -4,9 +4,9 @@ local use_context = require("lib.LuaX.hooks.use_context")
 
 local ScreenContext = require("src.awesome.ui.ScreenContext")
 
-local Wibox = require("src.components.awesome.Wibox")
-local Text = require("src.components.Text")
-local Background = require("src.components.Background")
+local Wibox = require("src.components").Wibox
+local Text = require("src.components.base.Text")
+local Background = require("src.components.base.Background")
 
 local use_animated = require("src.hooks.use_animated")
 

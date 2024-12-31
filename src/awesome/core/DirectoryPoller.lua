@@ -89,7 +89,7 @@ function DirectoryPoller:try_load (path)
 
     self.modules[path] = module
 
-    log.info(string.format("Loaded %q", path))
+    log.debug(string.format("Loaded %q", path))
 end
 
 ---@param path string

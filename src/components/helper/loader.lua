@@ -1,113 +1,136 @@
-local fs            = require("src.util.fs")
 local not_available = require("src.components.helper.not_available")
 
+---@class Zingle.Awesome.Components.Loader.Provider
+---@field is_supported boolean|(fun(): boolean)
+---@field loaded boolean
+---@field components table<string, function>
+---@field name string
 
-local loader = {}
+---@class Zingle.Awesome.Components.Loader
+---@field providers Zingle.Awesome.Components.Loader.Provider[]
+local loader = {
+    providers = {},
+    provider_names = {},
 
-
-loader.providers = {
-    "awesome",
+    expected = {
+        ["Background"] = true,
+        ["Center"] = true,
+        ["Flex"] = true,
+        ["Icon"] = true,
+        ["Margin"] = true,
+        ["Text"] = true
+    }
 }
 
----@return Zingle.Awesome.Components.Provider
-function loader.determine_provider()
-    if awesome then
-        return "awesome"
-    end
+---@param name string
+---@param info { is_supported: boolean|(fun(): boolean) }
+function loader.create_provider(name, info)
+    local provider = {}
 
-    error("Unable to determine current component provider")
+    provider.is_supported = info.is_supported
+
+    provider.components = {}
+    provider.name = name
+
+    provider.loaded = false
+
+    table.insert(loader.providers, provider)
+
+    loader.provider_names[name] = #loader.providers
 end
 
----@param provider Zingle.Awesome.Components.Provider
+loader.create_provider("awesome", {
+    is_supported = not not awesome
+})
+
+
+
+
+---@param provider Zingle.Awesome.Components.Loader.Provider
 ---@param component string
-function loader.build_path(provider, component)
-    return string.format("src.components.%s.%s", provider, component)
+function loader.get_require_path(provider, component)
+    return string.format("src.components.provider.%s.%s", provider.name, component)
 end
 
----@return boolean ok, string? err
-function loader.search_and_assert(provider, component)
-    local luapath = loader.build_path(provider, component)
+---@param provider Zingle.Awesome.Components.Loader.Provider
+---@param component_name string
+function loader.safe_load(provider, component_name)
+    if provider.components[component_name] then
+        return provider.components[component_name]
+    else
+        local require_path = loader.get_require_path(provider, component_name)
 
-    local filepath, err = package.searchpath(luapath, package.path)
+        local ok, module = pcall(require, require_path)
 
-    if not filepath then
-        return false, "Unable to resolve a real path for the expected component"
-    end
-
-    local exists = fs.exists(filepath)
-
-    if not exists then
-        return false, "An error occured while retrieving the component file"
-    end
-
-    return true
-end
-
----@param provider Zingle.Awesome.Components.Provider
----@param component string
----@param explicits table<Zingle.Awesome.Components.Provider, string?>
----@return boolean ok, string? err
-function loader.is_provided(provider, component, explicits)
-    if explicits[provider] then
-        return true
-    end
-
-    return loader.search_and_assert(provider, component)
-end
-
----@param component string
----@param explicits table<Zingle.Awesome.Components.Provider, string?>
-function loader.ensure_all_provide(component, explicits)
-    for _, provider in pairs(loader.providers) do
-        local is_provided, err = loader.is_provided(provider, component, explicits)
-
-        if not is_provided then
+        if ok then
+            provider.components[component_name] = module
+        else
             log.error(string.format(
                 "Provider %s does not provide component %s: %s",
-                provider, component, err or "unknown error"
+                provider.name, component_name, module or "unknown error"
             ))
+
+            provider.components[component_name] = not_available(component_name)
+        end
+
+        return provider.components[component_name]
+    end
+end
+
+---@param provider Zingle.Awesome.Components.Loader.Provider | string
+function loader.ensure_provider_loaded(provider)
+    if type(provider) == "string" then
+        local index = loader.provider_names[provider]
+
+        assert(index, string.format("No provider exists by the name %q", provider))
+
+        provider = loader.providers[index]
+    end
+
+    if not provider.loaded then
+        for component_name in pairs(loader.expected) do
+            provider.components[component_name] = loader.safe_load(provider, component_name)
+        end
+
+        provider.loaded = true
+    end
+end
+
+function loader.get_provider()
+    -- pass for loaded
+    for _, provider in pairs(loader.providers) do
+        if provider.loaded then
+            return provider
+        end
+    end
+
+    -- pass for supported
+    for _, provider in pairs(loader.providers) do
+        local is_supported = provider.is_supported
+
+        if type(is_supported) == "function" then
+            is_supported = is_supported()
+        end
+
+        if is_supported then
+            loader.ensure_provider_loaded(provider)
+
+            return provider
         end
     end
 end
 
 ---@param component string
----@param explicits table<Zingle.Awesome.Components.Provider, string?>?
-function loader.autoload(component, explicits)
-    local explicits = explicits or {}
+function loader.get(component)
+    local provider = loader.get_provider()
 
-    loader.ensure_all_provide(component, explicits)
-
-    local provider = loader.determine_provider()
-
-    local is_provided, err = loader.is_provided(provider, component, explicits)
-
-    if not is_provided then
-        log.error(string.format(
-            "Provider %s does not provide component %s: %s",
-            provider, component, err or "unknown error"
-        ))
-
-        return not_available(component)
-    end
-
-    local luapath = loader.build_path(provider, component)
-
-    local ok, module = pcall(require, luapath)
-
-    if ok then
-        return module
-    end
-
-    local err = module
-
-    log.error(string.format(
-        "An error occured when loading component %s from provider %s: %s",
-        component, provider, err or "Unknown"
-    ))
-
-    return not_available(component)
+    return loader.safe_load(provider, component)
 end
 
-log.info(string.format("Using LuaX component provider %s", loader.determine_provider()))
-
-return loader
+local loader_mt_event = function (t, ...)
+    return t.get(...)
+end
+return setmetatable(loader, {
+    __index = loader_mt_event,
+    __call = loader_mt_event
+})

@@ -103,7 +103,8 @@ rofi-esque
   https://github.com/nickclyde/rofi-bluetooth/blob/master/rofi-bluetooth
 
 ## Components
-- ~~Text~~
+- ~~Text~~ 
+  - style options
 - ~~Margin~~
 - Flex (layout like flex box but simpler)
 - ~~Background (color, radius)~~

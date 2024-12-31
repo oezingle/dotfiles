@@ -2,9 +2,9 @@ local LuaX = require("lib.LuaX")
 local use_context = require("lib.LuaX.hooks.use_context")
 
 local ScreenContext = require("src.awesome.ui.ScreenContext")
-local Wibox = require("src.components.awesome.Wibox")
-local Center = require("src.components.Center")
-local Text = require("src.components.Text")
+local Wibox = require("src.components").Wibox
+local Center = require("src.components.base.Center")
+local Text = require("src.components.base.Text")
 
 local Brat = LuaX(function()
     local screen = use_context(ScreenContext)

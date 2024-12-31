@@ -5,8 +5,8 @@ local config = {
     meta = {
         providers = {
             LuaHot = {
-                poll_rate = 2,
-                -- enabled = true
+                poll_rate = 60,
+                enabled = false
             }
         }
     },

@@ -2,10 +2,10 @@ local LuaX = require("lib.LuaX")
 local create_element = LuaX.create_element
 
 local merge_props = require("src.components.helper.merge_props")
-local mouse_props = require("src.components.awesome.helper.mouse_props")
-local default_props = require("src.components.awesome.helper.default_props")
+local mouse_props = require("src.components.provider.awesome.helper.mouse_props")
+local default_props = require("src.components.provider.awesome.helper.default_props")
 
-local rounded_rect = require("src.components.awesome.helper.rounded_rect")
+local rounded_rect = require("src.components.provider.awesome.helper.rounded_rect")
 
 ---@param props Zingle.Awesome.Components.BackgroundProps
 local Background = function(props)

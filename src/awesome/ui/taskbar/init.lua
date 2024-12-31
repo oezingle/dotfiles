@@ -21,7 +21,7 @@ local function taskbar_for_screen (s)
     end
 
     s.taskbar.widget = wibox.widget {
-        layout = wibox.container.margin
+        layout = wibox.layout.stack
     }
 
     local element = create_element(Taskbar, {})

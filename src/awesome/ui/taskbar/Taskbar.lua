@@ -1,9 +1,9 @@
 
 local LuaX = require("lib.LuaX")
-local Text = require("src.components.Text")
-local Margin = require("src.components.Margin")
-local Background = require("src.components.Background")
-local Systray = require("src.components.awesome.Systray")
+local Text = require("src.components.base.Text")
+local Margin = require("src.components.base.Margin")
+local Background = require("src.components.base.Background")
+local Systray = require("src.components").Systray
 
 -- TODO pull from theme
 

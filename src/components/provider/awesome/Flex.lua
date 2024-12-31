@@ -1,7 +1,7 @@
 local list_reverse = require("src.polyfill.list.reverse")
 local merge_props = require("src.components.helper.merge_props")
-local mouse_props = require("src.components.awesome.helper.mouse_props")
-local default_props = require("src.components.awesome.helper.default_props")
+local mouse_props = require("src.components.provider.awesome.helper.mouse_props")
+local default_props = require("src.components.provider.awesome.helper.default_props")
 local Children = require("lib.LuaX.Children")
 local reduce = require("src.polyfill.list.reduce")
 

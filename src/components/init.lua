@@ -17,9 +17,4 @@ require("src.components.helper.mouse.MouseClickEvent")
 ---@alias Zingle.Awesome.Components.Mouseable<T> T | 
 ---| { ["onclick"|"onrelease"]?: Zingle.Awesome.Components.ClickHandler, onscroll?: Zingle.Awesome.Components.ScrollHandler, ["onhover"|"onleave"]?: Zingle.Awesome.Components.HoverHandler }
 
-return {
-    Margin = require("src.components.Margin"),
-    Text = require("src.components.Text"),
-    Systray = require("src.components.Systray"),
-    Background = require("src.components.Background"),
-}
+return require("src.components.helper.loader")

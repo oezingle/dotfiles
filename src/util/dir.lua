@@ -50,7 +50,7 @@ local dir = {
             core = callable_table("core", {
                 cli = callable_table("cli")
             })
-        })
+        }),
     }),
     src = callable_table("src", {
         awesome = callable_table("awesome", {
@@ -66,6 +66,10 @@ local dir = {
     generated = callable_table("generated", {
         persistent_storage = callable_table("persistent-storage"),
         log = callable_table("log"),
+        icon = callable_table("icon")
+    }),
+    lib = callable_table("lib", {
+        iconoir = callable_table("iconoir/icons")
     })
 }
 

@@ -1,7 +1,7 @@
 local create_element = require("lib.LuaX").create_element
 local merge_props = require("src.components.helper.merge_props")
-local mouse_props = require("src.components.awesome.helper.mouse_props")
-local default_props = require("src.components.awesome.helper.default_props")
+local mouse_props = require("src.components.provider.awesome.helper.mouse_props")
+local default_props = require("src.components.provider.awesome.helper.default_props")
 
 ---@param props Zingle.Awesome.Components.CenterProps
 local function Center(props)    

@@ -4,7 +4,7 @@ local use_portal = LuaX.use_portal
 local use_context = LuaX.use_context
 local TabsContext = require("src.components.styled.Tabs.internal.TabsContext")
 
-local Background = require("src.components.Background")
+local Background = require("src.components.base.Background")
 
 local TabContent = LuaX(function (props)
     local Portal = use_portal("tab-content")

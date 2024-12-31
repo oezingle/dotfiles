@@ -6,7 +6,7 @@ local TabsProvider = require("src.components.styled.Tabs.internal.TabsProvider")
 local TabRibbon = require("src.components.styled.Tabs.internal.TabRibbon")
 local CurrentTabContent = require("src.components.styled.Tabs.internal.CurrentTabContent")
 
-local Flex = require("src.components.Flex")
+local Flex = require("src.components.base.Flex")
 
 local Tabs = LuaX(function (props)
     return [[
