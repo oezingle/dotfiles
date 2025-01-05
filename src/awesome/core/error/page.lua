@@ -1,7 +1,7 @@
+local wibox      = require("wibox")
+local log_error  = require("src.awesome.core.error.log_error")
 
-local wibox = require("wibox")
-local log_error = require("src.awesome.core.error.log_error")
-local Service   = require("src.util.Service.Service")
+local has_service, Service    = pcall(require, "src.util.Service.Service")
 
 local error_page = {}
 
@@ -39,16 +39,18 @@ end
 
 -- TODO FIXME better error entrypoint than this!
 ---@param err string
-function error_page.display (err)
+function error_page.display(err)
     log.fatal(err)
-    
+
     log_error(err)
 
-    pcall(function ()
-        Service.stop_all({ "cli" })
-            :after(function ()
-                log.info("Successfully stopped all services")
-            end)
+    pcall(function()
+        if has_service then
+            Service.stop_all({ "cli" })
+                :after(function()
+                    log.info("Successfully stopped all services")
+                end)
+        end
     end)
 
     for s in screen do

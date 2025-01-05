@@ -1,4 +1,4 @@
-local PackageProvider = require("src.util.package.PackageProvider")
+local PackageProvider = require("src.util.package_manager.PackageProvider")
 
 local spawn = require("src.util.spawn")
 local which = require("src.util.spawn.which")
