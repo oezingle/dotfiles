@@ -1,13 +1,14 @@
--- TODO FIXME TODO get back to this file!
+local PackageProvider = require("src.util.package_manager.PackageProvider")
+local spawn           = require("src.util.spawn")
+local which           = require("src.util.spawn.which")
+local Promise         = require("src.polyfill.Promise")
+local escape          = require("src.polyfill.string.escape")
+local fs              = require("src.util.fs")
+local dir             = require("src.util.dir")
+local lua_version     = require("src.polyfill.lua_version")
 
-local PackageProvider  = require("src.util.package_manager.PackageProvider")
-local spawn            = require("src.util.spawn")
-local which            = require("src.util.spawn.which")
-local Promise          = require("src.polyfill.Promise")
-local escape           = require("src.polyfill.string.escape")
-local fs               = require("src.util.fs")
-local dir              = require("src.util.dir")
-local lua_version          = require("src.polyfill.lua_version")
+
+-- TODO actually a good candidate for promise_iter
 
 ---@class Zingle.Awesome.PackageProvider.LuaRocks : Zingle.Awesome.PackageProvider
 ---
@@ -17,6 +18,7 @@ local LuaRocksProvider = PackageProvider:extend("Zingle.Awesome.PackageProvider.
         has = {}
     }
 })
+
 
 LuaRocksProvider.version_arg = "--lua-version=" .. lua_version.version
 
@@ -39,34 +41,33 @@ function LuaRocksProvider:has(name, version)
     ---@type Promise<Zingle.Awesome.PackageInfo>?
     local p = self.cache.has[name] and Promise.resolve(self.cache.has[name])
 
+    -- no cached information for this package
     if not p then
         p = Promise.resolve()
 
         for _, info in ipairs({
             {
-                message = "Checking for LuaRock %q as root",
                 command = "luarocks show %s %q %s",
+                mode    = "root",
             },
             {
-                message = "Checking for LuaRock %q locally",
-                command = "luarocks show %s --tree generated/luarocks %q %s"
+                command = "luarocks show %s --tree generated/luarocks %q %s",
+                mode    = "local",
             }
         }) do
-            p = p:after(function (has)
+            p = p:after(function(has)
                 if not has then
                     local exec = string.format(info.command, self.version_arg, name, version or "") .. " 2>&1"
 
-                    log.debug(string.format(info.message, name))
-                    log.debug(string.format("Executing: %s", exec))
+                    log.debug(string.format("Checking for LuaRock %q in %s", name, info.mode))
+                    log.trace(string.format("Executing: %s", exec))
 
-                    return spawn(exec):after(function (ret)
+                    return spawn(exec):after(function(ret)
                         local stdout = ret.stdout
 
                         if stdout:match("Error: cannot find package") then
                             return false
                         end
-
-                        log.trace("found package", info.message)
 
                         return stdout
                     end)
@@ -77,7 +78,7 @@ function LuaRocksProvider:has(name, version)
         end
 
         -- parse whatever package info we find
-        p = p 
+        p = p
             :after(function(out)
                 if not out then
                     return { has = false, is_luarock = true }
@@ -150,9 +151,7 @@ function LuaRocksProvider:install(package, force)
     ---@type Promise<boolean>
     local p = force and
         Promise.resolve(false) or
-        self:has(name, version):after(function(info)
-            return info.has
-        end)
+        self:has(name, version):after(function(info) return info.has end)
 
     -- Check has cache first
     return p
@@ -162,33 +161,35 @@ function LuaRocksProvider:install(package, force)
                 return true, false
             end
 
-            -- always ensure this dev exists
+            -- always ensure this dir exists
             fs.mkdir_p(dir.generated.luarocks())
 
-            local p = Promise.resolve()
+            local p_exec = Promise.resolve()
 
             for _, info in ipairs({
                 {
-                    message = "Attempting to install LuaRock %q as root",
                     command = "luarocks install %s %q %s",
+                    mode = "root",
                 },
                 {
-                    message = "Attempting to install LuaRock %q locally",
-                    command = "luarocks install %s --tree generated/luarocks %q %s"
+                    command = "luarocks install %s --tree generated/luarocks %q %s",
+                    mode = "local",
                 }
             }) do
                 ---@diagnostic disable-next-line:redundant-parameter
-                p = p:after(function (has, installed)
+                p_exec = p_exec:after(function(has, installed)
                     if not (has or installed) then
                         local exec = string.format(info.command, self.version_arg, name, version or "") .. " 2>&1"
 
-                        log.info(string.format(info.message, name))
+                        log.info(string.format("Attempting to install LuaRock %q to %s", name, info.mode))
                         log.debug(string.format("Executing: %s", exec))
-                                
-                        return spawn(exec):after(function (ret)
+
+                        return spawn(exec):after(function(ret)
+                            log.trace(info.mode, "Exec return")
+
                             local stdout = ret.stdout
 
-                            local has_error = stdout:match("Error:")
+                            local has_error = stdout:match("Error:.*")
 
                             if not has_error then
                                 ---@diagnostic disable-next-line:redundant-return-value
@@ -205,7 +206,7 @@ function LuaRocksProvider:install(package, force)
                 end)
             end
 
-            return p
+            return p_exec
         end)
 end
 

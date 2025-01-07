@@ -1,4 +1,3 @@
-local Promise = require("src.polyfill.Promise")
 local LuaRocksProvider = require("src.util.package_manager.LuaRocksProvider")
 
 ---@class Zingle.Awesome.PackageLib
@@ -11,16 +10,19 @@ package_manager.provider = nil
 
 package_manager.rockprovider = LuaRocksProvider()
 
----@class Zingle.Awesome.PackageInfo
+---@class Zingle.Awesome.PackageInfo.Query
+---@field version_wants string?
+---@field name string
+---@field install_name string?
+
+---@class Zingle.Awesome.PackageInfo : Zingle.Awesome.PackageInfo.Query
 ---@field has boolean
 ---@field version_has string?
----@field version_wants string?
 ---@field is_luarock boolean
 ---@field license string?
 ---@field url string?
 ---@field description string?
 ---@field location string?
----@field name string
 ---@field install_name string
 
 --[[
@@ -52,7 +54,7 @@ function package_manager.install(packageinfo)
 end
 ]]
 
----@param packageinfo Zingle.Awesome.PackageInfo | string
+---@param packageinfo Zingle.Awesome.PackageInfo.Query | string
 function package_manager.rock_install(packageinfo)
     if type(packageinfo) == "string" then
         packageinfo = { name = packageinfo } --[[ @as any ]]
@@ -60,27 +62,20 @@ function package_manager.rock_install(packageinfo)
 
     local provider = package_manager.rockprovider
 
-    return Promise.resolve()
-        :after(function ()
-            return pcall(require, packageinfo.name or packageinfo.install_name)
-        end)
-        :after(function (require_ok)
-            if not require_ok then
-                return provider:has(packageinfo.name, packageinfo.version_wants)
-            end
-        end)
+    return provider:has(packageinfo.name, packageinfo.version_wants)
         :after(function(info)
-            if not info then
-                ---@diagnostic disable-next-line:redundant-return-value
-                return false, false
+
+            if info.has then
+                local require_ok = pcall(require, packageinfo.install_name or packageinfo.name)
+
+                if not require_ok then
+                    log.debug("require(%q) failed, even though a luarock is found. Installing locally.", packageinfo.install_name or packageinfo.name)
+
+                    info.has = false
+                end
             end
 
-            local require_ok = not info.has or pcall(require, info.install_name)
-            if require_ok then
-                log.warn(string.format("require(%q) failed - installing locally!", info.install_name))
-            end
-
-            if not (info.has and require_ok) then
+            if not info.has then
                 return provider:install(packageinfo)
             end
         end)

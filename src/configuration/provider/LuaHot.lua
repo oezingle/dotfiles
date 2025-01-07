@@ -1,8 +1,7 @@
 local ConfigurationProvider       = require("src.configuration.ConfigurationProvider")
 local get_meta_section            = require("src.configuration.get_meta_section")
 local lfs                         = require("lfs")
-local timer_add                   = require("src.util.timer.timer_add")
-local SmartTimer                  = require("src.util.timer.SmartTimer")
+local SmartTimer                  = require("src.util.Timer.SmartTimer")
 
 ---@class Zingle.Awesome.ConfigurationProvider.Lua.Hot : Zingle.Awesome.ConfigurationProvider
 ---@operator call:Zingle.Awesome.ConfigurationProvider.Lua.Hot

@@ -1,68 +1,108 @@
+-- TODO load shimmed version of spawn to do this work with Promises and a visible loader, then teardown and load dependencies as normal
+-- minimal 30log clone
+-- log = { debug = print }
 
--- This file can't use spawn helpers at all, as they require submodules that may not exist.
+local Promise = require("src.polyfill.Promise")
+local spawn   = require("src.util.spawn")
+local which   = require("src.util.spawn.which")
 
-local git = {
+local git     = {
     _cache = {}
 }
 
-function git.has ()
-    if git._cache.has then
-        return git._cache.has
+---@return Promise<boolean>
+function git.has()
+    if git._cache.has ~= nil then
+        return Promise.resolve(git._cache.has)
     end
 
-    local handle, err = io.popen("which git")
+    return which("git")
+        :after(function(loc)
+            local has = loc ~= nil
 
-    if not handle then
-        git._cache.has = false
-        return false
-    end
+            git._cache.has = has
 
-    local content = handle:read("a")
+            return has
+        end)
+        :catch(function()
+            git._cache.has = false
 
-    if content:match("which: no") then
-        git._cache.has = false
-        return false
-    end
-
-    git._cache.has = true
-    return true
+            return false
+        end)
 end
 
-function git.is ()
-    if not git.has() then
-        return false
-    end
+function git.is()
+    return git.has()
+        :after(function(has)
+            if not has then
+                return false
+            end
 
-    if git._cache.is then
-        return git._cache.is
-    end
+            if git._cache.is ~= nil then
+                return git._cache.is
+            end
 
-    local handle, err = io.popen("git status 2>&1", "r")
+            return spawn("git status 2>&1")
+                :after(function(ret)
+                    local stdout = ret.stdout
 
-    if not handle then
-        -- TODO error message
-        
-        git._cache.is = false
-        return false
-    end
+                    local is_fatal = stdout:match("Fatal:")
+                    local is = is_fatal == nil
 
-    local response = handle:read("a")
+                    git._cache.is = is
 
-    if response:match("fatal") then
-        git._cache.is = false
-        return false
-    end
+                    return is
+                end)
+                :catch(function(err)
+                    git._cache.is = false
 
-    git._cache.is = true
-    return true
+                    return false
+                end)
+        end)
 end
 
-function git.init_submodules ()
-    if git.is() then
-        print("Pulling submodules. This may take a moment.")
+---@return Promise<string[]>
+function git.submodules_needs()
+    return git.is()
+        :after(function(is)
+            if not is then
+                return {}
+            end
+            
+            return spawn("git submodule status")
+                :after(function(ret)
+                    local stdout = ret.stdout
 
-        io.popen("git submodule update --init --recursive")
-    end
+                    stdout = "\n" .. stdout
+
+                    local modules = {}
+                    for module in stdout:gmatch("\n%-%S+%s+(%S+)") do
+                        table.insert(modules, module)
+                    end
+
+                    return modules
+                end)
+        end)
+end
+
+-- Initialize submodules
+function git.submodules_init()
+    return git.is() 
+        :after(function (is)            
+            if not is then
+                return
+            end
+
+            return spawn("git submodule update --init --recursive")
+        end)
+end
+
+function git.submodules_deinit()
+    return spawn("git submodule deinit --all")
 end
 
 return git
+
+--[[
+
+]]

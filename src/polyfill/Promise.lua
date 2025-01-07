@@ -1,265 +1,200 @@
 local class = require("lib.30log")
 
----@alias PromiseCallback fun(resolve: function, reject: function?) | nil
+-- TODO improved typing, Promise.await, Promise.race.
 
----@alias PromiseChainFunction<T> (fun(arg: T): any)|nil
+---@alias Promise.Callback fun(resolve: function, reject: function?) | nil
 
--- { after: fun(self: Promise, callback: (fun(arg: T): any)|nil): Promise<T|any>|Promise }
+---@generic T, Res
+---@alias Promise.AfterType fun(self: Promise<`T`>, on_resolve: fun(value: T): `Res`?): Promise<Res>
 
--- yo what the fuck lua-language-server
----@generic R
----@class Promise<T> : Log.BaseFunctions, { after: fun(self: Promise, callback: (fun(arg: T): `R`|nil)|nil): Promise<R> }, { catch: fun(self: Promise, callback: (fun(arg: T): any)|nil): Promise<T|nil>|Promise }, { chain: fun(self: Promise, after: (fun(arg: T): any)|nil, catch: (fun(arg: any): any)|nil): Promise<T|nil>|Promise }, { await: (fun(self: Promise<T>): T) }, { fulfilled: boolean }, { _private: { callback: PromiseCallback, value: any, was_resolved: boolean } } Similar to JavaScript promises
----@field _private { callback: PromiseCallback, value: any, was_resolved: boolean }
----@field fulfilled boolean
----@field triggered boolean
----@field next Promise|nil
----@field prev Promise|nil
----@field new fun(self: Promise)
----@operator call(fun(res: function, rej: function)):Promise
-local Promise = class("Promise", {
-    __is_a_promise = true
-})
+---@generic T, Res
+---@alias Promise.CatchType fun(self:Promise<`T`>, on_reject: fun(value: string): `Res`?): Promise<Res>
 
---- Generate a promise. does not set metatable or trigger.
----@param callback PromiseCallback
----@return Promise
-local function Promise_new_silent(self, callback)
-    self._private = self._private or {}
+---@generic T, Res, Rec
+---@alias Promise.ChainType fun(self:Promise<`T`>, on_resolve: (fun(value: T): `Res`?)?, on_reject: (fun(value: string): `Rec`?)?): Promise<Res | Rec>
 
-    if callback then
-        self._private.callback = callback
+--- Similar to JavaScript Promises, but `Promise:then()` would be cumbersome due to lua's keyword reservations so we use `Promise:after()`
+---@generic NewRes
+---@class Promise<Res> : Log.BaseFunctions, { after: fun(self: self, on_resolve: fun(value: Res): NewRes?): Promise<NewRes> }, { catch: fun(self: self, on_reject: fun(value: string): NewRes?): Promise<NewRes> }
+---@field protected callback Promise.Callback
+---@field protected fulfilled_value any
+---@field protected fulfilled_type "reject" | "resolve" | nil
+---@field protected has_triggered boolean
+---@field protected next self[]
+---@field protected prev self?
+---
+---@field protected trigger fun(self: self): self?
+---
+---@field after Promise.AfterType 
+---@field catch Promise.CatchType
+---@field chain Promise.ChainType
+---
+---@operator call():Promise
+local Promise = class("Promise")
+
+Promise.DO_NOTHING = function (...) return ... end
+
+function Promise:init(callback, no_trigger)
+    self.callback = callback
+
+    -- self.next is a table:
+    --[[
+        If you call the then() method twice on the same promise object (instead
+        of chaining), then this promise object will have two pairs of
+        settlement handlers. All handlers attached to the same promise object
+        are always called in the order they were added. Moreover, the two
+        promises returned by each call of then() start separate chains and do
+        not wait for each other's settlement.
+
+        https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then
+    ]]
+    self.next = {}
+
+    if not no_trigger then
+        self:trigger()
     end
-
-    self.next = self.next or nil
-    self.prev = self.prev or nil
-
-    self.triggered = false
-    self.fulfilled = false
-
-    return self
 end
 
---- Create and trigger a Promise
----@param callback PromiseCallback
----@return Promise
-function Promise:init(callback)
-    Promise_new_silent(self, callback)
-
-    Promise._trigger(self)
-
-    return self
-end
-
----resolve the promise with some value
----@param self Promise
----@param value any
----@param reject boolean?
-local function Promise_settle(self, value, reject)
-    local reject = reject or false
-
-    -- stupid simple solution but it works
-    self._private.was_resolved = not reject
-
-    self.fulfilled = true
-
-    -- Check if the returned value is a Promise,
-    -- in which case that Promise is passed down to this scope
-    if #value == 1 and type(value) == "table" and type(value[1]) == "table" and value[1].__is_a_promise then
+---@param values any[]
+---@param settle_type "reject" | "resolve"
+function Promise:settle(values, settle_type)
+    -- Check if the previous Promise returned another Promise, in which case we
+    -- insert into the chain.
+    if #values == 1 and type(values[1]) == "table" and values[1].class == Promise then
         ---@type Promise
-        local child = value[1]
+        local ret_promise = values[1]
 
-        if child.fulfilled then
-            -- set value now
-            self._private.value = child._private.value
+        -- If the returned promise is already fulfilled, we 'ignore' it and
+        -- forward its value.
+        if ret_promise.fulfilled_type then
+            self.fulfilled_value = ret_promise.fulfilled_value
+            self.fulfilled_type = ret_promise.fulfilled_type
         else
-            -- TODO this doesn't work
+            -- follow promise chain to parent, as it is unchained.
+            local first = ret_promise
+            ---@diagnostic disable-next-line:need-check-nil
+            while first.prev do
+                first = first.prev
+            end
+            first.prev = self
 
+            -- set prev of all next to inserted value
+            -- also insert next to ret
+            for _, next in pairs(self.next) do
+                next.prev = ret_promise
 
-            --- Attach returned promise's chain into this chain
-            if self.next then
-                local last = child
-
-                ---@diagnostic disable-next-line:need-check-nil
-                while last.next do
-                    last = last.next
-                end
-
-                last.next = self.next
-
-                ---@diagnostic disable-next-line:need-check-nil
-                last.next.prev = last
+                table.insert(ret_promise.next, next)
             end
 
+            self.next = { first }
 
-            -- throw in the child promise
-            self.next = child
-
-            return
+            return ret_promise
         end
     else
-        self._private.value = value
+        self.fulfilled_value = values
+        self.fulfilled_type = settle_type
     end
 
-    if self.next and not self.next.triggered then
-        self.next:_trigger()
-    end
-end
-
---- Generate a function that resolves the promise, without having to pass self as the first argument
-local function Promise_get_resolver(self)
-    ---@param ... any[]
-    return function(...)
-        Promise_settle(self, table.pack(...))
+    -- trigger next-es
+    for _, next in pairs(self.next) do
+        next:trigger()
     end
 end
 
---- Generate a function that rejects the promise, without having to pass self as the first argument
-local function Promise_get_rejecter(self)
-    ---@param ... any[]
-    return function(...)
-        Promise_settle(self, table.pack(...), true)
+function Promise:trigger()
+    --- Is only non-nil if a promise is returned (see Promise:settle)
+    local settle_value = nil
+
+    if not self.has_triggered then
+        local resolve = function(...)
+            settle_value = self:settle(table.pack(...), "resolve")
+        end
+        local reject = function(...)
+            settle_value = self:settle(table.pack(...), "reject")
+        end
+
+        self.callback(resolve, reject)
     end
+
+    self.has_triggered = true
+
+    return settle_value
 end
 
---- append callbacks to the promise chain
----@param after function|nil
----@param catch function|nil
----@return Promise next
 function Promise:chain(after, catch)
-    after = after or function(...) return ... end
-    catch = catch or function(...) return ... end
-
-    if self.next then
-        return self.next:chain(after, catch)
-    end
-
-    self.next = Promise_new_silent({}, nil)
-
-    setmetatable(self.next, { __index = Promise })
-
-    local next = self.next
-
+    -- callback is nil because we need to reference prev
+    local next = Promise(nil, true)
     next.prev = self
 
-    -- needs a nil check here lmao
-    assert(next)
+    next.callback = function(resolve, reject)
+        -- prev here is this promise, as we are constructing next.
+        ---@diagnostic disable-next-line:invisible
+        local prev = assert(next.prev)
 
-    next._private.callback = function(resolve, reject)
-        -- let next get self's value
-        local prev = next.prev
+        -- get previously fulfilled value and what type that fulfillment is
+        ---@diagnostic disable-next-line:invisible
+        local args = prev.fulfilled_value
+        ---@diagnostic disable-next-line:invisible
+        local ftype = assert(prev.fulfilled_type, "Triggered promise " .. tostring(next) .. " has unfulfilled parent " .. tostring(prev))
 
-        -- lua language server go brrr
-        assert(prev)
-
-        local arguments = prev._private.value
-
-        local was_resolved = prev._private.was_resolved
-
-        if was_resolved then
-            -- :after's errors should be handled by :catch
-
-            local after_succeded, after_res = xpcall(function()
-                return table.pack(after(table.unpack(arguments or {})))
-            end, function(err) return err end)
-
-            if after_succeded then
-                resolve(table.unpack(after_res))
-            else
-                reject(after_res)
-            end
+        -- alternate depending on what situation we have to handle
+        local handler 
+        if ftype == "resolve" then
+            handler = after
         else
-            -- TODO resolve if catch returns a non-error? somehow?
-            reject(catch(table.unpack(arguments)))
+            handler = catch
+        end 
+        if not handler then
+            handler = Promise.DO_NOTHING
+
+            ---@diagnostic disable-next-line:invisible
+            if ftype == "reject" and #next.next == 0 then
+                error(string.format("Unhandled error in Promise: %s", table.unpack(args or {})))    
+            end
+        end
+
+        local ok, res = xpcall(function()
+            return table.pack(handler(table.unpack(args or {})))
+        end, function(err)
+            -- TODO safety check
+            return debug.traceback(err)
+        end)
+
+        if ok then
+            resolve(table.unpack(res))
+        else
+            reject(res)
         end
     end
 
-    if self.fulfilled then
-        next:_trigger()
+    table.insert(self.next, next)
+    if self.fulfilled_type then
+        -- This behaviour is a hacky bugfix. next:trigger -> next.callback will
+        -- call res/rej instantly if chained. this means we can return the
+        -- Promise that res/rej was supplied. Feels wrong but seems to work right.
+        local subpromise = next:trigger()
+
+        if subpromise then
+            return subpromise
+        end
     end
 
     return next
 end
 
 --- append a resolution callback to the promise chain
----@param callback function|nil
----@return Promise next
 function Promise:after(callback)
     return self:chain(callback, nil)
 end
 
 --- append a rejection callback to the promise chain
----@param callback function|nil
----@return Promise next
 function Promise:catch(callback)
     return self:chain(nil, callback)
 end
 
--- Trigger the callback in the promise
-function Promise:_trigger()
-    if not self.triggered then
-        self._private.callback(Promise_get_resolver(self), Promise_get_rejecter(self))
-    end
-
-    self.triggered = true
-end
-
-if lgi then
-    local GLib = lgi.GLib
-
-    -- TODO only works if this loop's idle priority is equal to the other's
-    -- TODO hangs if higher, instantly returns if lower
-    -- TODO make :catch resolve error object
-    ---@generic T
-    ---@param promise Promise<T>
-    ---@return T
-    function Promise.await(promise)
-        local mainloop = GLib.MainLoop(nil, false)
-
-        local context = mainloop:get_context()
-
-        local ok, err = true, nil
-
-        promise:catch(function(msg)
-            ok, err = false, msg
-        end)
-
-        -- Push context to default so g_idle_add works on this loop,
-        -- not on an AwesomeWM loop
-        -- https://stackoverflow.com/questions/19903537/how-to-attach-gsocketservice-to-non-default-main-loop-context
-        context:push_thread_default()
-
-        GLib.idle_add(GLib.PRIORITY_DEFAULT, function()
-            if promise.fulfilled then
-                mainloop:quit()
-
-                return false
-            end
-
-            if not ok then
-                mainloop:quit()
-
-                return false
-            end
-
-            return true
-        end)
-
-        context:pop_thread_default()
-
-        mainloop:run()
-
-        if not ok then
-            error(err)
-        end
-
-        return table.unpack(promise._private.value)
-    end
-end
-
-
 --- Return a Promise that resolves with the value given by ...
 ---@generic T
----@param ... Promise<T> | T
+---@param ... Promise<T> | `T`
 ---@return Promise<T>
 function Promise.resolve(...)
     local args = table.pack(...)
@@ -271,7 +206,7 @@ end
 
 --- Return a Promise that rejects with the value given by ...
 ---@generic T
----@param ... Promise<T> | T
+---@param ... Promise<`T`> | `T`
 ---@return Promise<T>
 function Promise.reject(...)
     local args = table.pack(...)
@@ -281,34 +216,31 @@ function Promise.reject(...)
     end)
 end
 
---- Return a promise that waits for all the child promises
---- TODO promise rejections
 ---@param promises Promise[]
----@return Promise results this promise will return a table of tables of the promises' results
 function Promise.all(promises)
-    return Promise(function(res)
+    return Promise(function(res, rej)
         local resolves_left = 0
-
         local values = {}
 
-        for i, promise in ipairs(promises) do
-            if promise.fulfilled then
-                values[i] = promise._private.value
-            else
-                resolves_left = resolves_left + 1
+        for i, promise in pairs(promises) do
+            resolves_left = resolves_left + 1
 
-                promise:chain(function(...)
-                    values[i] = table.pack(...)
+            promise:chain(function(...)
+                values[i] = table.pack(...)
 
-                    resolves_left = resolves_left - 1
+                resolves_left = resolves_left - 1
 
-                    if resolves_left == 0 then
-                        res(values)
-                    end
-                end)
-            end
+                -- We can ignore the rejection case here, because resolves_left
+                -- will never equal 0 given a single rejection
+                if resolves_left == 0 then
+                    res(values)
+                end
+            end, function(err)
+                rej(err)
+            end)
         end
 
+        -- resolve if no work was done.
         if resolves_left == 0 then
             res(values)
         end

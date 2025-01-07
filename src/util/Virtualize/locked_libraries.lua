@@ -17,7 +17,8 @@ local function lock_library(name)
             return #lib
         end,
         __pairs = function ()
-            return pairs(lib)
+            local iter = pairs(lib)
+            return iter
         end,
         __ipairs = function ()
             return ipairs(lib)

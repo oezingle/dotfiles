@@ -13,6 +13,8 @@ local has_awful = pcall(require, "awful")
 
 local spawn
 
+log.debug(string.format("spawn using %s", has_awful and "awful.spawn" or "io.popen"))
+
 if has_awful then
     local awful_spawn = require("awful.spawn")
 
