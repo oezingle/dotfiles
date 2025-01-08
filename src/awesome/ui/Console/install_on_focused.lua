@@ -1,6 +1,7 @@
 
 local LuaX = require("lib.LuaX")
 local awful = require("awful")
+local StyleProvider = require("src.components.styled.StyleProvider")
 local Renderer = LuaX.Renderer
 local WiboxElement = require("lib.LuaX.util.NativeElement.WiboxElement")
 local create_element = LuaX.create_element
@@ -16,7 +17,11 @@ local function console_install_on_focused ()
 
     local element = create_element(ScreenContext.Provider, {
         value = focused,
-        children = { create_element(Console, {}) }
+        children = { 
+            create_element(StyleProvider, {
+                children = create_element(Console, {}) 
+            })
+        }
     })
 
     local root = WiboxElement.get_root(focused.taskbar.widget)

@@ -14,6 +14,8 @@ local TabRibbonButton = require("src.components.styled.Tabs.TabRibbonButton")
 local LogsContent = require("src.awesome.ui.Console.LogsContent")
 local WiboxesContent = require("src.awesome.ui.Console.WiboxesContent")
 
+local GridTest =require("GridTest")
+
 local Console = LuaX(function(props)
     local is_visible, set_visible = use_state(true)
 
@@ -44,6 +46,12 @@ local Console = LuaX(function(props)
         {
             tag = "shell",
             name = "Lua shell"
+        },
+        -- TODO remove
+        {
+            tag = "grid-test",
+            name = "GridTest",
+            content = LuaX.create_element(GridTest, {})
         }
     }
 
