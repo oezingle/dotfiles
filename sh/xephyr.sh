@@ -1,3 +1,9 @@
 #!/bin/sh
 
-Xephyr :4 & sleep 1 ; DISPLAY=:4 awesome -c "$PWD/rc.lua"
+CONFIG=$1
+
+if [[ -z $1 ]]; then
+    CONFIG="$PWD/rc.lua"
+fi
+
+Xephyr :4 & sleep 0.01; DISPLAY=:4 awesome -c $CONFIG
