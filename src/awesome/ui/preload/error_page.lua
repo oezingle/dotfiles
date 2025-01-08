@@ -35,11 +35,8 @@ function error_page.display_for_screen(s, err)
     }
 end
 
--- TODO FIXME better error entrypoint than this!
 ---@param err string
 function error_page.display(err)
-    
-
     for s in screen do
         error_page.display_for_screen(s, err)
     end

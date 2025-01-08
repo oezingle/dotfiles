@@ -47,7 +47,6 @@ function package_manager.install(packageinfo)
     return package_manager.provider:install(packageinfo)
         :after(function(ok)
             if not ok then
-                -- TODO FIXME notify_warn
                 error("oh man")
             end
         end)

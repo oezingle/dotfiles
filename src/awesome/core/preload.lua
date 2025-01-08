@@ -42,7 +42,7 @@ local function preload_git()
             if #modules ~= 0 then
                 log.info("Installing submodules")
 
-                loader.start("Installing dependencies for you")
+                loader.start("Installing dependencies")
 
                 return git.submodules_init()
             end
@@ -62,7 +62,7 @@ local function preload_luarocks()
             if needs then
                 log.info("Installing LuaRocks")
 
-                loader.start("Installing dependencies for you")
+                loader.start("Installing dependencies")
 
                 return luarocks.ensure()
             end
