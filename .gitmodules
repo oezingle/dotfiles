@@ -23,3 +23,6 @@
 [submodule "lib/iconoir"]
 	path = lib/iconoir
 	url = https://github.com/iconoir-icons/iconoir
+[submodule "lib/rubato"]
+	path = lib/rubato
+	url = https://github.com/andOrlando/rubato

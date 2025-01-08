@@ -1,5 +1,5 @@
 local Service = require("src.util.Service")
-local SmartTimer = require("src.util.timer.SmartTimer")
+local SmartTimer = require("src.util.Timer.SmartTimer")
 
 ---@class Zingle.Awesome.TimerService : Zingle.Awesome.Service
 ---@field timer Zingle.SmartTimer

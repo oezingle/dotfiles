@@ -2,7 +2,6 @@
 -- This code has been grandmothered in from my previous config and may not work! hehe!
 
 local Promise = require("src.polyfill.Promise")
-local spawn_vanilla_sync = require("src.util.spawn.vanilla_sync")
 local has_awful = pcall(require, "awful")
 
 --- Lua wiki tells lies. maybe this comes in a future update.
@@ -13,6 +12,8 @@ local has_awful = pcall(require, "awful")
 -- ---@field exitcode number Exit code (exit code or signal number, depending on “exitreason”). 
 
 local spawn
+
+log.debug(string.format("spawn using %s", has_awful and "awful.spawn" or "io.popen"))
 
 if has_awful then
     local awful_spawn = require("awful.spawn")
@@ -34,7 +35,15 @@ else
     ---@param cmd string
     ---@param cb (fun(result: Awesome.SpawnReturn): nil)?
     spawn = function (cmd, cb)
-        local result = spawn_vanilla_sync(cmd)
+        local handle = io.popen(cmd)
+
+        -- stupid luacheck
+        if not handle then 
+            error("unable to popen")
+        end
+    
+        local result = handle:read("*a")
+        handle:close()
 
         if cb then
             cb({

@@ -1,7 +1,5 @@
 local GLib = lgi.GLib
 
-local posix = require("posix")
-
 if not mouse then
     error("MouseWatcher requires Awesome's mouse API")
 end

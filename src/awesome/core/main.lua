@@ -1,5 +1,6 @@
 local Service      = require("src.util.Service")
 local load_scripts = require("src.awesome.core.load_scripts")
+local loader       = require("src.awesome.ui.preload.loader")
 
 local init_ui      = require("src.awesome.ui")
 
@@ -17,6 +18,9 @@ local function main()
     Service.start_all()
 
     init_ui()
+
+    -- hide loader if it was shown
+    loader.stop()
 end
 
 return main

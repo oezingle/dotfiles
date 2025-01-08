@@ -1,6 +1,7 @@
-local script_dir = require("src.util.script_dir").script_dir
-local join       = require("src.polyfill.path.join")
-local fs         = require("src.util.fs")
+local script_dir  = require("src.util.script_dir").script_dir
+local join        = require("src.polyfill.path.join")
+local fs          = require("src.util.fs")
+local lua_version = require("src.polyfill.lua_version")
 
 ---@class Zingle.Awesome.Dir.CallableTable
 ---@field protected __parent_path string
@@ -66,7 +67,11 @@ local dir = {
     generated = callable_table("generated", {
         persistent_storage = callable_table("persistent-storage"),
         log = callable_table("log"),
-        icon = callable_table("icon")
+        icon = callable_table("icon"),
+        luarocks = callable_table("luarocks", {
+            share = callable_table(join("share", "lua", lua_version.version)),
+            lib = callable_table(join("lib", "lua", lua_version.version))
+        })
     }),
     lib = callable_table("lib", {
         iconoir = callable_table("iconoir/icons")

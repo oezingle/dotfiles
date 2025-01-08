@@ -8,7 +8,7 @@ local GObject          = lgi.GObject
 local GVariant         = require("src.util.lgi.GVariant")
 local Promise          = require("src.polyfill.Promise")
 local map              = require("src.polyfill.list.map")
-local timer_add        = require("src.util.timer.timer_add")
+local timer_add        = require("src.util.Timer.timer_add")
 
 ---@alias Zingle.Awesome.Service.CLIServer.DBusMethod fun(self: self, client_name: string, args: LGI.GLib.GVariant): LGI.GLib.GVariant?
 

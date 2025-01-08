@@ -1,7 +1,6 @@
-require("src.amenities.init")
 
 ---@type Zingle.Awesome.PackageProvider
-local PackageProvider = require("src.util.package.PackageProvider")
+local PackageProvider = require("src.util.package_manager.PackageProvider")
 local Promise        = require("src.polyfill.Promise")
 
 describe("PackageProvider", function ()
