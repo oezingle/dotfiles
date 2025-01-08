@@ -1,5 +1,8 @@
 ---@meta
 
+---@alias Awesome.InstanceEmitSignal<Self, Signal> fun(self: Self, signal: Signal | string, ...: any)
+---@alias Awesome.InstanceConnectSignal<Self, Signal> fun (self: Self, signal: Signal | string, callback: fun(...: any))
+
 -- TODO come back to this when lua-language-server fixes the generic class inheritance issue
 -- https://github.com/LuaLS/lua-language-server/issues/1861
 ---@class Awesome.ClassSignalable<T>: { connect_signal: fun(signal: string | T, callback: function), emit_signal: fun(signal: string | T, ...: any), disconnect_signal: fun (signal: string | T, callback: function) } https://awesomewm.org/doc/api/classes/signals.html

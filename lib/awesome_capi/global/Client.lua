@@ -59,8 +59,8 @@
 ---@field height integer The client height
 ---@field dockable boolean If the client is dockable.  A dockable client is an application confined to the edge of the screen. The space it occupies is substracted from the `screen.workarea`. Clients with a type of “utility”, “toolbar” or “dock” are dockable by default.
 ---@field requests_no_titlebar boolean If the client requests not to be decorated with a titlebar
----@field shape GearsShape Set the client shape
----@field struts InstanceGetterOrSetter<Awesome.CClient, Struts> Return client struts (reserved space at the edge of the screen).
+---@field shape Awesome.Gears.Shape Set the client shape
+---@field struts InstanceGetterOrSetter<Awesome.CClient, Awesome.Struts> Return client struts (reserved space at the edge of the screen).
 ---@field buttons InstanceGetterOrSetter<Awesome.CClient, Awesome.Button[]> Get or set mouse buttons bindings for a client.
 ---@field isvisible fun(self: Awesome.CClient): boolean Check if a client is visible on its screen
 ---@field kill fun(self: Awesome.CClient) Kill a client
@@ -71,7 +71,7 @@
 ---@field unmanage fun(self: Awesome.CClient) Stop managing a client
 ---@field geometry InstanceGetterOrSetter<Awesome.CClient, Awesome.Geometry>  Return or set client geometry
 ---@field apply_size_hints fun(self: Awesome.CClient, width: integer, height: integer) Apply size hints to a size
----@field keys InstanceGetterOrSetter<Awesome.CClient, Key[]> Get or set keys bindings for a client
+---@field keys InstanceGetterOrSetter<Awesome.CClient, Awesome.Key[]> Get or set keys bindings for a client
 ---@field get_icon fun(self: Awesome.CClient, index: integer): Awesome.Gears.Surface Get the client's n-th icon
 ---@field jump_to fun(self: Awesome.CClient, merge: boolean|function) Jump to the given client. Takes care of focussing the screen, the right tag, etc
 ---@field relative_move fun(self: Awesome.CClient, x: integer?, y: integer?, width: integer?, height: integer?) Move/resize a client relative to current coordinates

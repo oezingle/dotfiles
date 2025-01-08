@@ -7,7 +7,7 @@
 ---@field index integer The internal screen number. The indeces are a continuous sequence from 1 to screen.count(). It is NOT related to the actual screen position relative to each other. 1 is NOT necessarily the primary screen. When screens are added and removed indices CAN change. [Link](https://awesomewm.org/doc/api/classes/screen.html#screen.index)
 ---@field outputs { [string]: { mm_width: integer, mm_height: integer } }
 ---@field workarea Awesome.Geometry The screen workarea. The workarea is a subsection of the screen where clients can be placed. It usually excludes the toolbars (see awful.wibar) and dockable clients (see client.dockable) like WindowMaker DockAPP
----@field padding Struts The screen padding. This adds a “buffer” section on each side of the screen
+---@field padding Awesome.Struts The screen padding. This adds a “buffer” section on each side of the screen
 ---@field clients Awesome.Client[] The list of visible clients for the screen. Minimized and unmanaged clients are not included in this list as they are technically not on the screen.
 ---@field hidden_clients Awesome.Client[] Get the list of clients assigned to the screen but not currently visible. This includes minimized clients and clients on hidden tags
 ---@field all_clients Awesome.Client[]  All clients assigned to the screen
@@ -18,7 +18,7 @@
 ---@field swap fun(self: Awesome.CScreen, s: Awesome.Screen) Swap a screen with another one in global screen list
 ---@field get_square_distance fun(self: Awesome.CScreen, x: number, y: number): number Get the square distance between a screen and a point
 ---@field get_next_in_direction fun(self: Awesome.CScreen, direction: Awesome.Direction): Awesome.Screen
----@field get_bounding_geometry fun(self: Awesome.CScreen, args: { honor_padding: boolean?, honor_workarea: boolean?, margins: integer|Struts|nil, tag: Awesome.Tag?, parent: unknown?, bounding_rect: unknown? }|nil): Awesome.Geometry
+---@field get_bounding_geometry fun(self: Awesome.CScreen, args: { honor_padding: boolean?, honor_workarea: boolean?, margins: integer|Awesome.Struts|nil, tag: Awesome.Tag?, parent: unknown?, bounding_rect: unknown? }|nil): Awesome.Geometry
 ---@field get_clients fun(self: Awesome.CScreen, stacked: boolean?): Awesome.Client[] Get the list of visible clients for the screen. `stacked` defaults to `true`
 ---@field get_all_clients fun(self: Awesome.CScreen, stacked: boolean?): Awesome.Client[] Get all clients assigned to the screen. `stacked` defaults to `true`
 ---@field get_tiled_clients fun(self: Awesome.CScreen, stacked: boolean?): Awesome.Client[] Get tiled clients for the screen.`stacked` defaults to `true`

@@ -6,8 +6,6 @@
 ---@alias Awesome.Gears.Shape function
 ---@alias Awesome.Struts { right: integer, left: integer, top: integer, bottom: integer }
 ---@alias Awesome.Key table
----@alias Awesome.Wibox table
----@alias Awesome.Wibox.Widget table
 ---@alias Awesome.Layout table|function
 
 ---@type Awesome
@@ -34,8 +32,8 @@ mousegrabber = mousegrabber or {}
 ---@type Awesome.ButtonModule
 button       = button or {}
 
-local UnixSignal = require("lib.awesome_capi.awesome.module.Awesome").UnixSignal
-local Mouse = require("lib.awesome_capi.awesome.module.Mouse")
+local UnixSignal = require("lib.awesome_capi.global.Awesome").UnixSignal
+local Mouse = require("lib.awesome_capi.global.Mouse")
 
 return {
     UnixSignal = UnixSignal,
