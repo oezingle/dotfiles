@@ -1,9 +1,10 @@
 local Awesome     = require("lib.awesome_capi")
-local MouseButton = require("src.components.helper.mouse.MouseButton")
+local MouseButton = require("src.components.helper.types.MouseButton")
 
 local mouse_props = {}
 
 ---@param mods string[]
+---@return Zingle.Awesome.Components.helper.Modifiers
 function mouse_props.modifiers(mods)
     local modifiers = {
         super = false,
@@ -37,8 +38,8 @@ function mouse_props.transform_button(button)
     return translations[button]
 end
 
----@param click Zingle.Awesome.Components.ClickHandler?
----@param scroll Zingle.Awesome.Components.ScrollHandler?
+---@param click Zingle.Awesome.Components.helper.ClickHandler?
+---@param scroll Zingle.Awesome.Components.helper.ScrollHandler?
 function mouse_props.transform_button_press(click, scroll)
     if not click and not scroll then
         return nil
@@ -82,7 +83,7 @@ function mouse_props.transform_button_press(click, scroll)
     end
 end
 
----@param props Zingle.Awesome.Components.Mouseable<{}>
+---@param props Zingle.Awesome.Components.helper.Mouseable<{}>
 ---@return LuaX.Props
 function mouse_props.create(props)
     local ret = {}

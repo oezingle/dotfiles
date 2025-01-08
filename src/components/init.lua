@@ -8,13 +8,11 @@
 -- - opacity / visibility flags (maybe merge into one - opacity = -1.0, 0.0..1.0, visible = opacity == -1.0)
 --    - that is, if opacity and visibility even do different things in any case!
 
-require("src.components.helper.mouse.MouseClickEvent")
+require("src.components.helper.types.MouseButton")
+require("src.components.helper.types.Modifiers")
 
---- TODO is this ClickHandler generic enough?
----@alias Zingle.Awesome.Components.ClickHandler fun(event: Zingle.Awesome.Components.MouseClickEvent)
----@alias Zingle.Awesome.Components.ScrollHandler fun(event: Zingle.Awesome.Components.MouseWheelEvent)
----@alias Zingle.Awesome.Components.HoverHandler fun()
----@alias Zingle.Awesome.Components.Mouseable<T> T | 
----| { ["onclick"|"onrelease"]?: Zingle.Awesome.Components.ClickHandler, onscroll?: Zingle.Awesome.Components.ScrollHandler, ["onhover"|"onleave"]?: Zingle.Awesome.Components.HoverHandler }
+require("src.components.helper.types.MouseEvent")
+
+require("src.components.helper.types.Mouseable")
 
 return require("src.components.helper.loader")

@@ -1,4 +1,6 @@
 
+---@meta
+
 ---@enum Zingle.Awesome.Components.helper.MouseButton
 local MouseButton = {
     LEFT = "LEFT",
