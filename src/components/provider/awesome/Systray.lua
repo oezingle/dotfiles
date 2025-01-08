@@ -3,8 +3,8 @@ local create_element = LuaX.create_element
 
 local includes = require("src.polyfill.list.includes")
 
----@alias Zingle.Awesome.Components.SystrayProps { direction: Awesome.Direction }
----@alias Zingle.Awesome.Components.Systray LuaX.Component<Zingle.Awesome.Components.SystrayProps>
+---@alias Zingle.Components.SystrayProps { direction: Awesome.Direction }
+---@alias Zingle.Components.Systray LuaX.Component<Zingle.Components.SystrayProps>
 
 local Systray = function(props)
     local horizontal = includes({ "left", "right" }, props.direction)

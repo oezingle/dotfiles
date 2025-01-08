@@ -1,9 +1,9 @@
 
----@alias Zingle.Awesome.Components.helper.ClickHandler fun(event: Zingle.Awesome.Components.helper.MouseClickEvent)
+---@alias Zingle.Components.helper.ClickHandler fun(event: Zingle.Components.helper.MouseClickEvent)
 
----@alias Zingle.Awesome.Components.helper.ScrollHandler fun(event: Zingle.Awesome.Components.helper.MouseWheelEvent)
+---@alias Zingle.Components.helper.ScrollHandler fun(event: Zingle.Components.helper.MouseWheelEvent)
 
----@alias Zingle.Awesome.Components.helper.HoverHandler fun()
+---@alias Zingle.Components.helper.HoverHandler fun()
 
----@alias Zingle.Awesome.Components.helper.Mouseable<T> T | 
----| { ["onclick"|"onrelease"]?: Zingle.Awesome.Components.helper.ClickHandler, onscroll?: Zingle.Awesome.Components.helper.ScrollHandler, ["onhover"|"onleave"]?: Zingle.Awesome.Components.helper.HoverHandler }
+---@alias Zingle.Components.helper.Mouseable<T> T | 
+---| { ["onclick"|"onrelease"]?: Zingle.Components.helper.ClickHandler, onscroll?: Zingle.Components.helper.ScrollHandler, ["onhover"|"onleave"]?: Zingle.Components.helper.HoverHandler }

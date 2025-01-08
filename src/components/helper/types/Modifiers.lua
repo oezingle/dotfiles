@@ -1,4 +1,4 @@
 
 ---@meta
 
----@alias Zingle.Awesome.Components.helper.Modifiers { ["super"|"shift"|"alt"|"control"]: boolean }
+---@alias Zingle.Components.helper.Modifiers { ["super"|"shift"|"alt"|"control"]: boolean }

@@ -7,7 +7,7 @@ local default_props = require("src.components.provider.awesome.helper.default_pr
 
 local rounded_rect = require("src.components.provider.awesome.helper.rounded_rect")
 
----@param props Zingle.Awesome.Components.BackgroundProps
+---@param props Zingle.Components.BackgroundProps
 local Background = function(props)
     local border_width = props["border-width"]
     local border_color = props["border-color"]

@@ -7,8 +7,9 @@ local Flex = require("src.components.base.Flex")
 local TabRibbon = LuaX(function (props)
     local TabButtonPortal = use_portal("tab-button")
 
+    -- TODO seems to have no effect on exit button.
     return [[
-        <Flex>
+        <Flex align="stretch">
             <TabButtonPortal.Outlet/>
         </Flex>
     ]]

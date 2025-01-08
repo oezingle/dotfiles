@@ -1,5 +1,5 @@
 
----@alias Zingle.Awesome.Components.IconProps Zingle.Awesome.Components.helper.Mouseable<{ name?: string, color?: string, style?: "regular"|"solid" }>
----@alias Zingle.Awesome.Components.Icon LuaX.Component<Zingle.Awesome.Components.IconProps>
+---@alias Zingle.Components.IconProps Zingle.Components.helper.Mouseable<{ name?: string, color?: string, style?: "regular"|"solid" }>
+---@alias Zingle.Components.Icon LuaX.Component<Zingle.Components.IconProps>
 
 return require("src.components.helper.loader").get("Icon")

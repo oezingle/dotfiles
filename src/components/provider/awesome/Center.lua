@@ -3,7 +3,7 @@ local merge_props = require("src.components.helper.merge_props")
 local mouse_props = require("src.components.provider.awesome.helper.mouse_props")
 local default_props = require("src.components.provider.awesome.helper.default_props")
 
----@param props Zingle.Awesome.Components.CenterProps
+---@param props Zingle.Components.CenterProps
 local function Center(props)    
     return create_element("wibox.container.place", merge_props({
         children = props.children,

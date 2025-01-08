@@ -6,7 +6,7 @@ local create_element = LuaX.create_element
 local merge_props = require("src.components.helper.merge_props")
 local mouse_props = require("src.components.provider.awesome.helper.mouse_props")
 
----@param props Zingle.Awesome.Components.MarginProps
+---@param props Zingle.Components.MarginProps
 local Margin = function (props)
     local left = props.left or props.x or props.margin
     local right = props.right or props.x or props.margin

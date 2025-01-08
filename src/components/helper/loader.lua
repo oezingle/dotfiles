@@ -1,13 +1,13 @@
 local not_available = require("src.components.helper.not_available")
 
----@class Zingle.Awesome.Components.Loader.Provider
+---@class Zingle.Components.Loader.Provider
 ---@field is_supported boolean|(fun(): boolean)
 ---@field loaded boolean
 ---@field components table<string, function>
 ---@field name string
 
----@class Zingle.Awesome.Components.Loader
----@field providers Zingle.Awesome.Components.Loader.Provider[]
+---@class Zingle.Components.Loader
+---@field providers Zingle.Components.Loader.Provider[]
 local loader = {
     providers = {},
     provider_names = {},
@@ -46,13 +46,13 @@ loader.create_provider("awesome", {
 
 
 
----@param provider Zingle.Awesome.Components.Loader.Provider
+---@param provider Zingle.Components.Loader.Provider
 ---@param component string
 function loader.get_require_path(provider, component)
     return string.format("src.components.provider.%s.%s", provider.name, component)
 end
 
----@param provider Zingle.Awesome.Components.Loader.Provider
+---@param provider Zingle.Components.Loader.Provider
 ---@param component_name string
 function loader.safe_load(provider, component_name)
     if provider.components[component_name] then
@@ -77,7 +77,7 @@ function loader.safe_load(provider, component_name)
     end
 end
 
----@param provider Zingle.Awesome.Components.Loader.Provider | string
+---@param provider Zingle.Components.Loader.Provider | string
 function loader.ensure_provider_loaded(provider)
     if type(provider) == "string" then
         local index = loader.provider_names[provider]

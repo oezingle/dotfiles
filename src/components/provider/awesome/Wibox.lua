@@ -7,7 +7,7 @@ local use_memo     = require("lib.LuaX.hooks.use_memo")
 
 -- TODO destroy wibox on unrender (use_effect) and audit props for dynamicism
 
----@alias Zingle.Awesome.Components.Wibox.Props LuaX.Props.WithInternal<LuaX.PropsWithChildren<{ name: string, screen: Awesome.Screen, color?: string, ["x"|"y"|"width"|"height"]: number, ["visible"|"ontop"]?: boolean }>>
+---@alias Zingle.Components.Wibox.Props LuaX.Props.WithInternal<LuaX.PropsWithChildren<{ name: string, screen: Awesome.Screen, color?: string, ["x"|"y"|"width"|"height"]: number, ["visible"|"ontop"]?: boolean }>>
 local function Wibox(props)
     local name = props.name
     local screen = props.screen

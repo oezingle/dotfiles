@@ -1,4 +1,4 @@
----@param props Zingle.Awesome.Components.helper.DefaultProps<{}>
+---@param props Zingle.Components.helper.DefaultProps<{}>
 local function default_props(props)
     return {
         forced_with = props["forced-width"],

@@ -30,7 +30,7 @@ local function get_icon(name, style, color)
     return cache_path
 end
 
----@param props Zingle.Awesome.Components.IconProps
+---@param props Zingle.Components.IconProps
 local Icon = LuaX(function(props)
     assert((not props.color) or type(props.color) == "string", "Icon color must be a string!")
 
