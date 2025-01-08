@@ -5,7 +5,8 @@ local awful = require("awful")
 local console_install_on_focused = require("src.awesome.ui.Console.install_on_focused")
 
 local WiboxElement = require("lib.LuaX.util.NativeElement.WiboxElement")
-WiboxElement.add_mod("flexbox", require("src.awesome.widget.mod.flexbox"))
+WiboxElement.add_mod("flexbox", require("src.awesome.widget.flexbox"))
+WiboxElement.add_mod("pannable", require("src.awesome.widget.pannable"))
 
 local function init_ui ()
     -- TODO can this be achieved through LuaX?

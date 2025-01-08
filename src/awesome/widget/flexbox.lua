@@ -1,3 +1,12 @@
+--[[
+    File: flexbox.lua
+    Author: Zingle Zingle
+    Description: 
+        bidirectional AwesomeWM flexbox widget similar to CSS flexbox. has
+        justify (start, end, center, between, around, even), align (start, end,
+        center, stretch), and gap.
+]]
+
 local base = require("wibox.widget.base")
 local gtable = require("gears.table")
 
@@ -9,15 +18,6 @@ local max = math.max
 local pairs = pairs
 local ipairs = ipairs
 local assert = assert
-
---[[
-    File: flexbox.lua
-    Auther: Zingle Zingle
-    Description: 
-        bidirectional AwesomeWM flexbox widget similar to CSS flexbox. has
-        justify (start, end, center, between, around, even), align (start, end,
-        center, stretch), and gap.
-]]
 
 ---@param value number
 ---@return integer
@@ -43,13 +43,11 @@ end
 ---@field align Zingle.Awesome.Mod.Flexbox.Align
 ---@field gap number
 
----@class Zingle.Awesome.Mod.Flexbox
+---@class Zingle.Awesome.Mod.Flexbox : Awesome.Wibox.Widget
 ---@field _private Zingle.Awesome.Mod.Flexbox.Private
 ---
 ---@field fit fun(self: self, context: table, width: integer, height: integer): integer, integer
 ---@field layout fun(self: self, context: table, width: integer, height: integer): table
----
----@field emit_signal fun(self: self, signal: string | "widget::layout_changed", ...: any)
 local flexbox = {}
 
 function flexbox:fit(context, width, height)
@@ -176,12 +174,15 @@ function flexbox:layout(context, width, height)
 
     local grow_total = 0
 
+    local widgets = self._private.widgets
+
     -- length of non-expanded children, starting with the space taken by gap.
-    local static_length = max(0, #self._private.widgets - 1) * self:get_gap()
+    local static_length = max(0, #widgets - 1) * self:get_gap()
 
     -- calculate space taken by non-expanded widgets & grow ownership
     -- pairs is ok here because marginally faster and calculations can be done out-of-order
-    for _, widget in pairs(self._private.widgets) do
+    for _, widget in pairs(widgets) do
+        ---@diagnostic disable-next-line:undefined-field
         local grow = widget.flex_grow or 0
 
         -- non-growing widgets are guaranteed their minimal space
@@ -210,7 +211,7 @@ function flexbox:layout(context, width, height)
         -- grow_total is nonzero
         local is_justify = grow_total == 0
 
-        local n = #self._private.widgets
+        local n = #widgets
 
         -- children are spaced around to fill area depending on justify mode
         if is_justify then
@@ -218,7 +219,8 @@ function flexbox:layout(context, width, height)
             insert_pos = insert_pos + skip_space
         end
 
-        for _, widget in ipairs(self._private.widgets) do
+        for _, widget in ipairs(widgets) do
+            ---@diagnostic disable-next-line:undefined-field
             local grow = widget.flex_grow or 0
 
             -- always query fit because, h in horizontal mode is required and w in vertical.
@@ -407,7 +409,7 @@ function flexbox:init(...)
 end
 
 return setmetatable(flexbox, {
-    __call = function(_, ...)
-        return flexbox:init(...)
+    __call = function(t, ...)
+        return t:init(...)
     end
 })
